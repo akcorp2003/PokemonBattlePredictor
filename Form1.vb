@@ -21,20 +21,7 @@ Public Class Form1
 
     End Sub
 
-    Private Sub Pokedex_Formatter_DoWork(ByVal sender As Object,
-                                         ByVal e As System.ComponentModel.DoWorkEventArgs
-                                         ) Handles Pokedex_Formatter.DoWork
-        REM The real work begins here
-        Dim worker As System.ComponentModel.BackgroundWorker
-        worker = CType(sender, System.ComponentModel.BackgroundWorker)
-
-
-        Dim dex_formatter As Dex_formatter = CType(e.Argument, Dex_formatter)
-        dex_formatter.Format_Dex(dex_formatter.Formatting_Filename)
-    End Sub
-
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
         REM First check if an existing Pokedex file is there
         Dim filename As String = "pokedex.txt"
 
@@ -45,16 +32,10 @@ Public Class Form1
             REM if we get here, then that means no file exists so we have to query the
             REM master database server
             Dim dex_writer As New Dex_Writer
-            Pokedex_Writer.RunWorkerAsync(dex_writer)
-            REM we do not need to invoke the RunWorkerAsync for Dex_formatter because dex_writer calls
-            REM it for us. We can safely finish the loading process
-            Return
-        End Try
 
-        REM if the program successfully finds the file, then we don't need to worry!
-        Dim dex_formatter As New Dex_formatter
-        dex_formatter.Formatting_Filename = filename
-        Pokedex_Formatter.RunWorkerAsync(dex_formatter)
+            Pokedex_Writer.RunWorkerAsync(dex_writer)
+
+        End Try
     End Sub
 
     Private Sub Pokedex_Writer_WriteCompleted(ByVal sender As Object,
