@@ -1,15 +1,111 @@
 ﻿Imports System.Collections.Generic
 
 Public Class Pokemon
-    Public name As String
-    Public ability As String
-    Public ATK As Integer
-    Public DEF As Integer
-    Public Sp_ATK As Integer
-    Public Sp_DEF As Integer
-    Public HP As Integer
-    Public SPD As Integer
-    Public Moves As List(Of String)
-    Public Type As List(Of String)
+    Private m_name As String
+    Private m_ability As String
+    Private m_ATK As Integer
+    Private m_DEF As Integer
+    Private m_Sp_ATK As Integer
+    Private m_Sp_DEF As Integer
+    Private m_HP As Integer
+    Private m_SPD As Integer
+    Private m_Moves As List(Of String)
+    Private m_Type As List(Of String)
+
+    Public Property Name() As String
+        Get
+            Return m_name
+        End Get
+        Set(value As String)
+            m_name = value
+        End Set
+    End Property
+
+    Public Property Ability() As String
+        Get
+            Return m_ability
+        End Get
+        Set(value As String)
+            m_ability = value
+        End Set
+    End Property
+
+    Public Property ATK() As Integer
+        Get
+            Return m_ATK
+        End Get
+        Set(value As Integer)
+            m_ATK = value
+        End Set
+    End Property
+
+    Public Property DEF() As Integer
+        Get
+            Return m_DEF
+        End Get
+        Set(value As Integer)
+            m_DEF = value
+        End Set
+    End Property
+
+    Public Property Sp_ATK() As Integer
+        Get
+            Return m_Sp_ATK
+        End Get
+        Set(value As Integer)
+            m_Sp_ATK = value
+        End Set
+    End Property
+
+    Public Property Sp_DEF() As Integer
+        Get
+            Return m_Sp_DEF
+        End Get
+        Set(value As Integer)
+            m_Sp_DEF = value
+        End Set
+    End Property
+
+    Public Property HP() As Integer
+        Get
+            Return m_HP
+        End Get
+        Set(value As Integer)
+            m_HP = value
+        End Set
+    End Property
+
+    Public Property SPD() As Integer
+        Get
+            Return m_SPD
+        End Get
+        Set(value As Integer)
+            m_SPD = value
+        End Set
+    End Property
+
+    REM mimic a copy constructor
+    Public Property Moves() As List(Of String)
+        Get
+            Return m_Moves
+        End Get
+        Set(value As List(Of String))
+            For Each Move As String In value
+                m_Moves.Add(Move)
+            Next
+        End Set
+    End Property
+
+    REM Mimic a copy constructor
+    Public Property Types() As List(Of String)
+        Get
+            Return m_Type
+        End Get
+        Set(value As List(Of String))
+            For Each Type As String In value
+                m_Type.Add(Type)
+            Next
+        End Set
+    End Property
 
 End Class

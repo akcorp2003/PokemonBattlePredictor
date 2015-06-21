@@ -35,6 +35,7 @@ Partial Class Form1
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Pokedex_Writer = New System.ComponentModel.BackgroundWorker()
         Me.Pokedex_Formatter = New System.ComponentModel.BackgroundWorker()
+        Me.Worker_InsertURI = New System.ComponentModel.BackgroundWorker()
         CType(Me.TeamBlue_3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TeamBlue_2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TeamBlue_1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -152,6 +153,9 @@ Partial Class Form1
         Me.Pokedex_Writer.WorkerReportsProgress = True
         Me.Pokedex_Writer.WorkerSupportsCancellation = True
         '
+        'Pokedex_Formatter
+        '
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -192,5 +196,6 @@ Partial Class Form1
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Pokedex_Writer As System.ComponentModel.BackgroundWorker
     Friend WithEvents Pokedex_Formatter As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Worker_InsertURI As System.ComponentModel.BackgroundWorker
 
 End Class

@@ -106,6 +106,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Pokemon.vb" />
+    <Compile Include="Pokemon_ResourceURI_dictionary.vb" />
     <Compile Include="RequestPokemon.vb" />
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,30 @@ PokemonBattlePredictor
 </name>
 </assembly>
 <members>
-<member name="P:PokemonBattlePredictor.My.Resources.Resources.ResourceManager">
+<member name="M:PokemonBattlePredictor.Pokemon_ResourceURI_dictionary.IsPokemonInDictionary(System.String)">
+	<summary>
+ Checks if Pokemon and its URI is in the Dictionary
+ </summary>
+	<param name="pokemon_name"></param>
+	<returns>A boolean saying yes or no if the pokemon exists in the dictionary</returns>
+	<remarks>Kind of a useless function because if Pokemon is not in dictionary, it means
+ that the master database doesn't have such pokemon. So it could mean that the user typed
+ a non-existant pokemon, spelling error, or a brand new pokemon</remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_ResourceURI_dictionary.Get_PokemonURI(System.String)">
+	<summary>
+ Fetches the URI of the pokemon in question
+ </summary>
+	<param name="pokemon_name"></param>
+	<returns>String of the URI</returns>
+	<remarks>the user will use the URI to request the actual pokemon object from the database</remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_ResourceURI_dictionary.Add_PokemonandURI(System.String,System.String)">
+	<summary>
+ Adds Pokemon and its URI
+ </summary>
+	<param name="pokemon_name"></param>
+	<param name="pokemon_URI"></param>
+	<remarks></remarks>
+</member><member name="P:PokemonBattlePredictor.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
 </summary>
