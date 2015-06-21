@@ -34,6 +34,7 @@ Partial Class Form1
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Pokedex_Writer = New System.ComponentModel.BackgroundWorker()
+        Me.Pokedex_Formatter = New System.ComponentModel.BackgroundWorker()
         CType(Me.TeamBlue_3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TeamBlue_2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TeamBlue_1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -190,5 +191,6 @@ Partial Class Form1
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents Pokedex_Writer As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Pokedex_Formatter As System.ComponentModel.BackgroundWorker
 
 End Class
