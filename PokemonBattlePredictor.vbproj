@@ -70,6 +70,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ability_Dictionary.vb" />
     <Compile Include="BattleSetup.Designer.vb">
       <DependentUpon>BattleSetup.vb</DependentUpon>
     </Compile>
@@ -90,6 +91,7 @@
     <Compile Include="InsertPokemonFunct.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Move_Dictionary.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -106,7 +108,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Pokemon.vb" />
+    <Compile Include="Pokemon_Dictionary.vb" />
     <Compile Include="Pokemon_ResourceURI_dictionary.vb" />
+    <Compile Include="Pokemon_Team.vb" />
     <Compile Include="RequestPokemon.vb" />
   </ItemGroup>
   <ItemGroup>

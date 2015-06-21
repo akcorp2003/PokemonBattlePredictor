@@ -5,6 +5,7 @@ Imports System.IO
 Public Class Form1
 
     Dim dictionaryOf_ResourceURI As New Pokemon_ResourceURI_dictionary
+    Dim dictionaryOf_Pokemon As New Pokemon_Dictionary
 
     '////////////////////////////////////////////////////////////////
     '// BackgroundWorker Code                                      //
@@ -92,7 +93,6 @@ Public Class Form1
             MessageBox.Show("Finished Creating URI Dictionary Baby. You like that don't you?")
         End If
 
-        Dim josh As Integer = 9
     End Sub
 
 
@@ -128,8 +128,6 @@ Public Class Form1
         REM we will now begin adding the URI Pokemon into the ResourceURI_dictionary
         REM this MUST wait until the Pokedex_Formatter worker finished its job
         Worker_InsertURI.RunWorkerAsync(dictionaryOf_ResourceURI)
-        Dim justhere As Integer = 9
-        justhere += 1
     End Sub
 
 

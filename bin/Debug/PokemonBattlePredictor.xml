@@ -6,7 +6,34 @@ PokemonBattlePredictor
 </name>
 </assembly>
 <members>
-<member name="M:PokemonBattlePredictor.Pokemon_ResourceURI_dictionary.IsPokemonInDictionary(System.String)">
+<member name="M:PokemonBattlePredictor.Pokemon_Dictionary.Add_Pokemon(System.String,PokemonBattlePredictor.Pokemon)">
+	<summary>
+ Inserts Pokemon into the pokemon_dictionary
+ </summary>
+	<param name="poke_name"></param>
+	<param name="the_pokemon"></param>
+	<remarks>The function does not query the database. The querying is left to the user.</remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_Team.Addto_Team(PokemonBattlePredictor.Pokemon,System.String)">
+	<summary>
+ Add the pokemon to the corresponding team
+ </summary>
+	<param name="pokemon"></param>
+	<param name="team">Must be either "blue" or "red"</param>
+	<remarks></remarks>
+</member><member name="P:PokemonBattlePredictor.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:PokemonBattlePredictor.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:PokemonBattlePredictor.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:PokemonBattlePredictor.Pokemon_ResourceURI_dictionary.IsPokemonInDictionary(System.String)">
 	<summary>
  Checks if Pokemon and its URI is in the Dictionary
  </summary>
@@ -29,19 +56,6 @@ PokemonBattlePredictor
 	<param name="pokemon_name"></param>
 	<param name="pokemon_URI"></param>
 	<remarks></remarks>
-</member><member name="P:PokemonBattlePredictor.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:PokemonBattlePredictor.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:PokemonBattlePredictor.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
 </member>
 </members>
 </doc>
