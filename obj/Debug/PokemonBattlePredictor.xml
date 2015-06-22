@@ -6,7 +6,36 @@ PokemonBattlePredictor
 </name>
 </assembly>
 <members>
-<member name="P:PokemonBattlePredictor.My.Resources.Resources.ResourceManager">
+<member name="M:PokemonBattlePredictor.Move_Package.ProcessLine(System.String)">
+	<summary>
+ Given an unorganized moves text string, this function will parse it into one lines into
+ a new text file
+ </summary>
+	<param name="lines"></param>
+	<returns>Name of the formatted textfile</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_Dictionary.Add_Pokemon(System.String,PokemonBattlePredictor.Pokemon)">
+	<summary>
+ Inserts Pokemon into the pokemon_dictionary
+ </summary>
+	<param name="poke_name"></param>
+	<param name="the_pokemon"></param>
+	<remarks>The function does not query the database. The querying is left to the user.</remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_Dictionary.Add_Pokemon(System.String)">
+	<summary>
+ Queries the master database using URL
+ </summary>
+	<param name="poke_name"></param>
+	<remarks>This function will probably be used more than its other overloaded counterpart. 
+ This function handles all the URL stuff and parsing.</remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_Team.Addto_Team(PokemonBattlePredictor.Pokemon,System.String)">
+	<summary>
+ Add the pokemon to the corresponding team
+ </summary>
+	<param name="pokemon"></param>
+	<param name="team">Must be either "blue" or "red"</param>
+	<remarks></remarks>
+</member><member name="P:PokemonBattlePredictor.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
 </summary>
@@ -19,6 +48,38 @@ PokemonBattlePredictor
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>
+</member><member name="M:PokemonBattlePredictor.Form1.FormatFile(System.String,System.String,System.String)">
+	<summary>
+ This function will properly remove all unnecessary characters according to the design of this program.
+ </summary>
+	<param name="content"></param>
+	<param name="inputfilename"></param>
+	<param name="outputfilename"></param>
+	<returns>The original filename or "" to indicate an error</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_ResourceURI_dictionary.IsPokemonInDictionary(System.String)">
+	<summary>
+ Checks if Pokemon and its URI is in the Dictionary
+ </summary>
+	<param name="pokemon_name"></param>
+	<returns>A boolean saying yes or no if the pokemon exists in the dictionary</returns>
+	<remarks>Kind of a useless function because if Pokemon is not in dictionary, it means
+ that the master database doesn't have such pokemon. So it could mean that the user typed
+ a non-existant pokemon, spelling error, or a brand new pokemon</remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_ResourceURI_dictionary.Get_PokemonURI(System.String)">
+	<summary>
+ Fetches the URI of the pokemon in question
+ </summary>
+	<param name="pokemon_name"></param>
+	<returns>String of the URI</returns>
+	<remarks>the user will use the URI to request the actual pokemon object from the database</remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_ResourceURI_dictionary.Add_PokemonandURI(System.String,System.String)">
+	<summary>
+ Adds Pokemon and its URI
+ </summary>
+	<param name="pokemon_name"></param>
+	<param name="pokemon_URI"></param>
+	<remarks></remarks>
 </member>
 </members>
 </doc>
