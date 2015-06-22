@@ -5,7 +5,7 @@ Public Class Ability_Dictionary
     Private ability_dictionary As New Dictionary(Of String, Ability_Info)
 
     Public Function IsAbilityInDictionary(ByVal ability As String) As Boolean
-        If ability_dictionary.ContainsKey(ability) = True Then
+        If ability_dictionary.ContainsKey(ability.ToLower) = True Then
             Return True
         Else
             Return False
@@ -30,6 +30,26 @@ Public Class Ability_Dictionary
     End Sub
 End Class
 
+REM this class will be developed in the future. We will add more info about the moves
 Public Class Ability_Info
+    Private m_name As String
+    Private m_uri As String
 
+    Public Property Name As String
+        Get
+            Return m_name
+        End Get
+        Set(value As String)
+            m_name = value
+        End Set
+    End Property
+
+    Public Property URI As String
+        Get
+            Return m_uri
+        End Get
+        Set(value As String)
+            m_uri = value
+        End Set
+    End Property
 End Class

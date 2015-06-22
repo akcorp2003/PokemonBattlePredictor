@@ -46,6 +46,7 @@ Partial Class BattleSetup
         Me.ColumnHeader6 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.Worker_FetchMove = New System.ComponentModel.BackgroundWorker()
         Me.SuspendLayout()
         '
         'Pokemon_Name
@@ -250,4 +251,5 @@ Partial Class BattleSetup
     Friend WithEvents ColumnHeader6 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader7 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader8 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Worker_FetchMove As System.ComponentModel.BackgroundWorker
 End Class

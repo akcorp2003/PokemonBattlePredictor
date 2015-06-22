@@ -2,8 +2,8 @@
 Imports System.Collections
 
 Public Class Pokemon_Team
-    Dim Team_Blue As List(Of Pokemon)
-    Dim Team_Red As List(Of Pokemon)
+    Dim Team_Blue As New List(Of Pokemon)
+    Dim Team_Red As New List(Of Pokemon)
 
     ''' <summary>
     ''' Add the pokemon to the corresponding team

@@ -1,16 +1,17 @@
-﻿Imports System.Collections.Generic
+﻿Imports System.Collections
 
 Public Class Pokemon
     Private m_name As String
-    Private m_ability As String
+    Private m_ability As New List(Of Ability_Info)
     Private m_ATK As Integer
     Private m_DEF As Integer
     Private m_Sp_ATK As Integer
     Private m_Sp_DEF As Integer
     Private m_HP As Integer
     Private m_SPD As Integer
-    Private m_Moves As List(Of String)
-    Private m_Type As List(Of String)
+    Private m_Moves As New List(Of String)
+    Private m_Moves_for_Battle As New List(Of Move_Info)
+    Private m_Type As New List(Of String)
 
     Public Property Name() As String
         Get
@@ -18,15 +19,6 @@ Public Class Pokemon
         End Get
         Set(value As String)
             m_name = value
-        End Set
-    End Property
-
-    Public Property Ability() As String
-        Get
-            Return m_ability
-        End Get
-        Set(value As String)
-            m_ability = value
         End Set
     End Property
 
@@ -108,4 +100,25 @@ Public Class Pokemon
         End Set
     End Property
 
+    Public Property Ability() As List(Of Ability_Info)
+        Get
+            Return m_ability
+        End Get
+        Set(value As List(Of Ability_Info))
+            For Each ability As Ability_Info In value
+                m_ability.Add(ability)
+            Next
+        End Set
+    End Property
+
+    Public Property Moves_For_Battle() As List(Of Move_Info)
+        Get
+            Return m_Moves_for_Battle
+        End Get
+        Set(value As List(Of Move_Info))
+            For Each move As Move_Info In value
+                m_Moves_for_Battle.Add(move)
+            Next
+        End Set
+    End Property
 End Class

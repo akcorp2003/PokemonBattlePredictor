@@ -47,6 +47,8 @@ Partial Class InsertPokemonFunct
         Me.Move3 = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.Move4 = New System.Windows.Forms.TextBox()
+        Me.Pokemon_Name = New System.Windows.Forms.TextBox()
+        Me.Label12 = New System.Windows.Forms.Label()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -88,7 +90,7 @@ Partial Class InsertPokemonFunct
         '
         'SpDEF
         '
-        Me.SpDEF.Location = New System.Drawing.Point(66, 323)
+        Me.SpDEF.Location = New System.Drawing.Point(66, 309)
         Me.SpDEF.Name = "SpDEF"
         Me.SpDEF.Size = New System.Drawing.Size(100, 20)
         Me.SpDEF.TabIndex = 5
@@ -151,7 +153,7 @@ Partial Class InsertPokemonFunct
         '
         Me.label5.AutoSize = True
         Me.label5.Font = New System.Drawing.Font("Comic Sans MS", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.label5.Location = New System.Drawing.Point(9, 323)
+        Me.label5.Location = New System.Drawing.Point(3, 309)
         Me.label5.Name = "label5"
         Me.label5.Size = New System.Drawing.Size(61, 17)
         Me.label5.TabIndex = 12
@@ -276,11 +278,30 @@ Partial Class InsertPokemonFunct
         Me.Move4.Size = New System.Drawing.Size(100, 20)
         Me.Move4.TabIndex = 24
         '
+        'Pokemon_Name
+        '
+        Me.Pokemon_Name.Location = New System.Drawing.Point(66, 123)
+        Me.Pokemon_Name.Name = "Pokemon_Name"
+        Me.Pokemon_Name.Size = New System.Drawing.Size(100, 20)
+        Me.Pokemon_Name.TabIndex = 25
+        '
+        'Label12
+        '
+        Me.Label12.AutoSize = True
+        Me.Label12.Font = New System.Drawing.Font("Comic Sans MS", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(9, 123)
+        Me.Label12.Name = "Label12"
+        Me.Label12.Size = New System.Drawing.Size(42, 17)
+        Me.Label12.TabIndex = 26
+        Me.Label12.Text = "Name:"
+        '
         'InsertPokemonFunct
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(385, 523)
+        Me.Controls.Add(Me.Label12)
+        Me.Controls.Add(Me.Pokemon_Name)
         Me.Controls.Add(Me.Move4)
         Me.Controls.Add(Me.Label11)
         Me.Controls.Add(Me.Move3)
@@ -338,4 +359,6 @@ Partial Class InsertPokemonFunct
     Friend WithEvents Move3 As System.Windows.Forms.TextBox
     Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents Move4 As System.Windows.Forms.TextBox
+    Friend WithEvents Pokemon_Name As System.Windows.Forms.TextBox
+    Friend WithEvents Label12 As System.Windows.Forms.Label
 End Class

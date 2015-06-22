@@ -33,8 +33,8 @@ Partial Class Form1
         Me.TeamRed_1 = New System.Windows.Forms.PictureBox()
         Me.Button2 = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.Pokedex_Writer = New System.ComponentModel.BackgroundWorker()
-        Me.Pokedex_Formatter = New System.ComponentModel.BackgroundWorker()
+        Me.Worker_Pokedex_Writer = New System.ComponentModel.BackgroundWorker()
+        Me.Worker_Pokedex_Formatter = New System.ComponentModel.BackgroundWorker()
         Me.Worker_InsertURI = New System.ComponentModel.BackgroundWorker()
         CType(Me.TeamBlue_3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TeamBlue_2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -148,12 +148,15 @@ Partial Class Form1
         Me.Label2.TabIndex = 9
         Me.Label2.Text = "VS."
         '
-        'Pokedex_Writer
+        'Worker_Pokedex_Writer
         '
-        Me.Pokedex_Writer.WorkerReportsProgress = True
-        Me.Pokedex_Writer.WorkerSupportsCancellation = True
+        Me.Worker_Pokedex_Writer.WorkerReportsProgress = True
+        Me.Worker_Pokedex_Writer.WorkerSupportsCancellation = True
         '
-        'Pokedex_Formatter
+        'Worker_Pokedex_Formatter
+        '
+        '
+        'Worker_InsertURI
         '
         '
         'Form1
@@ -194,8 +197,8 @@ Partial Class Form1
     Friend WithEvents TeamRed_1 As System.Windows.Forms.PictureBox
     Friend WithEvents Button2 As System.Windows.Forms.Button
     Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Pokedex_Writer As System.ComponentModel.BackgroundWorker
-    Friend WithEvents Pokedex_Formatter As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Worker_Pokedex_Writer As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Worker_Pokedex_Formatter As System.ComponentModel.BackgroundWorker
     Friend WithEvents Worker_InsertURI As System.ComponentModel.BackgroundWorker
 
 End Class

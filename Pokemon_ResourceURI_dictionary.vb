@@ -13,7 +13,7 @@ Public Class Pokemon_ResourceURI_dictionary
     ''' that the master database doesn't have such pokemon. So it could mean that the user typed
     ''' a non-existant pokemon, spelling error, or a brand new pokemon</remarks>
     Public Function IsPokemonInDictionary(ByVal pokemon_name As String) As Boolean
-        If pokemon_resourceURI_dictionary.ContainsKey(pokemon_name) = True Then
+        If pokemon_resourceURI_dictionary.ContainsKey(pokemon_name.ToLower) = True Then
             Return True
         Else
             Return False
@@ -29,7 +29,8 @@ Public Class Pokemon_ResourceURI_dictionary
     ''' <remarks>the user will use the URI to request the actual pokemon object from the database</remarks>
     Public Function Get_PokemonURI(ByVal pokemon_name As String) As String
         Dim uri_string As String = ""
-        If pokemon_resourceURI_dictionary.TryGetValue(pokemon_name, uri_string) = True Then
+        If pokemon_resourceURI_dictionary.TryGetValue(pokemon_name.ToLower, uri_string) = True Then
+            uri_string = uri_string.Trim("""")
             Return uri_string
         Else
             Return ""
@@ -46,7 +47,7 @@ Public Class Pokemon_ResourceURI_dictionary
         If pokemon_resourceURI_dictionary.ContainsKey(pokemon_name) = True Then
             Return REM it's already in the system
         Else
-            pokemon_resourceURI_dictionary.Add(pokemon_name, pokemon_URI)
+            pokemon_resourceURI_dictionary.Add(pokemon_name.ToLower, pokemon_URI)
         End If
     End Sub
 

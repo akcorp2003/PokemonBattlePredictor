@@ -17,9 +17,8 @@ Public Class Dex_Writer
         my_stream = GETURL.GetResponse.GetResponseStream()
 
         Dim stream_Reader As New StreamReader(my_stream)
-        REM for testing purposes, we'll output it to the console
+
         Dim Line As String = ""
-        Dim i As Integer = 0
 
         REM set up the filename and things
         Dim filename As String = "pokedex.txt"
@@ -30,7 +29,6 @@ Public Class Dex_Writer
         End Try
 
         Do While Not Line Is Nothing
-            i += 1
             Line = stream_Reader.ReadLine
             If Not Line Is Nothing Then
                 REM Write the line to file
@@ -77,7 +75,7 @@ Public Class Dex_formatter
                 REM we are going to assume the existing file is bad so delete it
                 My.Computer.FileSystem.DeleteFile(new_filename)
             Catch ex As Exception
-                MessageBox.Show("Something went awry when trying to delete the formatted Pokedex file. Aborting this operation.")
+                MessageBox.Show("Something went awry when trying to delete the formatted Pokedex file. Aborting this operation.", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
 
         End If
