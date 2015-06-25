@@ -1,0 +1,198 @@
+﻿Imports System
+Imports System.Collections
+Imports System.Net
+Imports System.IO
+
+Public Class Move_Dictionary
+    Private move_dictionary As New Dictionary(Of String, Move_Info)
+
+    Public Function IsMoveInDictionary(ByVal move As String) As Boolean
+        If move_dictionary.ContainsKey(move.ToLower) = True Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Function Get_Move(ByVal move As String) As Move_Info
+        Dim toreturn_move As Move_Info = Nothing
+        If move_dictionary.TryGetValue(move, toreturn_move) = True Then
+            Return toreturn_move
+        Else
+            Return Nothing
+        End If
+    End Function
+
+    Public Sub Add_Move(ByVal move As String, ByVal move_info As Move_Info)
+        If move_dictionary.ContainsKey(move) = True Then
+            Return
+        Else
+            move_dictionary.Add(move, move_info)
+            Return
+        End If
+    End Sub
+End Class
+
+Public Class Move_Info
+    Private m_name As String
+    Private m_accuracy As Integer
+    Private m_type As String
+    Private m_power As Integer
+    Private m_pp As Integer
+    Private m_uri As String
+
+    Public Property Name As String
+        Get
+            Return m_name
+        End Get
+        Set(value As String)
+            m_name = value
+        End Set
+    End Property
+
+    Public Property Accuracy As Integer
+        Get
+            Return m_accuracy
+        End Get
+        Set(value As Integer)
+            m_accuracy = value
+        End Set
+    End Property
+
+    Public Property Type As String
+        Get
+            Return m_type
+        End Get
+        Set(value As String)
+            m_type = value
+        End Set
+    End Property
+
+    Public Property Power As Integer
+        Get
+            Return m_power
+        End Get
+        Set(value As Integer)
+            m_power = value
+        End Set
+    End Property
+
+    Public Property PP As Integer
+        Get
+            Return m_pp
+        End Get
+        Set(value As Integer)
+            m_pp = value
+        End Set
+    End Property
+
+    Public Property URI As String
+        Get
+            Return m_uri
+        End Get
+        Set(value As String)
+            m_uri = value
+        End Set
+    End Property
+End Class
+
+Public Class Move_Package
+
+    Private m_name As String
+    Private m_uri As String
+
+    Public Property Name As String
+        Get
+            Return m_name
+        End Get
+        Set(value As String)
+            m_name = value
+        End Set
+    End Property
+
+    Public Property URI As String
+        Get
+            Return m_uri
+        End Get
+        Set(value As String)
+            m_uri = value
+        End Set
+    End Property
+
+    Public Sub InsertMove(ByRef pokemon As Pokemon, ByVal package As Move_Package)
+        Dim base_url As String = "http://pokeapi.co/"
+        Dim uri As String = package.URI
+        uri = uri.Trim("""")
+        Dim fulluri As String = base_url + uri
+
+        Dim movelines As String = Form1.RequestLine(fulluri)
+        Dim filename As String = Me.ProcessLine(movelines)
+        If filename = "" Then
+            MessageBox.Show("Something went wrong with processing the line when trying to insert a move. Check previous error messages.", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+
+        Dim master_filereader As StreamReader = Nothing
+        Try
+            master_filereader = My.Computer.FileSystem.OpenTextFileReader(filename)
+        Catch ex As Exception
+            MessageBox.Show("Something went wrong when trying to open " & filename & " for reading. Aborting...", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End Try
+
+        Dim poke_moveinfo As New Move_Info
+        poke_moveinfo.Name = package.Name
+
+
+        Dim line As String = ""
+        While Not master_filereader.EndOfStream()
+            line = master_filereader.ReadLine()
+            If line = """accuracy""" Then
+                REM directly consume the next line since we know it's the value of the accuracy
+                line = master_filereader.ReadLine()
+                Dim accuracy As Integer = Convert.ToInt32(line)
+                poke_moveinfo.Accuracy = accuracy
+            ElseIf line = """power""" Then
+                line = master_filereader.ReadLine()
+                Dim power As Integer = Convert.ToInt32(line)
+                poke_moveinfo.Power = power
+            ElseIf line = """pp""" Then
+                line = master_filereader.ReadLine()
+                Dim pp As Integer = Convert.ToInt32(line)
+                poke_moveinfo.PP = pp
+            ElseIf line = """resource_uri""" Then
+                line = master_filereader.ReadLine()
+                poke_moveinfo.URI = line
+            Else
+                Continue While
+            End If
+        End While
+        master_filereader.Close()
+
+        Dim movename As String = package.Name.Trim("""")
+        movename.Trim()
+        Form1.Get_MoveDictionary.Add_Move(movename, poke_moveinfo)
+        pokemon.Moves.Add(movename)
+
+    End Sub
+
+    ''' <summary>
+    ''' Given an unorganized moves text string, this function will parse it into one lines into
+    ''' a new text file
+    ''' </summary>
+    ''' <param name="lines"></param>
+    ''' <returns>Name of the formatted textfile</returns>
+    ''' <remarks></remarks>
+    Public Function ProcessLine(ByVal lines As String) As String
+
+        Dim returnvalue As String = Form1.FormatFile(lines, "move.txt", "move_formatted.txt")
+        If returnvalue = "" Then
+            MessageBox.Show("Something went wrong with formatting the file. Check previous error messages.", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return ""
+        End If
+
+        Return "move_formatted.txt"
+
+    End Function
+
+End Class
