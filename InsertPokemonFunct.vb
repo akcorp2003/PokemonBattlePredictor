@@ -15,6 +15,10 @@
         End Get
     End Property
     
+<<<<<<< HEAD
+=======
+    
+>>>>>>> origin/master
     Private Sub InsertPokemonFunct_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Dim pokemon_name As String = BattleSetup.Pokemon_Name.Text
@@ -88,6 +92,7 @@
         End If
 
         Form1.Get_TeamBlue.Addto_Team(bluepokemon, "blue")
+<<<<<<< HEAD
         m_lastadded_pokemon = "blue"
         Me.Close()
     End Sub
@@ -148,4 +153,7 @@
         Me.Close()
     End Sub
 
+=======
+    End Sub
+>>>>>>> origin/master
 End Class

@@ -138,6 +138,7 @@ Public Class Form1
         Dim GETURL As WebRequest
         GETURL = WebRequest.Create(uri)
 
+<<<<<<< HEAD
 
         REM check for internet connection
         If Not My.Computer.Network.IsAvailable Then
@@ -145,6 +146,8 @@ Public Class Form1
                             "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
 
+=======
+>>>>>>> origin/master
         Dim my_stream As Stream
         my_stream = GETURL.GetResponse.GetResponseStream()
 
@@ -153,9 +156,12 @@ Public Class Form1
         Dim line As String = ""
         line = stream_reader.ReadLine()
 
+<<<<<<< HEAD
         Progress.AddingPokemon_Bar.PerformStep()
         Progress.Information.Text = "Got all text from database."
 
+=======
+>>>>>>> origin/master
         Return line
 
     End Function

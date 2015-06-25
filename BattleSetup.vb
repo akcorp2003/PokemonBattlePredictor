@@ -11,7 +11,10 @@ Public Class BattleSetup
         If Form1.Get_PokemonDictionary.IsPokemonInDictionary(Pokemon_Name.Text) = False Then
             REM query the database
             Dim returnvalue As Integer
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
             returnvalue = Form1.Get_PokemonDictionary().Add_Pokemon(Pokemon_Name.Text)
             If returnvalue = 0 Then
                 MessageBox.Show("Yay! We added " & Pokemon_Name.Text & " into our database!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -19,6 +22,7 @@ Public Class BattleSetup
                 MessageBox.Show("Whoops! There was some trouble adding a pokemon. Please check the previous error messages.", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
             
+<<<<<<< HEAD
         End If
 
         REM to freeze the progress of this form
@@ -64,6 +68,15 @@ Public Class BattleSetup
         '    End If
         'End If
 
+
+=======
+            Dim Josh As Integer = 9
+        End If
+
+
+
+        InsertPokemonFunct.Show()
+>>>>>>> origin/master
 
 
     End Sub

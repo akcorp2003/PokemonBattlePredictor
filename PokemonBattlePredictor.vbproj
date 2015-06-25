@@ -111,12 +111,15 @@
     <Compile Include="Pokemon_Dictionary.vb" />
     <Compile Include="Pokemon_ResourceURI_dictionary.vb" />
     <Compile Include="Pokemon_Team.vb" />
+<<<<<<< HEAD
     <Compile Include="Progress.Designer.vb">
       <DependentUpon>Progress.vb</DependentUpon>
     </Compile>
     <Compile Include="Progress.vb">
       <SubType>Form</SubType>
     </Compile>
+=======
+>>>>>>> origin/master
     <Compile Include="RequestPokemon.vb" />
   </ItemGroup>
   <ItemGroup>
