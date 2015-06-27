@@ -9,8 +9,12 @@ Public Class Form1
     Dim dictionaryOf_Moves As New Move_Dictionary
     Dim dictionaryOf_Abilities As New Ability_Dictionary
 
-    Dim Team_Blue As New Pokemon_Team
-    Dim Team_Red As New Pokemon_Team
+    Dim battle_arena As New Pokemon_Arena
+
+    'Dim battlesetupform As New BattleSetup
+
+    'Dim Team_Blue As New Pokemon_Team
+    'Dim Team_Red As New Pokemon_Team
 
     Public Function Get_ResourceURIDictionary() As Pokemon_ResourceURI_dictionary
         Return dictionaryOf_ResourceURI
@@ -28,13 +32,17 @@ Public Class Form1
         Return dictionaryOf_Abilities
     End Function
 
-    Public Function Get_TeamBlue() As Pokemon_Team
-        Return Team_Blue
+    Public Function Get_PokemonArena() As Pokemon_Arena
+        Return battle_arena
     End Function
 
-    Public Function Get_TeamRed() As Pokemon_Team
-        Return Team_Red
-    End Function
+    'Public Function Get_TeamBlue() As Pokemon_Team
+    '    Return Team_Blue
+    'End Function
+
+    'Public Function Get_TeamRed() As Pokemon_Team
+    '    Return Team_Red
+    'End Function
 
     '////////////////////////////////////////////////////////////////
     '// BackgroundWorker Code                                      //
@@ -124,6 +132,79 @@ Public Class Form1
 
     End Sub
 
+    Private Sub PokemonReader_DoWork(ByVal sender As Object,
+                                      ByVal e As System.ComponentModel.DoWorkEventArgs
+                                      ) Handles Worker_Pokemonreader.DoWork
+        Dim worker As System.ComponentModel.BackgroundWorker
+        worker = CType(sender, System.ComponentModel.BackgroundWorker)
+
+        Dim poke_reader As New Dex_reader
+        poke_reader = CType(e.Argument, Dex_reader)
+        poke_reader.Execute(worker, e)
+
+    End Sub
+
+    Private Sub PokemonReader_WriteCompleted(ByVal sender As Object,
+                                             ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs
+                                             ) Handles Worker_Pokemonreader.RunWorkerCompleted
+        If e.Error IsNot Nothing Then
+            MessageBox.Show("Whoops! Error: " & e.Error.Message)
+        ElseIf e.Cancelled Then
+            MessageBox.Show("Cancelled")
+        Else
+            MessageBox.Show("Finished processing file" & e.Result & ". You like that don't you?")
+        End If
+
+    End Sub
+
+    Private Sub MoveReader_DoWork(ByVal sender As Object,
+                                      ByVal e As System.ComponentModel.DoWorkEventArgs
+                                      ) Handles Worker_Movereader.DoWork
+        Dim worker As System.ComponentModel.BackgroundWorker
+        worker = CType(sender, System.ComponentModel.BackgroundWorker)
+
+        Dim move_reader As New Dex_reader
+        move_reader = CType(e.Argument, Dex_reader)
+        move_reader.Execute(worker, e)
+
+    End Sub
+
+    Private Sub MoveReader_WriteCompleted(ByVal sender As Object,
+                                             ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs
+                                             ) Handles Worker_Movereader.RunWorkerCompleted
+        If e.Error IsNot Nothing Then
+            MessageBox.Show("Whoops! Error: " & e.Error.Message)
+        ElseIf e.Cancelled Then
+            MessageBox.Show("Cancelled")
+        Else
+            MessageBox.Show("Finished processing file" & e.Result & ". You like that don't you?")
+        End If
+    End Sub
+
+    Private Sub AbilityReader_DoWork(ByVal sender As Object,
+                                      ByVal e As System.ComponentModel.DoWorkEventArgs
+                                      ) Handles Worker_Abilityreader.DoWork
+        Dim worker As System.ComponentModel.BackgroundWorker
+        worker = CType(sender, System.ComponentModel.BackgroundWorker)
+
+        Dim ability_reader As New Dex_reader
+        ability_reader = CType(e.Argument, Dex_reader)
+        ability_reader.Execute(worker, e)
+
+    End Sub
+
+    Private Sub AbilityReader_WriteCompleted(ByVal sender As Object,
+                                             ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs
+                                             ) Handles Worker_Abilityreader.RunWorkerCompleted
+        If e.Error IsNot Nothing Then
+            MessageBox.Show("Whoops! Error: " & e.Error.Message)
+        ElseIf e.Cancelled Then
+            MessageBox.Show("Cancelled")
+        Else
+            MessageBox.Show("Finished processing file" & e.Result & ". You like that don't you?")
+        End If
+    End Sub
+
 
 
     '/////////////////////////////////////////////////////////////
@@ -138,7 +219,6 @@ Public Class Form1
         Dim GETURL As WebRequest
         GETURL = WebRequest.Create(uri)
 
-<<<<<<< HEAD
 
         REM check for internet connection
         If Not My.Computer.Network.IsAvailable Then
@@ -146,8 +226,6 @@ Public Class Form1
                             "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
 
-=======
->>>>>>> origin/master
         Dim my_stream As Stream
         my_stream = GETURL.GetResponse.GetResponseStream()
 
@@ -156,12 +234,9 @@ Public Class Form1
         Dim line As String = ""
         line = stream_reader.ReadLine()
 
-<<<<<<< HEAD
         Progress.AddingPokemon_Bar.PerformStep()
         Progress.Information.Text = "Got all text from database."
 
-=======
->>>>>>> origin/master
         Return line
 
     End Function
@@ -264,6 +339,8 @@ Public Class Form1
             Return
         End Try
 
+        filereader.Close()
+
         REM if the program successfully finds the file, then we don't need to worry!
         Dim dex_formatter As New Dex_formatter
         dex_formatter.Formatting_Filename = filename
@@ -273,17 +350,60 @@ Public Class Form1
         REM we will now begin adding the URI Pokemon into the ResourceURI_dictionary
         REM this MUST wait until the Pokedex_Formatter worker finished its job
         Worker_InsertURI.RunWorkerAsync(dictionaryOf_ResourceURI)
+
+        REM thread for reading pokemon
+        Dim dex_reader1 As New Dex_reader
+        dex_reader1.Read_File = "pokemondictionary_formatted.txt"
+        dex_reader1.Parent_Form = Me
+        Worker_Pokemonreader.RunWorkerAsync(dex_reader1)
+
+        REM thread for reading moves
+        Dim dex_reader2 As New Dex_reader
+        dex_reader2.Read_File = "moves_formatted.txt"
+        dex_reader2.Parent_Form = Me
+        Worker_Movereader.RunWorkerAsync(dex_reader2)
+
+        REM thread for reading abilities
+        Dim dex_reader3 As New Dex_reader
+        dex_reader3.Read_File = "ability_formatted.txt"
+        dex_reader3.Parent_Form = Me
+        Worker_Abilityreader.RunWorkerAsync(dex_reader3)
+
+
+    End Sub
+
+    Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As FormClosedEventArgs) Handles Me.FormClosed
+        REM output the data into files
+        Dim writer As New Dex_Writer
+
+        REM first readout the Pokemon files
+        writer.PrintPokemonInfo(Me)
+
+        REM second readout the Abilities
+        writer.PrintAbilityInfo(Me)
+
+        REM finally readout the Moves
+        writer.PrintMoveInfo(Me)
+
+        MessageBox.Show("Thank you for using PBP. The data is now finished writing.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
+
     End Sub
 
 
-
     Private Sub BattleButton_Click(sender As Object, e As EventArgs) Handles BattleButton.Click
-        BattleSetup.Show()
+        BattleSetup.ShowDialog()
 
     End Sub
 
     'Prediction algorithm begins here
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
         'Pass the Pokemon to true algorithm
+        Dim predictor As New Battle_Prediction
+        Dim winner As String = ""
+        Dim temp_battlearena As New Pokemon_Arena
+        temp_battlearena = battle_arena.Clone()
+        temp_battlearena.Team_Blue.Get_Team("blue").Clear()
+        winner = predictor.predict_outcome(battle_arena)
+        Dim josh As Integer = 9
     End Sub
 End Class

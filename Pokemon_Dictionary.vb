@@ -6,6 +6,10 @@ Imports System.IO
 Public Class Pokemon_Dictionary
     Private pokemon_dictionary As New Dictionary(Of String, Pokemon)
 
+    Public Function Get_Dictionary() As Dictionary(Of String, Pokemon)
+        Return pokemon_dictionary
+    End Function
+
     Public Function IsPokemonInDictionary(ByVal poke_name As String) As Boolean
         If pokemon_dictionary.ContainsKey(poke_name.ToLower) = True Then
             Return True
@@ -14,7 +18,13 @@ Public Class Pokemon_Dictionary
         End If
     End Function
 
-
+    ''' <summary>
+    ''' Fetches the Pokemon from the dictionary. poke_name should all be in lowercase and spaces trimmed.
+    ''' No quotations.
+    ''' </summary>
+    ''' <param name="poke_name"></param>
+    ''' <returns>A Pokemon object</returns>
+    ''' <remarks>poke_name should be in lowercase and spaces removed. No quotations</remarks>
     Public Function Get_Pokemon(ByVal poke_name As String) As Pokemon
         Dim toreturn_pokemon As New Pokemon 'Hopefully this will be alright
         poke_name = poke_name.ToLower
@@ -26,12 +36,16 @@ Public Class Pokemon_Dictionary
     End Function
 
     ''' <summary>
-    ''' Inserts Pokemon into the pokemon_dictionary
+    ''' Inserts Pokemon into the pokemon_dictionary. No need to format poke_name. The function will handle it.
     ''' </summary>
     ''' <param name="poke_name"></param>
     ''' <param name="the_pokemon"></param>
-    ''' <remarks>The function does not query the database. The querying is left to the user.</remarks>
+    ''' <remarks>The function does not query the database. The querying is left to the user. 
+    ''' No need to format poke_name as the function will clean it up.</remarks>
     Public Sub Add_Pokemon(ByVal poke_name As String, ByVal the_pokemon As Pokemon)
+        poke_name = poke_name.Trim()
+        poke_name = poke_name.Trim("""")
+        poke_name = poke_name.ToLower()
         If pokemon_dictionary.ContainsKey(poke_name) = True Then
             Return
         Else
@@ -40,7 +54,7 @@ Public Class Pokemon_Dictionary
     End Sub
 
     ''' <summary>
-    ''' Queries the master database using URL
+    ''' Queries the master database using URL. No need to format poke_name. The function will format it properly for you.
     ''' </summary>
     ''' <param name="poke_name"></param>
     ''' <remarks>This function will probably be used more than its other overloaded counterpart. 

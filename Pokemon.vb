@@ -1,6 +1,10 @@
 ﻿Imports System.Collections
+Imports System.Reflection
+
 
 Public Class Pokemon
+    Implements System.ICloneable
+
     Private m_name As String
     Private m_ability As New List(Of Ability_Info)
     Private m_ATK As Integer
@@ -121,4 +125,21 @@ Public Class Pokemon
             Next
         End Set
     End Property
+
+    Public Function Clone() As Object Implements ICloneable.Clone
+        Dim freshpokemon As New Pokemon
+        freshpokemon.ATK = Me.ATK
+        freshpokemon.DEF = Me.DEF
+        freshpokemon.Sp_ATK = Me.Sp_ATK
+        freshpokemon.Sp_DEF = Me.Sp_DEF
+        freshpokemon.SPD = Me.SPD
+        freshpokemon.Name = Me.Name
+        freshpokemon.HP = Me.HP
+        freshpokemon.Moves = Me.Moves.Select(Function(x) x.Clone()).Cast(Of String).ToList()
+        freshpokemon.Types = Me.Types.Select(Function(x) x.Clone()).Cast(Of String).ToList()
+        freshpokemon.Ability = Me.Ability.Select(Function(x) x.Clone()).Cast(Of Ability_Info).ToList()
+        freshpokemon.Moves_For_Battle = Me.Moves_For_Battle.Select(Function(x) x.Clone()).Cast(Of Move_Info).ToList()
+
+        Return freshpokemon
+    End Function
 End Class
