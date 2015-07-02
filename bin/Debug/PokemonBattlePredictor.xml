@@ -6,34 +6,69 @@ PokemonBattlePredictor
 </name>
 </assembly>
 <members>
-<member name="M:PokemonBattlePredictor.Move_Package.ProcessLine(System.String)">
+<member name="M:PokemonBattlePredictor.Battle_Prediction.IsThereSuperEffectiveMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.EffectivenessTable)">
 	<summary>
- Given an unorganized moves text string, this function will parse it into one lines into
- a new text file
+ Finds all supereffective moves that attacking_pokemon can use
  </summary>
-	<param name="lines"></param>
-	<returns>Name of the formatted textfile</returns>
+	<param name="attacking_pokemon"></param>
+	<param name="defending_pokemon"></param>
+	<param name="effectiveness_table"></param>
+	<returns>A list of SuperEffective moves</returns>
 	<remarks></remarks>
-</member><member name="M:PokemonBattlePredictor.Pokemon_Dictionary.Add_Pokemon(System.String,PokemonBattlePredictor.Pokemon)">
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.Project_Battle(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info,PokemonBattlePredictor.Poke_Calculator,System.Int32)">
 	<summary>
- Inserts Pokemon into the pokemon_dictionary
+ project_battle figures out the number of turns it takes for first_pokemon to destroy the second_pokemon
+ using attacking_move. Passing a non-damaging move does not work. 
  </summary>
-	<param name="poke_name"></param>
-	<param name="the_pokemon"></param>
-	<remarks>The function does not query the database. The querying is left to the user.</remarks>
-</member><member name="M:PokemonBattlePredictor.Pokemon_Dictionary.Add_Pokemon(System.String)">
+	<param name="first_pokemon">It is recommended to pass a clone.</param>
+	<param name="second_pokemon">It is recommended to pass a clone.</param>
+	<param name="attacking_move"></param>
+	<param name="poke_calculator"></param>
+	<param name="max_or_min">An integer to indicate if the user wants to project the battle using max(1), min(-1), or regular(0) damage. </param>
+	<returns>The number of turns until second_pokemon faints</returns>
+	<remarks>Non-damaging moves are not accepted</remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.apply_battle(PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Poke_Calculator)">
 	<summary>
- Queries the master database using URL
+ Applys the battle logic for pokemon battles.
+ The function looks 
  </summary>
-	<param name="poke_name"></param>
-	<remarks>This function will probably be used more than its other overloaded counterpart. 
- This function handles all the URL stuff and parsing.</remarks>
-</member><member name="M:PokemonBattlePredictor.Pokemon_Team.Addto_Team(PokemonBattlePredictor.Pokemon,System.String)">
+	<param name="first_pokemon">The attacking Pokemon</param>
+	<param name="second_pokemon">The defending Pokemon</param>
+	<param name="poke_calc"></param>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Poke_Calculator.CalculateDamage(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info,System.UInt64,System.Int32)">
 	<summary>
- Add the pokemon to the corresponding team
+ Uses the Formula provided by bulbapedia
+ </summary>
+	<param name="attacking_pokemon"></param>
+	<param name="defending_pokemon"></param>
+	<param name="attack_move"></param>
+	<param name="EFF">Indicates how effective is the attacking pokemon move on the defending pokemon</param>
+	<param name="MAXMIN">Indicates if user wants to apply max(1) or min (-1) possible damage. 0 is
+ regular damage. </param>
+	<returns>The damage value</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Poke_Calculator.GenerateRandomNumber">
+	<summary>
+	</summary>
+	<returns>A number between 0 and 100</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Poke_Calculator.GetCriticalStage(PokemonBattlePredictor.Pokemon)">
+	<summary>
+ Returns the percentage value that a critical hit can occur for the pokemon
  </summary>
 	<param name="pokemon"></param>
-	<param name="team">Must be either "blue" or "red"</param>
+	<returns>The percentage value that the stage the pokemon is currently in.</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Constants.Get_FormattedString(System.String@)">
+	<summary>
+ Takes in a string and formats the string by:
+ 1. Removing any leading and ending whitespace
+ 2. Removes any quotations
+ 3. Lowercases all letters
+ </summary>
+	<param name="ugly_string"></param>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="P:PokemonBattlePredictor.My.Resources.Resources.ResourceManager">
 	<summary>
@@ -56,6 +91,27 @@ PokemonBattlePredictor
 	<param name="inputfilename"></param>
 	<param name="outputfilename"></param>
 	<returns>The original filename or "" to indicate an error</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.InsertPokemonFunct.brushupstring(System.String)">
+	<summary>
+ Replaces all upper case characters after the first uppercase with a lowercase. Also adds a hyphen for every space.
+ </summary>
+	<param name="tomodify_string"></param>
+	<returns>A string with a hyphen and all lowercase except for the first one.</returns>
+	<remarks></remarks>
+</member><member name="P:PokemonBattlePredictor.Pokemon.Stage">
+	<summary>
+ Stage for determining critical hits
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Dex_reader.Execute(System.ComponentModel.BackgroundWorker,System.ComponentModel.DoWorkEventArgs)">
+	<summary>
+ Begins reading files. The object will determine which function to run based on the filename it holds.
+ </summary>
+	<param name="worker"></param>
+	<param name="e"></param>
 	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Pokemon_ResourceURI_dictionary.IsPokemonInDictionary(System.String)">
 	<summary>
@@ -80,7 +136,6 @@ PokemonBattlePredictor
 	<param name="pokemon_name"></param>
 	<param name="pokemon_URI"></param>
 	<remarks></remarks>
-<<<<<<< HEAD
 </member><member name="M:PokemonBattlePredictor.Pokemon_Team.Addto_Team(PokemonBattlePredictor.Pokemon,System.String)">
 	<summary>
  Add the pokemon to the corresponding team
@@ -88,20 +143,45 @@ PokemonBattlePredictor
 	<param name="pokemon"></param>
 	<param name="team">Must be either "blue" or "red"</param>
 	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_Dictionary.Get_Pokemon(System.String)">
+	<summary>
+ Fetches the Pokemon from the dictionary. poke_name should all be in lowercase and spaces trimmed.
+ No quotations.
+ </summary>
+	<param name="poke_name"></param>
+	<returns>A Pokemon object</returns>
+	<remarks>poke_name should be in lowercase and spaces removed. No quotations</remarks>
 </member><member name="M:PokemonBattlePredictor.Pokemon_Dictionary.Add_Pokemon(System.String,PokemonBattlePredictor.Pokemon)">
 	<summary>
- Inserts Pokemon into the pokemon_dictionary
+ Inserts Pokemon into the pokemon_dictionary. No need to format poke_name. The function will handle it.
  </summary>
 	<param name="poke_name"></param>
 	<param name="the_pokemon"></param>
-	<remarks>The function does not query the database. The querying is left to the user.</remarks>
+	<remarks>The function does not query the database. The querying is left to the user. 
+ No need to format poke_name as the function will clean it up.</remarks>
 </member><member name="M:PokemonBattlePredictor.Pokemon_Dictionary.Add_Pokemon(System.String)">
 	<summary>
- Queries the master database using URL
+ Queries the master database using URL. No need to format poke_name. The function will format it properly for you.
  </summary>
 	<param name="poke_name"></param>
 	<remarks>This function will probably be used more than its other overloaded counterpart. 
  This function handles all the URL stuff and parsing.</remarks>
+</member><member name="M:PokemonBattlePredictor.Move_Dictionary.Add_Move(System.String,PokemonBattlePredictor.Move_Info)">
+	<summary>
+ Adds a move to the dictionary
+ </summary>
+	<param name="move">Does not need to be specifically formatted. The function will handle
+ the formattting. FYI: the formatting is "Cut" (no quotes)</param>
+	<param name="move_info"></param>
+	<remarks>No need to specially format the arguments.</remarks>
+</member><member name="P:PokemonBattlePredictor.Move_Info.Effect">
+	<summary>
+ Holds a string of effects. Generally for moves that raises or lowers stats.
+ For instance, a string can be ATK+1SPD+1 means ATK raised by 1 stage and SPD raised by 1 stage
+ </summary>
+	<value></value>
+	<returns>A string of effect application</returns>
+	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Move_Package.ProcessLine(System.String)">
 	<summary>
  Given an unorganized moves text string, this function will parse it into one lines into
@@ -110,8 +190,23 @@ PokemonBattlePredictor
 	<param name="lines"></param>
 	<returns>Name of the formatted textfile</returns>
 	<remarks></remarks>
-=======
->>>>>>> origin/master
+</member><member name="M:PokemonBattlePredictor.EffectivenessTable.Effective_Type(System.String,System.String)">
+	<summary>
+ Returns the effectiveness of the pokemon as an unsigned long.
+ </summary>
+	<param name="Attacking_Type">No need to format it. Function will format it accordingly.</param>
+	<param name="Defending_Type">No need to format it. Function will format it accordingly.</param>
+	<returns>An unsigned long. 0 is no effect, 0.5 is not very effective, 1 is normal, 
+ 2 is super effective, 100 is couldn't locate</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.EffectivenessTable.Effective_Type(System.String,System.Collections.Generic.List{System.String})">
+	<summary>
+ Overloaded version. Takes the attacking type and calculates the effectiveness given a list of types for the defending pokemon
+ </summary>
+	<param name="Attacking_Type"></param>
+	<param name="Defending_Types">List of Strings of the types of the pokemon</param>
+	<returns>An ULong that indicates the effective type of the battle</returns>
+	<remarks></remarks>
 </member>
 </members>
 </doc>

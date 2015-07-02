@@ -4,10 +4,14 @@ Imports System.Net
 Imports System.IO
 
 Public Class Move_Dictionary
-    Private move_dictionary As New Dictionary(Of String, Move_Info)
+    Private m_move_dictionary As New Dictionary(Of String, Move_Info)
+
+    Public Function Get_MoveDictionary() As Dictionary(Of String, Move_Info)
+        Return m_move_dictionary
+    End Function
 
     Public Function IsMoveInDictionary(ByVal move As String) As Boolean
-        If move_dictionary.ContainsKey(move.ToLower) = True Then
+        If m_move_dictionary.ContainsKey(move) = True Then
             Return True
         Else
             Return False
@@ -16,30 +20,44 @@ Public Class Move_Dictionary
 
     Public Function Get_Move(ByVal move As String) As Move_Info
         Dim toreturn_move As Move_Info = Nothing
-        If move_dictionary.TryGetValue(move, toreturn_move) = True Then
+        If m_move_dictionary.TryGetValue(move, toreturn_move) = True Then
             Return toreturn_move
         Else
             Return Nothing
         End If
     End Function
 
+    ''' <summary>
+    ''' Adds a move to the dictionary
+    ''' </summary>
+    ''' <param name="move">Does not need to be specifically formatted. The function will handle
+    ''' the formattting. FYI: the formatting is "Cut" (no quotes)</param>
+    ''' <param name="move_info"></param>
+    ''' <remarks>No need to specially format the arguments.</remarks>
     Public Sub Add_Move(ByVal move As String, ByVal move_info As Move_Info)
-        If move_dictionary.ContainsKey(move) = True Then
+        move = move.Trim()
+        move = move.Trim("""")
+        If m_move_dictionary.ContainsKey(move) = True Then
             Return
         Else
-            move_dictionary.Add(move, move_info)
+            m_move_dictionary.Add(move, move_info)
             Return
         End If
     End Sub
 End Class
 
 Public Class Move_Info
+    Implements ICloneable
+
     Private m_name As String
     Private m_accuracy As Integer
     Private m_type As String
     Private m_power As Integer
     Private m_pp As Integer
     Private m_uri As String
+    Private m_boost As Integer
+    Private m_isSpecial As Boolean
+    Private m_effect As String
 
     Public Property Name As String
         Get
@@ -94,6 +112,56 @@ Public Class Move_Info
             m_uri = value
         End Set
     End Property
+
+    Public Property Boost As Integer
+        Get
+            Return m_boost
+        End Get
+        Set(value As Integer)
+            m_boost = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Holds a string of effects. Generally for moves that raises or lowers stats.
+    ''' For instance, a string can be ATK+1SPD+1 means ATK raised by 1 stage and SPD raised by 1 stage
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A string of effect application</returns>
+    ''' <remarks></remarks>
+    Public Property Effect As String
+        Get
+            Return m_effect
+        End Get
+        Set(value As String)
+            m_effect = value
+        End Set
+    End Property
+
+    Public Property Is_Special As Boolean
+        Get
+            Return m_isSpecial
+        End Get
+        Set(value As Boolean)
+            m_isSpecial = value
+        End Set
+    End Property
+
+    Public Function Clone() As Object Implements ICloneable.Clone
+        Dim freshmoveinfo As New Move_Info
+        freshmoveinfo.Accuracy = Me.Accuracy
+        freshmoveinfo.Type = Me.Type
+        freshmoveinfo.Name = Me.Name
+        freshmoveinfo.Power = Me.Power
+        freshmoveinfo.PP = Me.PP
+        'freshmoveinfo.Type = Me.Type.Clone() for a future release
+        freshmoveinfo.URI = Me.URI
+        freshmoveinfo.Boost = Me.Boost
+        freshmoveinfo.Is_Special = Me.Is_Special
+        freshmoveinfo.Effect = Me.Effect
+
+        Return freshmoveinfo
+    End Function
 End Class
 
 Public Class Move_Package

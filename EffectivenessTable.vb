@@ -1,0 +1,141 @@
+﻿Public Class EffectivenessTable
+
+    'Since there is only a fixed number of types, we're going to hardcode the for loop
+    '0 - normal
+    '1 - fighting
+    '2 - flying
+    '3 - poison
+    '4 - ground
+    '5 - rock
+    '6 - bug
+    '7 - ghost
+    '8 - steel
+    '9 - fire
+    '10 - water
+    '11 - grass
+    '12 - electric
+    '13 - psychic
+    '14 - ice
+    '15 - dragon
+    '16 - dark
+    '17 - fairy
+    Dim master_table(,) As ULong = {{1, 1, 1, 1, 1, 0.5, 1, 0, 0.5, 1, 1, 1, 1, 1, 1, 1, 1, 1}, _
+                                    {2, 1, 0.5, 0.5, 1, 2, 0.5, 0, 2, 1, 1, 1, 1, 0.5, 2, 1, 2, 0.5}, _
+                                    {1, 2, 1, 1, 1, 0.5, 2, 1, 0.5, 1, 1, 2, 0.5, 1, 1, 1, 1, 1}, _
+                                    {1, 1, 1, 0.5, 0.5, 0.5, 1, 0.5, 0, 1, 1, 2, 1, 1, 1, 1, 1, 2}, _
+                                    {1, 1, 0, 2, 1, 2, 0.5, 1, 2, 2, 1, 0.5, 2, 1, 1, 1, 1, 1}, _
+                                    {1, 0.5, 2, 1, 0.5, 1, 2, 1, 0.5, 2, 1, 1, 1, 1, 2, 1, 1, 1}, _
+                                    {1, 0.5, 0.5, 0.5, 1, 1, 1, 0.5, 0.5, 0.5, 1, 2, 1, 2, 1, 1, 2, 0.5}, _
+                                    {0, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 0.5, 1}, _
+                                    {1, 1, 1, 1, 1, 2, 1, 1, 0.5, 0.5, 0.5, 1, 0.5, 1, 2, 1, 1, 2}, _
+                                    {1, 1, 1, 1, 1, 0.5, 2, 1, 2, 0.5, 0.5, 2, 1, 1, 2, 0.5, 1, 1}, _
+                                    {1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 0.5, 0.5, 1, 1, 1, 0.5, 1, 1}, _
+                                    {1, 1, 0.5, 0.5, 2, 2, 0.5, 1, 0.5, 0.5, 2, 0.5, 1, 1, 1, 0.5, 1, 1}, _
+                                    {1, 1, 2, 1, 0, 1, 1, 1, 1, 1, 2, 0.5, 0.5, 1, 1, 0.5, 1, 1}, _
+                                    {1, 2, 1, 2, 1, 1, 1, 1, 0.5, 1, 1, 1, 1, 0.5, 1, 1, 0, 1}, _
+                                    {1, 1, 2, 1, 2, 1, 1, 1, 0.5, 0.5, 0.5, 2, 1, 1, 0.5, 2, 1, 1}, _
+                                    {1, 1, 1, 1, 1, 1, 1, 1, 0.5, 1, 1, 1, 1, 1, 1, 2, 1, 0}, _
+                                    {1, 0.5, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 0.5, 0.5}, _
+                                    {1, 2, 1, 0.5, 1, 1, 1, 1, 0.5, 0.5, 1, 1, 1, 1, 1, 2, 2, 1}}
+
+    ''' <summary>
+    ''' Returns the effectiveness of the pokemon as an unsigned long.
+    ''' </summary>
+    ''' <param name="Attacking_Type">No need to format it. Function will format it accordingly.</param>
+    ''' <param name="Defending_Type">No need to format it. Function will format it accordingly.</param>
+    ''' <returns>An unsigned long. 0 is no effect, 0.5 is not very effective, 1 is normal, 
+    ''' 2 is super effective, 100 is couldn't locate</returns>
+    ''' <remarks></remarks>
+    Public Function Effective_Type(ByVal Attacking_Type As String, ByVal Defending_Type As String) As ULong
+        REM first format the strings
+        Attacking_Type = Constants.Get_FormattedString(Attacking_Type)
+        'Attacking_Type = Attacking_Type.Trim()
+        'Attacking_Type = Attacking_Type.Trim("""")
+        'Attacking_Type = Attacking_Type.ToLower()
+
+        Defending_Type = Constants.Get_FormattedString(Defending_Type)
+        'Defending_Type = Defending_Type.Trim()
+        'Defending_Type = Defending_Type.Trim("""")
+        'Defending_Type = Defending_Type.ToLower()
+
+        Dim attack_index As Integer = GetTypeIndexInChart(Attacking_Type)
+        Dim defend_index As Integer = GetTypeIndexInChart(Defending_Type)
+        If attack_index = -1 Or defend_index = -1 Then
+            Return 100
+        End If
+
+        Return master_table(attack_index, defend_index)
+
+    End Function
+
+    ''' <summary>
+    ''' Overloaded version. Takes the attacking type and calculates the effectiveness given a list of types for the defending pokemon
+    ''' </summary>
+    ''' <param name="Attacking_Type"></param>
+    ''' <param name="Defending_Types">List of Strings of the types of the pokemon</param>
+    ''' <returns>An ULong that indicates the effective type of the battle</returns>
+    ''' <remarks></remarks>
+    Public Function Effective_Type(ByVal Attacking_Type As String, ByVal Defending_Types As List(Of String)) As ULong
+        Dim EFF As ULong = 1
+        Dim def_types As String() = Defending_Types.ToArray()
+        Attacking_Type = Constants.Get_FormattedString(Attacking_Type)
+        Dim attack_index As Integer = GetTypeIndexInChart(Attacking_Type)
+
+        Dim i As Integer = 0
+        While i < def_types.Length
+            Dim defend_index As Integer = GetTypeIndexInChart(def_types(i))
+            EFF = master_table(attack_index, defend_index) * EFF
+            i += 1
+        End While
+
+        Return EFF
+    End Function
+
+    Public Function GetTypeIndexInChart(ByVal type As String) As Integer
+        type = Constants.Get_FormattedString(type)
+        If type = "normal" Then
+            Return Types.normal
+        ElseIf type = "fighting" Then
+            Return Types.fighting
+        ElseIf type = "flying" Then
+            Return Types.flying
+        ElseIf type = "poison" Then
+            Return Types.poison
+        ElseIf type = "ground" Then
+            Return Types.ground
+        ElseIf type = "rock" Then
+            Return Types.rock
+        ElseIf type = "bug" Then
+            Return Types.bug
+        ElseIf type = "ghost" Then
+            Return Types.ghost
+        ElseIf type = "steel" Then
+            Return Types.steel
+        ElseIf type = "fire" Then
+            Return Types.fire
+        ElseIf type = "water" Then
+            Return Types.water
+        ElseIf type = "grass" Then
+            Return Types.grass
+        ElseIf type = "electric" Then
+            Return Types.electric
+        ElseIf type = "psychic" Then
+            Return Types.psychic
+        ElseIf type = "ice" Then
+            Return Types.ice
+        ElseIf type = "dragon" Then
+            Return Types.dragon
+        ElseIf type = "dark" Then
+            Return Types.dark
+        ElseIf type = "fairy" Then
+            Return Types.fairy
+        Else
+            Return -1
+        End If
+    End Function
+
+
+
+
+End Class
+

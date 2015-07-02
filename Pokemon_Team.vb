@@ -2,6 +2,8 @@
 Imports System.Collections
 
 Public Class Pokemon_Team
+    Implements System.ICloneable
+
     Dim Team_Blue As New List(Of Pokemon)
     Dim Team_Red As New List(Of Pokemon)
 
@@ -33,5 +35,13 @@ Public Class Pokemon_Team
             MessageBox.Show("Unable to get pokemon team. Please make sure you spelled Blue or Red properly.", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return Nothing
         End If
+    End Function
+
+    Public Function Clone() As Object Implements ICloneable.Clone
+        Dim freshpokemonteam As New Pokemon_Team
+        freshpokemonteam.Team_Blue = Me.Team_Blue.Select(Function(x) x.Clone).Cast(Of Pokemon).ToList()
+        freshpokemonteam.Team_Red = Me.Team_Red.Select(Function(x) x.Clone).Cast(Of Pokemon).ToList()
+
+        Return freshpokemonteam
     End Function
 End Class

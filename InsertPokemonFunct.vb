@@ -15,10 +15,6 @@
         End Get
     End Property
     
-<<<<<<< HEAD
-=======
-    
->>>>>>> origin/master
     Private Sub InsertPokemonFunct_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
         Dim pokemon_name As String = BattleSetup.Pokemon_Name.Text
@@ -39,6 +35,11 @@
         Me.SPEED.Text = Convert.ToString(addingpokemon.SPD)
         Me.ABILITY.Text = addingpokemon.Ability.First().Name
 
+        Me.Move1.Text = ""
+        Me.Move2.Text = ""
+        Me.Move3.Text = ""
+        Me.Move4.Text = ""
+
     End Sub
 
     Private Sub AddBlue_Click(sender As Object, e As EventArgs) Handles AddBlue.Click
@@ -49,7 +50,7 @@
         Dim move3 As New Move_Info
         Dim move4 As New Move_Info
 
-        bluepokemon = Form1.Get_PokemonDictionary().Get_Pokemon(Me.Pokemon_Name.Text)
+        bluepokemon = Form1.Get_PokemonDictionary().Get_Pokemon(Me.Pokemon_Name.Text).Clone()
 
         REM Update the values with the user's values
         bluepokemon.ATK = Me.ATK.Text
@@ -57,16 +58,22 @@
         bluepokemon.Sp_ATK = Me.SpATK.Text
         bluepokemon.Sp_DEF = Me.SpDEF.Text
         bluepokemon.SPD = Me.SPEED.Text
+        bluepokemon.HP = Me.HP.Text
 
         If Not bluepokemon.Moves_For_Battle.Count = 0 Then
             REM we want the move list to be fresh
             bluepokemon.Moves_For_Battle.Clear()
         End If
 
-        move1 = Form1.Get_MoveDictionary().Get_Move(Me.Move1.Text)
-        move2 = Form1.Get_MoveDictionary().Get_Move(Me.Move2.Text)
-        move3 = Form1.Get_MoveDictionary().Get_Move(Me.Move3.Text)
-        move4 = Form1.Get_MoveDictionary().Get_Move(Me.Move4.Text)
+        Dim proper_move1 As String = brushupstring(Me.Move1.Text)
+        Dim proper_move2 As String = brushupstring(Me.Move2.Text)
+        Dim proper_move3 As String = brushupstring(Me.Move3.Text)
+        Dim proper_move4 As String = brushupstring(Me.Move4.Text)
+
+        move1 = Form1.Get_MoveDictionary().Get_Move(proper_move1)
+        move2 = Form1.Get_MoveDictionary().Get_Move(proper_move2)
+        move3 = Form1.Get_MoveDictionary().Get_Move(proper_move3)
+        move4 = Form1.Get_MoveDictionary().Get_Move(proper_move4)
 
         If move1 Is Nothing Then
             MessageBox.Show("Couldn't find the move " & Me.Move1.Text & ".", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -91,11 +98,36 @@
             bluepokemon.Moves_For_Battle.Add(move4)
         End If
 
-        Form1.Get_TeamBlue.Addto_Team(bluepokemon, "blue")
-<<<<<<< HEAD
+        Form1.Get_PokemonArena.Get_TeamBlue.Addto_Team(bluepokemon, "blue")
         m_lastadded_pokemon = "blue"
         Me.Close()
     End Sub
+
+    ''' <summary>
+    ''' Replaces all upper case characters after the first uppercase with a lowercase. Also adds a hyphen for every space.
+    ''' </summary>
+    ''' <param name="tomodify_string"></param>
+    ''' <returns>A string with a hyphen and all lowercase except for the first one.</returns>
+    ''' <remarks></remarks>
+    Private Function brushupstring(ByVal tomodify_string As String) As String
+        Dim returnstring As String
+        REM first add the hyphen
+        returnstring = tomodify_string.Replace(" ", "-")
+        Dim seenUpper As Boolean = False
+        Dim secondUpperseen As Boolean = False REM for extra security
+        For Each c As Char In returnstring
+            If Char.IsUpper(c) Then
+                If seenUpper = False Then
+                    seenUpper = True
+                Else
+                    returnstring = returnstring.Replace(c, c.ToString.ToLower())
+                End If
+            End If
+        Next
+
+        Return returnstring
+
+    End Function
 
 
     Private Sub AddRed_Click(sender As Object, e As EventArgs) Handles AddRed.Click
@@ -114,16 +146,22 @@
         redpokemon.Sp_ATK = Me.SpATK.Text
         redpokemon.Sp_DEF = Me.SpDEF.Text
         redpokemon.SPD = Me.SPEED.Text
+        redpokemon.HP = Me.HP.Text
 
         If Not redpokemon.Moves_For_Battle.Count = 0 Then
             REM we want the move list to be fresh
             redpokemon.Moves_For_Battle.Clear()
         End If
 
-        move1 = Form1.Get_MoveDictionary().Get_Move(Me.Move1.Text)
-        move2 = Form1.Get_MoveDictionary().Get_Move(Me.Move2.Text)
-        move3 = Form1.Get_MoveDictionary().Get_Move(Me.Move3.Text)
-        move4 = Form1.Get_MoveDictionary().Get_Move(Me.Move4.Text)
+        Dim proper_move1 As String = brushupstring(Me.Move1.Text)
+        Dim proper_move2 As String = brushupstring(Me.Move2.Text)
+        Dim proper_move3 As String = brushupstring(Me.Move3.Text)
+        Dim proper_move4 As String = brushupstring(Me.Move4.Text)
+
+        move1 = Form1.Get_MoveDictionary().Get_Move(proper_move1)
+        move2 = Form1.Get_MoveDictionary().Get_Move(proper_move2)
+        move3 = Form1.Get_MoveDictionary().Get_Move(proper_move3)
+        move4 = Form1.Get_MoveDictionary().Get_Move(proper_move4)
 
         If move1 Is Nothing Then
             MessageBox.Show("Couldn't find the move " & Me.Move1.Text & ".", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -148,12 +186,9 @@
             redpokemon.Moves_For_Battle.Add(move4)
         End If
 
-        Form1.Get_TeamRed.Addto_Team(redpokemon, "red")
+        Form1.Get_PokemonArena.Get_TeamRed.Addto_Team(redpokemon, "red")
         m_lastadded_pokemon = "red"
         Me.Close()
     End Sub
 
-=======
-    End Sub
->>>>>>> origin/master
 End Class

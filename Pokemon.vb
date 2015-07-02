@@ -1,6 +1,10 @@
 ﻿Imports System.Collections
+Imports System.Reflection
+
 
 Public Class Pokemon
+    Implements System.ICloneable
+
     Private m_name As String
     Private m_ability As New List(Of Ability_Info)
     Private m_ATK As Integer
@@ -12,6 +16,8 @@ Public Class Pokemon
     Private m_Moves As New List(Of String)
     Private m_Moves_for_Battle As New List(Of Move_Info)
     Private m_Type As New List(Of String)
+    Private m_stage As Integer = 0
+    Private m_team As String
 
     Public Property Name() As String
         Get
@@ -76,6 +82,30 @@ Public Class Pokemon
         End Set
     End Property
 
+    ''' <summary>
+    ''' Stage for determining critical hits
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Property Stage() As Integer
+        Get
+            Return m_stage
+        End Get
+        Set(value As Integer)
+            m_stage = value
+        End Set
+    End Property
+
+    Public Property Team() As String
+        Get
+            Return m_team
+        End Get
+        Set(value As String)
+            m_team = value
+        End Set
+    End Property
+
     REM mimic a copy constructor
     Public Property Moves() As List(Of String)
         Get
@@ -121,4 +151,21 @@ Public Class Pokemon
             Next
         End Set
     End Property
+
+    Public Function Clone() As Object Implements ICloneable.Clone
+        Dim freshpokemon As New Pokemon
+        freshpokemon.ATK = Me.ATK
+        freshpokemon.DEF = Me.DEF
+        freshpokemon.Sp_ATK = Me.Sp_ATK
+        freshpokemon.Sp_DEF = Me.Sp_DEF
+        freshpokemon.SPD = Me.SPD
+        freshpokemon.Name = Me.Name
+        freshpokemon.HP = Me.HP
+        freshpokemon.Moves = Me.Moves.Select(Function(x) x.Clone()).Cast(Of String).ToList()
+        freshpokemon.Types = Me.Types.Select(Function(x) x.Clone()).Cast(Of String).ToList()
+        freshpokemon.Ability = Me.Ability.Select(Function(x) x.Clone()).Cast(Of Ability_Info).ToList()
+        freshpokemon.Moves_For_Battle = Me.Moves_For_Battle.Select(Function(x) x.Clone()).Cast(Of Move_Info).ToList()
+
+        Return freshpokemon
+    End Function
 End Class
