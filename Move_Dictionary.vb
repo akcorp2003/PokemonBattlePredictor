@@ -188,6 +188,16 @@ Public Class Move_Package
     End Property
 
     Public Sub InsertMove(ByRef pokemon As Pokemon, ByVal package As Move_Package)
+
+        Dim movename As String = package.Name.Trim("""")
+        movename.Trim()
+
+        REM first check if the move is already in our dictionary, we can save a lot of time
+        If Form1.Get_MoveDictionary.IsMoveInDictionary(movename) Then
+            pokemon.Moves.Add(movename)
+            Return
+        End If
+
         Dim base_url As String = "http://pokeapi.co/"
         Dim uri As String = package.URI
         uri = uri.Trim("""")
@@ -237,8 +247,6 @@ Public Class Move_Package
         End While
         master_filereader.Close()
 
-        Dim movename As String = package.Name.Trim("""")
-        movename.Trim()
         Form1.Get_MoveDictionary.Add_Move(movename, poke_moveinfo)
         pokemon.Moves.Add(movename)
 
