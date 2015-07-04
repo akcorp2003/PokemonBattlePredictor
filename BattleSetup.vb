@@ -88,5 +88,6 @@ Public Class BattleSetup
     Private Sub Initiate_movebuild_Click(sender As Object, e As EventArgs) Handles Initiate_movebuild.Click
         Dim csv_reader As New Dex_reader
         csv_reader.Read_MovesCSV()
+        MessageBox.Show("All done building moves!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 End Class

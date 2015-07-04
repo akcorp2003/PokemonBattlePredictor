@@ -675,8 +675,12 @@ Public Class Dex_reader
             Dim movename As String = currentLine(1)
             Dim type As String = currentLine(3)
             Dim damage_type As String = currentLine(9)
+            Dim effect As String = currentLine(10)
             Dim norm_or_special As Integer = Convert.ToInt32(damage_type)
             Dim typename As String = eff_table.GetTypeName(Convert.ToInt32(type) - 1)
+
+            Dim effectclass As Integer = Convert.ToInt32(effect)
+            Dim effect_string As String = Constants.Get_EffectString(effectclass)
 
             movename = Capitalizefirstletter(movename)
 
@@ -684,6 +688,7 @@ Public Class Dex_reader
             modify_move = Form1.Get_MoveDictionary.Get_Move(movename)
             If Not modify_move Is Nothing Then
                 modify_move.Type = typename
+                modify_move.Effect = effect_string
                 If norm_or_special = 3 Then
                     modify_move.Is_Special = True
                 Else
