@@ -14,3 +14,5 @@ CURRENT PROGRESS:
 4. 6/24/15 Small Progress: Pokemon is now displayed in the ListView. Battle logic implementation begins here.
  
 5. 6/26/15 Small Progress: IO is now implemented. This reduces the need to constantly go to the server, which is quite slow. Also, this serves as the ability to cache all the data.
+
+CURRENT ACTIVE BRANCH: BattleLogic
