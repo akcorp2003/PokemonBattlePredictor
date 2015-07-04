@@ -1,1 +1,1 @@
-﻿{"accuracy": 55, "category": "", "created": "2013-11-03T15:06:09.614086", "description": "Confuse the target.", "id": 48, "modified": "2013-12-24T15:24:29.920229", "name": "Supersonic", "power": 0, "pp": 20, "resource_uri": "/api/v1/move/48/"}
+﻿{"accuracy": 0, "category": "", "created": "2013-11-03T15:06:10.659490", "description": "User faint.  Its replacement's HP and PP are fully restored, and any major status effect-effect is removed.", "id": 461, "modified": "2013-12-24T15:24:32.365594", "name": "Lunar-dance", "power": 0, "pp": 10, "resource_uri": "/api/v1/move/461/"}

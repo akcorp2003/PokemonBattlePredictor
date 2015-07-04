@@ -47,6 +47,8 @@ Partial Class BattleSetup
         Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Worker_FetchMove = New System.ComponentModel.BackgroundWorker()
+        Me.Initiate_Build = New System.Windows.Forms.Button()
+        Me.Initiate_movebuild = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Pokemon_Name
@@ -211,11 +213,31 @@ Partial Class BattleSetup
         '
         Me.ColumnHeader8.Text = "Ability"
         '
+        'Initiate_Build
+        '
+        Me.Initiate_Build.Location = New System.Drawing.Point(595, 27)
+        Me.Initiate_Build.Name = "Initiate_Build"
+        Me.Initiate_Build.Size = New System.Drawing.Size(155, 23)
+        Me.Initiate_Build.TabIndex = 14
+        Me.Initiate_Build.Text = "Build Pokemon Dictionary"
+        Me.Initiate_Build.UseVisualStyleBackColor = True
+        '
+        'Initiate_movebuild
+        '
+        Me.Initiate_movebuild.Location = New System.Drawing.Point(595, 93)
+        Me.Initiate_movebuild.Name = "Initiate_movebuild"
+        Me.Initiate_movebuild.Size = New System.Drawing.Size(155, 23)
+        Me.Initiate_movebuild.TabIndex = 15
+        Me.Initiate_movebuild.Text = "Build Move Dictionary"
+        Me.Initiate_movebuild.UseVisualStyleBackColor = True
+        '
         'BattleSetup
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(762, 626)
+        Me.Controls.Add(Me.Initiate_movebuild)
+        Me.Controls.Add(Me.Initiate_Build)
         Me.Controls.Add(Me.TeamRed_List)
         Me.Controls.Add(Me.TeamBlue_List)
         Me.Controls.Add(Me.Label3)
@@ -255,4 +277,6 @@ Partial Class BattleSetup
     Friend WithEvents ColumnHeader7 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader8 As System.Windows.Forms.ColumnHeader
     Friend WithEvents Worker_FetchMove As System.ComponentModel.BackgroundWorker
+    Friend WithEvents Initiate_Build As System.Windows.Forms.Button
+    Friend WithEvents Initiate_movebuild As System.Windows.Forms.Button
 End Class

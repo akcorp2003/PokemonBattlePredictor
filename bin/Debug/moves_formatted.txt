@@ -14,7 +14,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -32,7 +32,7 @@ False
 EFFECT
 
 TYPE
-
+electric
 END MOVE
 MOVE
 NAME
@@ -46,11 +46,11 @@ PP
 URI
 "/api/v1/move/521/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+electric
 END MOVE
 MOVE
 NAME
@@ -64,11 +64,11 @@ PP
 URI
 "/api/v1/move/497/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -82,11 +82,11 @@ PP
 URI
 "/api/v1/move/496/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -104,7 +104,7 @@ False
 EFFECT
 
 TYPE
-
+electric
 END MOVE
 MOVE
 NAME
@@ -118,11 +118,11 @@ PP
 URI
 "/api/v1/move/324/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+bug
 END MOVE
 MOVE
 NAME
@@ -140,7 +140,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -158,7 +158,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -172,11 +172,11 @@ PP
 URI
 "/api/v1/move/451/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+electric
 END MOVE
 MOVE
 NAME
@@ -190,11 +190,11 @@ PP
 URI
 "/api/v1/move/447/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -212,7 +212,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -230,7 +230,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -244,11 +244,11 @@ PP
 URI
 "/api/v1/move/411/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -266,7 +266,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -284,7 +284,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -316,11 +316,11 @@ PP
 URI
 "/api/v1/move/351/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+electric
 END MOVE
 MOVE
 NAME
@@ -338,7 +338,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -356,7 +356,7 @@ False
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -374,7 +374,7 @@ False
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -392,7 +392,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -410,7 +410,7 @@ False
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -428,7 +428,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -446,7 +446,7 @@ False
 EFFECT
 
 TYPE
-
+ground
 END MOVE
 MOVE
 NAME
@@ -464,7 +464,7 @@ False
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -478,11 +478,11 @@ PP
 URI
 "/api/v1/move/237/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -500,7 +500,7 @@ False
 EFFECT
 
 TYPE
-
+steel
 END MOVE
 MOVE
 NAME
@@ -536,7 +536,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -554,7 +554,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -572,7 +572,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -590,7 +590,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -608,7 +608,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -626,7 +626,7 @@ False
 EFFECT
 
 TYPE
-
+rock
 END MOVE
 MOVE
 NAME
@@ -644,7 +644,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -662,7 +662,7 @@ False
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -676,11 +676,11 @@ PP
 URI
 "/api/v1/move/192/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+electric
 END MOVE
 MOVE
 NAME
@@ -694,11 +694,11 @@ PP
 URI
 "/api/v1/move/189/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+ground
 END MOVE
 MOVE
 NAME
@@ -716,7 +716,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -734,7 +734,7 @@ False
 EFFECT
 
 TYPE
-
+ghost
 END MOVE
 MOVE
 NAME
@@ -748,11 +748,11 @@ PP
 URI
 "/api/v1/move/173/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -770,7 +770,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -788,7 +788,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -806,7 +806,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -842,7 +842,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -860,7 +860,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -896,7 +896,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -914,7 +914,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -932,7 +932,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -950,7 +950,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -964,11 +964,11 @@ PP
 URI
 "/api/v1/move/129/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -986,7 +986,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1004,7 +1004,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -1022,7 +1022,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1040,7 +1040,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1058,7 +1058,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1076,7 +1076,7 @@ False
 EFFECT
 
 TYPE
-
+poison
 END MOVE
 MOVE
 NAME
@@ -1090,7 +1090,7 @@ PP
 URI
 "/api/v1/move/87/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
@@ -1112,7 +1112,7 @@ False
 EFFECT
 
 TYPE
-
+electric
 END MOVE
 MOVE
 NAME
@@ -1126,7 +1126,7 @@ PP
 URI
 "/api/v1/move/85/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
@@ -1166,7 +1166,7 @@ False
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -1184,7 +1184,7 @@ False
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -1198,11 +1198,11 @@ PP
 URI
 "/api/v1/move/63/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1218,9 +1218,9 @@ URI
 SPECIAL
 False
 EFFECT
-
+ATKO-1
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1238,7 +1238,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1256,7 +1256,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1274,7 +1274,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1292,7 +1292,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1310,7 +1310,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1328,7 +1328,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1346,7 +1346,7 @@ False
 EFFECT
 
 TYPE
-
+dragon
 END MOVE
 MOVE
 NAME
@@ -1364,7 +1364,7 @@ False
 EFFECT
 
 TYPE
-
+ground
 END MOVE
 MOVE
 NAME
@@ -1378,11 +1378,11 @@ PP
 URI
 "/api/v1/move/527/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+electric
 END MOVE
 MOVE
 NAME
@@ -1400,7 +1400,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1418,7 +1418,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -1436,7 +1436,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -1454,7 +1454,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -1468,11 +1468,11 @@ PP
 URI
 "/api/v1/move/304/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1490,7 +1490,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1508,7 +1508,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1540,11 +1540,11 @@ PP
 URI
 "/api/v1/move/101/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+ghost
 END MOVE
 MOVE
 NAME
@@ -1562,7 +1562,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -1576,11 +1576,11 @@ PP
 URI
 "/api/v1/move/555/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -1598,7 +1598,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1616,7 +1616,7 @@ False
 EFFECT
 
 TYPE
-
+dragon
 END MOVE
 MOVE
 NAME
@@ -1630,11 +1630,11 @@ PP
 URI
 "/api/v1/move/524/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+ice
 END MOVE
 MOVE
 NAME
@@ -1652,7 +1652,7 @@ False
 EFFECT
 
 TYPE
-
+ground
 END MOVE
 MOVE
 NAME
@@ -1666,11 +1666,11 @@ PP
 URI
 "/api/v1/move/522/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+bug
 END MOVE
 MOVE
 NAME
@@ -1688,7 +1688,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1706,7 +1706,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -1724,7 +1724,7 @@ False
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -1742,7 +1742,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -1756,11 +1756,11 @@ PP
 URI
 "/api/v1/move/510/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -1778,7 +1778,7 @@ False
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -1792,11 +1792,11 @@ PP
 URI
 "/api/v1/move/503/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -1814,7 +1814,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -1832,7 +1832,7 @@ False
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -1850,7 +1850,7 @@ False
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -1864,11 +1864,11 @@ PP
 URI
 "/api/v1/move/482/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+poison
 END MOVE
 MOVE
 NAME
@@ -1886,7 +1886,7 @@ False
 EFFECT
 
 TYPE
-
+rock
 END MOVE
 MOVE
 NAME
@@ -1904,7 +1904,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -1918,11 +1918,11 @@ PP
 URI
 "/api/v1/move/474/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+poison
 END MOVE
 MOVE
 NAME
@@ -1936,11 +1936,11 @@ PP
 URI
 "/api/v1/move/473/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -1958,7 +1958,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -1976,7 +1976,7 @@ False
 EFFECT
 
 TYPE
-
+bug
 END MOVE
 MOVE
 NAME
@@ -1994,7 +1994,7 @@ False
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -2012,7 +2012,7 @@ False
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -2030,7 +2030,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -2048,7 +2048,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -2066,7 +2066,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -2084,7 +2084,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -2102,7 +2102,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -2120,7 +2120,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -2138,7 +2138,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -2156,7 +2156,7 @@ False
 EFFECT
 
 TYPE
-
+bug
 END MOVE
 MOVE
 NAME
@@ -2174,7 +2174,7 @@ False
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -2188,11 +2188,11 @@ PP
 URI
 "/api/v1/move/466/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+ghost
 END MOVE
 MOVE
 NAME
@@ -2210,7 +2210,7 @@ False
 EFFECT
 
 TYPE
-
+steel
 END MOVE
 MOVE
 NAME
@@ -2228,7 +2228,7 @@ False
 EFFECT
 
 TYPE
-
+poison
 END MOVE
 MOVE
 NAME
@@ -2246,7 +2246,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -2260,11 +2260,11 @@ PP
 URI
 "/api/v1/move/414/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+ground
 END MOVE
 MOVE
 NAME
@@ -2278,11 +2278,11 @@ PP
 URI
 "/api/v1/move/410/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -2300,7 +2300,7 @@ False
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -2318,7 +2318,7 @@ False
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -2336,7 +2336,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -2354,7 +2354,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -2372,7 +2372,7 @@ False
 EFFECT
 
 TYPE
-
+poison
 END MOVE
 MOVE
 NAME
@@ -2390,7 +2390,7 @@ False
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -2408,7 +2408,7 @@ False
 EFFECT
 
 TYPE
-
+steel
 END MOVE
 MOVE
 NAME
@@ -2422,11 +2422,11 @@ PP
 URI
 "/api/v1/move/314/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -2444,7 +2444,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -2462,7 +2462,7 @@ False
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -2480,7 +2480,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -2494,11 +2494,11 @@ PP
 URI
 "/api/v1/move/257/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -2512,11 +2512,11 @@ PP
 URI
 "/api/v1/move/253/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -2530,11 +2530,11 @@ PP
 URI
 "/api/v1/move/239/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+dragon
 END MOVE
 MOVE
 NAME
@@ -2552,7 +2552,7 @@ False
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -2570,7 +2570,7 @@ False
 EFFECT
 
 TYPE
-
+dragon
 END MOVE
 MOVE
 NAME
@@ -2588,7 +2588,7 @@ False
 EFFECT
 
 TYPE
-
+ghost
 END MOVE
 MOVE
 NAME
@@ -2606,7 +2606,7 @@ False
 EFFECT
 
 TYPE
-
+rock
 END MOVE
 MOVE
 NAME
@@ -2624,7 +2624,7 @@ False
 EFFECT
 
 TYPE
-
+rock
 END MOVE
 MOVE
 NAME
@@ -2642,7 +2642,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -2660,7 +2660,7 @@ False
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -2678,7 +2678,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -2692,11 +2692,11 @@ PP
 URI
 "/api/v1/move/430/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+steel
 END MOVE
 MOVE
 NAME
@@ -2714,7 +2714,7 @@ False
 EFFECT
 
 TYPE
-
+ghost
 END MOVE
 MOVE
 NAME
@@ -2732,7 +2732,7 @@ False
 EFFECT
 
 TYPE
-
+ice
 END MOVE
 MOVE
 NAME
@@ -2750,7 +2750,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -2764,11 +2764,11 @@ PP
 URI
 "/api/v1/move/412/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -2786,7 +2786,7 @@ False
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -2800,11 +2800,11 @@ PP
 URI
 "/api/v1/move/406/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+dragon
 END MOVE
 MOVE
 NAME
@@ -2822,7 +2822,7 @@ False
 EFFECT
 
 TYPE
-
+bug
 END MOVE
 MOVE
 NAME
@@ -2836,11 +2836,11 @@ PP
 URI
 "/api/v1/move/399/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -2858,7 +2858,7 @@ False
 EFFECT
 
 TYPE
-
+poison
 END MOVE
 MOVE
 NAME
@@ -2876,7 +2876,7 @@ False
 EFFECT
 
 TYPE
-
+rock
 END MOVE
 MOVE
 NAME
@@ -2890,11 +2890,11 @@ PP
 URI
 "/api/v1/move/396/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -2912,7 +2912,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -2930,7 +2930,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -2948,7 +2948,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -2966,7 +2966,7 @@ False
 EFFECT
 
 TYPE
-
+bug
 END MOVE
 MOVE
 NAME
@@ -2984,7 +2984,7 @@ False
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -2998,11 +2998,11 @@ PP
 URI
 "/api/v1/move/362/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -3020,7 +3020,7 @@ False
 EFFECT
 
 TYPE
-
+steel
 END MOVE
 MOVE
 NAME
@@ -3038,7 +3038,7 @@ False
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -3052,11 +3052,11 @@ PP
 URI
 "/api/v1/move/318/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+bug
 END MOVE
 MOVE
 NAME
@@ -3074,7 +3074,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -3092,7 +3092,7 @@ False
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -3110,7 +3110,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -3128,7 +3128,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -3146,7 +3146,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -3164,7 +3164,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -3178,11 +3178,11 @@ PP
 URI
 "/api/v1/move/352/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -3198,9 +3198,9 @@ URI
 SPECIAL
 False
 EFFECT
-
+SPATKU+1,SPDEFU+1
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -3216,9 +3216,9 @@ URI
 SPECIAL
 False
 EFFECT
-
+ATKU+1,DEFU+1
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -3236,7 +3236,7 @@ False
 EFFECT
 
 TYPE
-
+dragon
 END MOVE
 MOVE
 NAME
@@ -3254,7 +3254,7 @@ False
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -3272,7 +3272,7 @@ False
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -3290,7 +3290,7 @@ False
 EFFECT
 
 TYPE
-
+rock
 END MOVE
 MOVE
 NAME
@@ -3304,11 +3304,11 @@ PP
 URI
 "/api/v1/move/315/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -3326,7 +3326,7 @@ False
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -3344,7 +3344,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -3362,7 +3362,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -3380,7 +3380,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -3398,7 +3398,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -3416,7 +3416,7 @@ False
 EFFECT
 
 TYPE
-
+ice
 END MOVE
 MOVE
 NAME
@@ -3434,7 +3434,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -3448,11 +3448,11 @@ PP
 URI
 "/api/v1/move/53/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -3466,11 +3466,11 @@ PP
 URI
 "/api/v1/move/250/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -3484,11 +3484,11 @@ PP
 URI
 "/api/v1/move/247/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+ghost
 END MOVE
 MOVE
 NAME
@@ -3524,7 +3524,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -3542,7 +3542,7 @@ False
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -3560,7 +3560,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -3574,7 +3574,7 @@ PP
 URI
 "/api/v1/move/225/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
@@ -3596,7 +3596,7 @@ False
 EFFECT
 
 TYPE
-
+steel
 END MOVE
 MOVE
 NAME
@@ -3614,7 +3614,7 @@ False
 EFFECT
 
 TYPE
-
+bug
 END MOVE
 MOVE
 NAME
@@ -3628,11 +3628,11 @@ PP
 URI
 "/api/v1/move/202/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -3650,7 +3650,7 @@ False
 EFFECT
 
 TYPE
-
+rock
 END MOVE
 MOVE
 NAME
@@ -3664,11 +3664,11 @@ PP
 URI
 "/api/v1/move/196/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+ice
 END MOVE
 MOVE
 NAME
@@ -3682,11 +3682,11 @@ PP
 URI
 "/api/v1/move/188/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+poison
 END MOVE
 MOVE
 NAME
@@ -3704,7 +3704,7 @@ False
 EFFECT
 
 TYPE
-
+ghost
 END MOVE
 MOVE
 NAME
@@ -3722,7 +3722,7 @@ False
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -3740,7 +3740,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -3758,7 +3758,7 @@ False
 EFFECT
 
 TYPE
-
+ice
 END MOVE
 MOVE
 NAME
@@ -3776,7 +3776,7 @@ False
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -3790,11 +3790,11 @@ PP
 URI
 "/api/v1/move/161/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -3812,7 +3812,7 @@ False
 EFFECT
 
 TYPE
-
+rock
 END MOVE
 MOVE
 NAME
@@ -3830,7 +3830,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -3844,11 +3844,11 @@ PP
 URI
 "/api/v1/move/149/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -3866,7 +3866,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -3884,7 +3884,7 @@ False
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -3898,11 +3898,11 @@ PP
 URI
 "/api/v1/move/138/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -3934,11 +3934,11 @@ PP
 URI
 "/api/v1/move/126/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -3956,7 +3956,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -3992,7 +3992,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -4010,7 +4010,7 @@ False
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -4024,11 +4024,11 @@ PP
 URI
 "/api/v1/move/94/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -4046,7 +4046,7 @@ False
 EFFECT
 
 TYPE
-
+ground
 END MOVE
 MOVE
 NAME
@@ -4064,7 +4064,7 @@ False
 EFFECT
 
 TYPE
-
+ground
 END MOVE
 MOVE
 NAME
@@ -4078,11 +4078,11 @@ PP
 URI
 "/api/v1/move/82/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+dragon
 END MOVE
 MOVE
 NAME
@@ -4114,11 +4114,11 @@ PP
 URI
 "/api/v1/move/72/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -4150,11 +4150,11 @@ PP
 URI
 "/api/v1/move/59/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+ice
 END MOVE
 MOVE
 NAME
@@ -4168,11 +4168,11 @@ PP
 URI
 "/api/v1/move/58/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+ice
 END MOVE
 MOVE
 NAME
@@ -4186,11 +4186,11 @@ PP
 URI
 "/api/v1/move/57/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -4204,11 +4204,11 @@ PP
 URI
 "/api/v1/move/55/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -4226,7 +4226,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -4244,7 +4244,7 @@ False
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -4262,7 +4262,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -4280,7 +4280,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -4296,9 +4296,9 @@ URI
 SPECIAL
 False
 EFFECT
-
+ATKU+2
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -4312,11 +4312,11 @@ PP
 URI
 "/api/v1/move/13/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -4334,7 +4334,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -4348,11 +4348,11 @@ PP
 URI
 "/api/v1/move/518/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -4366,11 +4366,11 @@ PP
 URI
 "/api/v1/move/308/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -4388,7 +4388,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -4402,11 +4402,11 @@ PP
 URI
 "/api/v1/move/145/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -4424,7 +4424,7 @@ False
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -4438,11 +4438,11 @@ PP
 URI
 "/api/v1/move/56/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -4460,7 +4460,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -4478,7 +4478,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -4492,11 +4492,11 @@ PP
 URI
 "/api/v1/move/520/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -4514,7 +4514,7 @@ False
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -4528,11 +4528,11 @@ PP
 URI
 "/api/v1/move/124/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+poison
 END MOVE
 MOVE
 NAME
@@ -4546,11 +4546,11 @@ PP
 URI
 "/api/v1/move/437/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -4568,7 +4568,7 @@ False
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -4586,7 +4586,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -4600,11 +4600,11 @@ PP
 URI
 "/api/v1/move/345/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -4640,7 +4640,7 @@ False
 EFFECT
 
 TYPE
-
+fairy
 END MOVE
 MOVE
 NAME
@@ -4654,11 +4654,11 @@ PP
 URI
 "/api/v1/move/80/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -4676,7 +4676,7 @@ False
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -4712,7 +4712,7 @@ False
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -4730,7 +4730,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -4748,7 +4748,7 @@ False
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -4766,7 +4766,7 @@ False
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -4780,11 +4780,11 @@ PP
 URI
 "/api/v1/move/338/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -4798,11 +4798,11 @@ PP
 URI
 "/api/v1/move/519/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -4816,11 +4816,11 @@ PP
 URI
 "/api/v1/move/517/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -4834,11 +4834,11 @@ PP
 URI
 "/api/v1/move/481/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -4856,7 +4856,7 @@ False
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -4874,7 +4874,7 @@ False
 EFFECT
 
 TYPE
-
+dragon
 END MOVE
 MOVE
 NAME
@@ -4892,7 +4892,7 @@ False
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -4910,7 +4910,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -4928,7 +4928,7 @@ False
 EFFECT
 
 TYPE
-
+steel
 END MOVE
 MOVE
 NAME
@@ -4944,9 +4944,9 @@ URI
 SPECIAL
 False
 EFFECT
-
+ATKU+1,SPDU+1
 TYPE
-
+dragon
 END MOVE
 MOVE
 NAME
@@ -4964,7 +4964,7 @@ False
 EFFECT
 
 TYPE
-
+dark
 END MOVE
 MOVE
 NAME
@@ -4982,7 +4982,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -5000,7 +5000,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -5018,7 +5018,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -5036,7 +5036,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -5050,11 +5050,11 @@ PP
 URI
 "/api/v1/move/83/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -5068,11 +5068,11 @@ PP
 URI
 "/api/v1/move/52/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -5090,7 +5090,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -5108,7 +5108,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -5122,11 +5122,11 @@ PP
 URI
 "/api/v1/move/403/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -5140,11 +5140,11 @@ PP
 URI
 "/api/v1/move/307/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+fire
 END MOVE
 MOVE
 NAME
@@ -5162,7 +5162,7 @@ False
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -5176,11 +5176,11 @@ PP
 URI
 "/api/v1/move/323/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -5198,7 +5198,7 @@ False
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -5216,7 +5216,7 @@ False
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -5230,11 +5230,11 @@ PP
 URI
 "/api/v1/move/330/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+water
 END MOVE
 MOVE
 NAME
@@ -5252,7 +5252,7 @@ False
 EFFECT
 
 TYPE
-
+ground
 END MOVE
 MOVE
 NAME
@@ -5270,7 +5270,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -5288,7 +5288,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -5302,11 +5302,11 @@ PP
 URI
 "/api/v1/move/243/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -5324,7 +5324,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -5342,7 +5342,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -5360,7 +5360,7 @@ False
 EFFECT
 
 TYPE
-
+ice
 END MOVE
 MOVE
 NAME
@@ -5374,11 +5374,11 @@ PP
 URI
 "/api/v1/move/93/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -5396,7 +5396,7 @@ False
 EFFECT
 
 TYPE
-
+ice
 END MOVE
 MOVE
 NAME
@@ -5414,7 +5414,7 @@ False
 EFFECT
 
 TYPE
-
+normal
 END MOVE
 MOVE
 NAME
@@ -5432,7 +5432,7 @@ False
 EFFECT
 
 TYPE
-
+bug
 END MOVE
 MOVE
 NAME
@@ -5450,7 +5450,7 @@ False
 EFFECT
 
 TYPE
-
+bug
 END MOVE
 MOVE
 NAME
@@ -5464,11 +5464,11 @@ PP
 URI
 "/api/v1/move/405/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+bug
 END MOVE
 MOVE
 NAME
@@ -5482,11 +5482,11 @@ PP
 URI
 "/api/v1/move/16/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+flying
 END MOVE
 MOVE
 NAME
@@ -5504,7 +5504,7 @@ False
 EFFECT
 
 TYPE
-
+grass
 END MOVE
 MOVE
 NAME
@@ -5518,11 +5518,11 @@ PP
 URI
 "/api/v1/move/60/"
 SPECIAL
-False
+True
 EFFECT
 
 TYPE
-
+psychic
 END MOVE
 MOVE
 NAME
@@ -5540,5 +5540,4487 @@ False
 EFFECT
 
 TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Final-gambit"
+ACCURACY
+100
+POWER
+1
+PP
+5
+URI
+"/api/v1/move/515/"
+SPECIAL
+True
+EFFECT
 
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Revenge"
+ACCURACY
+100
+POWER
+60
+PP
+10
+URI
+"/api/v1/move/279/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Assurance"
+ACCURACY
+100
+POWER
+50
+PP
+10
+URI
+"/api/v1/move/372/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+dark
+END MOVE
+MOVE
+NAME
+"Pursuit"
+ACCURACY
+100
+POWER
+40
+PP
+20
+URI
+"/api/v1/move/228/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+dark
+END MOVE
+MOVE
+NAME
+"Reversal"
+ACCURACY
+100
+POWER
+1
+PP
+15
+URI
+"/api/v1/move/179/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Flame-wheel"
+ACCURACY
+100
+POWER
+60
+PP
+25
+URI
+"/api/v1/move/172/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fire
+END MOVE
+MOVE
+NAME
+"Fury-swipes"
+ACCURACY
+80
+POWER
+18
+PP
+15
+URI
+"/api/v1/move/154/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Screech"
+ACCURACY
+85
+POWER
+0
+PP
+40
+URI
+"/api/v1/move/103/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Hyper-fang"
+ACCURACY
+90
+POWER
+80
+PP
+15
+URI
+"/api/v1/move/158/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Focus-energy"
+ACCURACY
+0
+POWER
+0
+PP
+30
+URI
+"/api/v1/move/116/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Featherdance"
+ACCURACY
+100
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/297/"
+SPECIAL
+False
+EFFECT
+ATKO-2
+TYPE
+flying
+END MOVE
+MOVE
+NAME
+"Astonish"
+ACCURACY
+100
+POWER
+30
+PP
+15
+URI
+"/api/v1/move/310/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ghost
+END MOVE
+MOVE
+NAME
+"Mirror-move"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/119/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+flying
+END MOVE
+MOVE
+NAME
+"Agility"
+ACCURACY
+0
+POWER
+0
+PP
+30
+URI
+"/api/v1/move/97/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Drill-peck"
+ACCURACY
+100
+POWER
+80
+PP
+20
+URI
+"/api/v1/move/65/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+flying
+END MOVE
+MOVE
+NAME
+"Peck"
+ACCURACY
+100
+POWER
+35
+PP
+35
+URI
+"/api/v1/move/64/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+flying
+END MOVE
+MOVE
+NAME
+"Fury-attack"
+ACCURACY
+85
+POWER
+15
+PP
+20
+URI
+"/api/v1/move/31/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Toxic-spikes"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/390/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+poison
+END MOVE
+MOVE
+NAME
+"Pin-missile"
+ACCURACY
+85
+POWER
+14
+PP
+20
+URI
+"/api/v1/move/42/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+bug
+END MOVE
+MOVE
+NAME
+"Twineedle"
+ACCURACY
+100
+POWER
+25
+PP
+20
+URI
+"/api/v1/move/41/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+bug
+END MOVE
+MOVE
+NAME
+"Hurricane"
+ACCURACY
+70
+POWER
+120
+PP
+10
+URI
+"/api/v1/move/542/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+flying
+END MOVE
+MOVE
+NAME
+"Brave-bird"
+ACCURACY
+100
+POWER
+120
+PP
+15
+URI
+"/api/v1/move/413/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+flying
+END MOVE
+MOVE
+NAME
+"Sand-attack"
+ACCURACY
+100
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/28/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ground
+END MOVE
+MOVE
+NAME
+"Electro-ball"
+ACCURACY
+100
+POWER
+1
+PP
+10
+URI
+"/api/v1/move/486/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+electric
+END MOVE
+MOVE
+NAME
+"Discharge"
+ACCURACY
+100
+POWER
+80
+PP
+15
+URI
+"/api/v1/move/435/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+electric
+END MOVE
+MOVE
+NAME
+"Feint"
+ACCURACY
+100
+POWER
+30
+PP
+10
+URI
+"/api/v1/move/364/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Slam"
+ACCURACY
+75
+POWER
+80
+PP
+20
+URI
+"/api/v1/move/21/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Acid-spray"
+ACCURACY
+100
+POWER
+40
+PP
+20
+URI
+"/api/v1/move/491/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+poison
+END MOVE
+MOVE
+NAME
+"Coil"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/489/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+poison
+END MOVE
+MOVE
+NAME
+"Switcheroo"
+ACCURACY
+100
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/415/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+dark
+END MOVE
+MOVE
+NAME
+"Mud-bomb"
+ACCURACY
+85
+POWER
+65
+PP
+10
+URI
+"/api/v1/move/426/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+ground
+END MOVE
+MOVE
+NAME
+"Poison-tail"
+ACCURACY
+100
+POWER
+50
+PP
+25
+URI
+"/api/v1/move/342/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+poison
+END MOVE
+MOVE
+NAME
+"Disable"
+ACCURACY
+100
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/50/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Poison-fang"
+ACCURACY
+100
+POWER
+50
+PP
+15
+URI
+"/api/v1/move/305/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+poison
+END MOVE
+MOVE
+NAME
+"Swallow"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/256/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Spit-up"
+ACCURACY
+100
+POWER
+1
+PP
+10
+URI
+"/api/v1/move/255/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Stockpile"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/254/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Glare"
+ACCURACY
+90
+POWER
+0
+PP
+30
+URI
+"/api/v1/move/137/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Acid"
+ACCURACY
+100
+POWER
+40
+PP
+30
+URI
+"/api/v1/move/51/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+poison
+END MOVE
+MOVE
+NAME
+"Poison-sting"
+ACCURACY
+100
+POWER
+15
+PP
+35
+URI
+"/api/v1/move/40/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+poison
+END MOVE
+MOVE
+NAME
+"Wrap"
+ACCURACY
+90
+POWER
+15
+PP
+20
+URI
+"/api/v1/move/35/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Ice-fang"
+ACCURACY
+95
+POWER
+65
+PP
+15
+URI
+"/api/v1/move/423/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ice
+END MOVE
+MOVE
+NAME
+"Thunder-fang"
+ACCURACY
+95
+POWER
+65
+PP
+15
+URI
+"/api/v1/move/422/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+electric
+END MOVE
+MOVE
+NAME
+"Flatter"
+ACCURACY
+100
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/260/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+dark
+END MOVE
+MOVE
+NAME
+"Double-kick"
+ACCURACY
+100
+POWER
+30
+PP
+30
+URI
+"/api/v1/move/24/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Magnitude"
+ACCURACY
+100
+POWER
+1
+PP
+30
+URI
+"/api/v1/move/222/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ground
+END MOVE
+MOVE
+NAME
+"Chip-away"
+ACCURACY
+100
+POWER
+70
+PP
+20
+URI
+"/api/v1/move/498/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Mud-shot"
+ACCURACY
+95
+POWER
+55
+PP
+15
+URI
+"/api/v1/move/341/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+ground
+END MOVE
+MOVE
+NAME
+"Night-slash"
+ACCURACY
+100
+POWER
+70
+PP
+15
+URI
+"/api/v1/move/400/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+dark
+END MOVE
+MOVE
+NAME
+"Sand-tomb"
+ACCURACY
+85
+POWER
+35
+PP
+15
+URI
+"/api/v1/move/328/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ground
+END MOVE
+MOVE
+NAME
+"Crush-claw"
+ACCURACY
+95
+POWER
+75
+PP
+10
+URI
+"/api/v1/move/306/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Head-smash"
+ACCURACY
+80
+POWER
+150
+PP
+5
+URI
+"/api/v1/move/457/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+rock
+END MOVE
+MOVE
+NAME
+"Horn-attack"
+ACCURACY
+100
+POWER
+65
+PP
+25
+URI
+"/api/v1/move/30/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Megahorn"
+ACCURACY
+85
+POWER
+120
+PP
+10
+URI
+"/api/v1/move/224/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+bug
+END MOVE
+MOVE
+NAME
+"Thrash"
+ACCURACY
+100
+POWER
+120
+PP
+10
+URI
+"/api/v1/move/37/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Moonlight"
+ACCURACY
+0
+POWER
+0
+PP
+5
+URI
+"/api/v1/move/236/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fairy
+END MOVE
+MOVE
+NAME
+"Minimize"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/107/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Sing"
+ACCURACY
+55
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/47/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Doubleslap"
+ACCURACY
+85
+POWER
+15
+PP
+10
+URI
+"/api/v1/move/3/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+
+END MOVE
+MOVE
+NAME
+"Wake-up-slap"
+ACCURACY
+100
+POWER
+60
+PP
+10
+URI
+"/api/v1/move/358/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Tail-slap"
+ACCURACY
+85
+POWER
+25
+PP
+10
+URI
+"/api/v1/move/541/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Hex"
+ACCURACY
+100
+POWER
+50
+PP
+10
+URI
+"/api/v1/move/506/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+ghost
+END MOVE
+MOVE
+NAME
+"Power-swap"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/384/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Extrasensory"
+ACCURACY
+100
+POWER
+80
+PP
+30
+URI
+"/api/v1/move/326/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Howl"
+ACCURACY
+0
+POWER
+0
+PP
+40
+URI
+"/api/v1/move/336/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Grudge"
+ACCURACY
+0
+POWER
+0
+PP
+5
+URI
+"/api/v1/move/288/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ghost
+END MOVE
+MOVE
+NAME
+"Imprison"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/286/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Confuse-ray"
+ACCURACY
+100
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/109/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ghost
+END MOVE
+MOVE
+NAME
+"Mean-look"
+ACCURACY
+0
+POWER
+0
+PP
+5
+URI
+"/api/v1/move/212/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Leech-life"
+ACCURACY
+100
+POWER
+20
+PP
+15
+URI
+"/api/v1/move/141/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+bug
+END MOVE
+MOVE
+NAME
+"Morning-sun"
+ACCURACY
+0
+POWER
+0
+PP
+5
+URI
+"/api/v1/move/234/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Punishment"
+ACCURACY
+100
+POWER
+1
+PP
+5
+URI
+"/api/v1/move/386/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+dark
+END MOVE
+MOVE
+NAME
+"Odor-sleuth"
+ACCURACY
+0
+POWER
+0
+PP
+40
+URI
+"/api/v1/move/316/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Assist"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/274/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Teeter-dance"
+ACCURACY
+100
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/298/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Lucky-chant"
+ACCURACY
+0
+POWER
+0
+PP
+30
+URI
+"/api/v1/move/381/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Tickle"
+ACCURACY
+100
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/321/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Absorb"
+ACCURACY
+100
+POWER
+20
+PP
+25
+URI
+"/api/v1/move/71/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+grass
+END MOVE
+MOVE
+NAME
+"Aromatherapy"
+ACCURACY
+0
+POWER
+0
+PP
+5
+URI
+"/api/v1/move/312/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+grass
+END MOVE
+MOVE
+NAME
+"Cross-poison"
+ACCURACY
+100
+POWER
+70
+PP
+20
+URI
+"/api/v1/move/440/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+poison
+END MOVE
+MOVE
+NAME
+"Spore"
+ACCURACY
+100
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/147/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+grass
+END MOVE
+MOVE
+NAME
+"Memento"
+ACCURACY
+100
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/262/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+dark
+END MOVE
+MOVE
+NAME
+"Power-gem"
+ACCURACY
+100
+POWER
+70
+PP
+20
+URI
+"/api/v1/move/408/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+rock
+END MOVE
+MOVE
+NAME
+"Soak"
+ACCURACY
+100
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/487/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+water
+END MOVE
+MOVE
+NAME
+"Synchronoise"
+ACCURACY
+100
+POWER
+70
+PP
+15
+URI
+"/api/v1/move/485/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Encore"
+ACCURACY
+100
+POWER
+0
+PP
+5
+URI
+"/api/v1/move/227/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Water-sport"
+ACCURACY
+0
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/346/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+water
+END MOVE
+MOVE
+NAME
+"Cross-chop"
+ACCURACY
+80
+POWER
+100
+PP
+5
+URI
+"/api/v1/move/238/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Future-sight"
+ACCURACY
+100
+POWER
+100
+PP
+10
+URI
+"/api/v1/move/248/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Close-combat"
+ACCURACY
+100
+POWER
+120
+PP
+5
+URI
+"/api/v1/move/370/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Smellingsalt"
+ACCURACY
+100
+POWER
+60
+PP
+10
+URI
+"/api/v1/move/265/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+
+END MOVE
+MOVE
+NAME
+"Meditate"
+ACCURACY
+0
+POWER
+0
+PP
+40
+URI
+"/api/v1/move/96/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Karate-chop"
+ACCURACY
+100
+POWER
+50
+PP
+25
+URI
+"/api/v1/move/2/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Extremespeed"
+ACCURACY
+100
+POWER
+80
+PP
+5
+URI
+"/api/v1/move/245/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+
+END MOVE
+MOVE
+NAME
+"Ice-ball"
+ACCURACY
+90
+POWER
+30
+PP
+20
+URI
+"/api/v1/move/301/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ice
+END MOVE
+MOVE
+NAME
+"Mind-reader"
+ACCURACY
+0
+POWER
+0
+PP
+5
+URI
+"/api/v1/move/170/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Splash"
+ACCURACY
+0
+POWER
+0
+PP
+40
+URI
+"/api/v1/move/150/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Circle-throw"
+ACCURACY
+90
+POWER
+60
+PP
+10
+URI
+"/api/v1/move/509/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Guard-split"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/470/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Guard-swap"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/385/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Power-trick"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/379/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Psycho-cut"
+ACCURACY
+100
+POWER
+70
+PP
+20
+URI
+"/api/v1/move/427/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Miracle-eye"
+ACCURACY
+0
+POWER
+0
+PP
+40
+URI
+"/api/v1/move/357/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Kinesis"
+ACCURACY
+80
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/134/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Recover"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/105/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Heavy-slam"
+ACCURACY
+100
+POWER
+1
+PP
+10
+URI
+"/api/v1/move/484/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+steel
+END MOVE
+MOVE
+NAME
+"Bullet-punch"
+ACCURACY
+100
+POWER
+40
+PP
+30
+URI
+"/api/v1/move/418/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+steel
+END MOVE
+MOVE
+NAME
+"Vital-throw"
+ACCURACY
+0
+POWER
+70
+PP
+10
+URI
+"/api/v1/move/233/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Rolling-kick"
+ACCURACY
+85
+POWER
+60
+PP
+15
+URI
+"/api/v1/move/27/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Wide-guard"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/469/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+rock
+END MOVE
+MOVE
+NAME
+"Clear-smog"
+ACCURACY
+0
+POWER
+50
+PP
+15
+URI
+"/api/v1/move/499/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+poison
+END MOVE
+MOVE
+NAME
+"Weather-ball"
+ACCURACY
+100
+POWER
+50
+PP
+10
+URI
+"/api/v1/move/311/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Wring-out"
+ACCURACY
+100
+POWER
+1
+PP
+5
+URI
+"/api/v1/move/378/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Rock-blast"
+ACCURACY
+90
+POWER
+25
+PP
+10
+URI
+"/api/v1/move/350/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+rock
+END MOVE
+MOVE
+NAME
+"Rock-throw"
+ACCURACY
+90
+POWER
+50
+PP
+15
+URI
+"/api/v1/move/88/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+rock
+END MOVE
+MOVE
+NAME
+"Autotomize"
+ACCURACY
+0
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/475/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+steel
+END MOVE
+MOVE
+NAME
+"Hammer-arm"
+ACCURACY
+90
+POWER
+100
+PP
+10
+URI
+"/api/v1/move/359/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Steamroller"
+ACCURACY
+100
+POWER
+65
+PP
+20
+URI
+"/api/v1/move/537/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+bug
+END MOVE
+MOVE
+NAME
+"Stomp"
+ACCURACY
+100
+POWER
+65
+PP
+20
+URI
+"/api/v1/move/23/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Heal-pulse"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/505/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Slack-off"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/303/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Shadow-sneak"
+ACCURACY
+100
+POWER
+40
+PP
+30
+URI
+"/api/v1/move/425/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ghost
+END MOVE
+MOVE
+NAME
+"Shadow-punch"
+ACCURACY
+0
+POWER
+60
+PP
+20
+URI
+"/api/v1/move/325/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ghost
+END MOVE
+MOVE
+NAME
+"Lick"
+ACCURACY
+100
+POWER
+20
+PP
+30
+URI
+"/api/v1/move/122/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ghost
+END MOVE
+MOVE
+NAME
+"Acid-armor"
+ACCURACY
+0
+POWER
+0
+PP
+40
+URI
+"/api/v1/move/151/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+poison
+END MOVE
+MOVE
+NAME
+"Poison-gas"
+ACCURACY
+80
+POWER
+0
+PP
+40
+URI
+"/api/v1/move/139/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+poison
+END MOVE
+MOVE
+NAME
+"Trump-card"
+ACCURACY
+0
+POWER
+1
+PP
+5
+URI
+"/api/v1/move/376/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Leaf-blade"
+ACCURACY
+100
+POWER
+90
+PP
+15
+URI
+"/api/v1/move/348/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+grass
+END MOVE
+MOVE
+NAME
+"Magnet-bomb"
+ACCURACY
+0
+POWER
+60
+PP
+20
+URI
+"/api/v1/move/443/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+steel
+END MOVE
+MOVE
+NAME
+"Mirror-shot"
+ACCURACY
+85
+POWER
+65
+PP
+10
+URI
+"/api/v1/move/429/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+steel
+END MOVE
+MOVE
+NAME
+"Metal-sound"
+ACCURACY
+85
+POWER
+0
+PP
+40
+URI
+"/api/v1/move/319/"
+SPECIAL
+False
+EFFECT
+SPDEFO-2
+TYPE
+steel
+END MOVE
+MOVE
+NAME
+"Spark"
+ACCURACY
+100
+POWER
+65
+PP
+20
+URI
+"/api/v1/move/209/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+electric
+END MOVE
+MOVE
+NAME
+"Lock-on"
+ACCURACY
+0
+POWER
+0
+PP
+5
+URI
+"/api/v1/move/199/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Sonicboom"
+ACCURACY
+90
+POWER
+1
+PP
+20
+URI
+"/api/v1/move/49/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+
+END MOVE
+MOVE
+NAME
+"Double-hit"
+ACCURACY
+90
+POWER
+35
+PP
+10
+URI
+"/api/v1/move/458/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Acupressure"
+ACCURACY
+0
+POWER
+0
+PP
+30
+URI
+"/api/v1/move/367/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Ice-shard"
+ACCURACY
+100
+POWER
+40
+PP
+30
+URI
+"/api/v1/move/420/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ice
+END MOVE
+MOVE
+NAME
+"Icicle-spear"
+ACCURACY
+100
+POWER
+25
+PP
+30
+URI
+"/api/v1/move/333/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ice
+END MOVE
+MOVE
+NAME
+"Perish-song"
+ACCURACY
+0
+POWER
+0
+PP
+5
+URI
+"/api/v1/move/195/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Aurora-beam"
+ACCURACY
+100
+POWER
+65
+PP
+20
+URI
+"/api/v1/move/62/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+ice
+END MOVE
+MOVE
+NAME
+"Sheer-cold"
+ACCURACY
+30
+POWER
+1
+PP
+5
+URI
+"/api/v1/move/329/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+ice
+END MOVE
+MOVE
+NAME
+"Smog"
+ACCURACY
+70
+POWER
+20
+PP
+20
+URI
+"/api/v1/move/123/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+poison
+END MOVE
+MOVE
+NAME
+"Destiny-bond"
+ACCURACY
+0
+POWER
+0
+PP
+5
+URI
+"/api/v1/move/194/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ghost
+END MOVE
+MOVE
+NAME
+"Icicle-crash"
+ACCURACY
+90
+POWER
+85
+PP
+10
+URI
+"/api/v1/move/556/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ice
+END MOVE
+MOVE
+NAME
+"Spikes"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/191/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ground
+END MOVE
+MOVE
+NAME
+"Spike-cannon"
+ACCURACY
+100
+POWER
+20
+PP
+15
+URI
+"/api/v1/move/131/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Clamp"
+ACCURACY
+85
+POWER
+35
+PP
+15
+URI
+"/api/v1/move/128/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+water
+END MOVE
+MOVE
+NAME
+"Crabhammer"
+ACCURACY
+90
+POWER
+90
+PP
+10
+URI
+"/api/v1/move/152/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+water
+END MOVE
+MOVE
+NAME
+"Guillotine"
+ACCURACY
+30
+POWER
+1
+PP
+5
+URI
+"/api/v1/move/12/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Vicegrip"
+ACCURACY
+100
+POWER
+55
+PP
+30
+URI
+"/api/v1/move/11/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+
+END MOVE
+MOVE
+NAME
+"Charge"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/268/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+electric
+END MOVE
+MOVE
+NAME
+"Bestow"
+ACCURACY
+0
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/516/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Barrage"
+ACCURACY
+85
+POWER
+15
+PP
+20
+URI
+"/api/v1/move/140/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Wood-hammer"
+ACCURACY
+100
+POWER
+120
+PP
+15
+URI
+"/api/v1/move/452/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+grass
+END MOVE
+MOVE
+NAME
+"Blaze-kick"
+ACCURACY
+90
+POWER
+85
+PP
+10
+URI
+"/api/v1/move/299/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fire
+END MOVE
+MOVE
+NAME
+"Hi-jump-kick"
+ACCURACY
+90
+POWER
+130
+PP
+10
+URI
+"/api/v1/move/136/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+
+END MOVE
+MOVE
+NAME
+"Jump-kick"
+ACCURACY
+95
+POWER
+100
+PP
+10
+URI
+"/api/v1/move/26/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Bone-rush"
+ACCURACY
+90
+POWER
+25
+PP
+10
+URI
+"/api/v1/move/198/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ground
+END MOVE
+MOVE
+NAME
+"Bonemerang"
+ACCURACY
+90
+POWER
+50
+PP
+10
+URI
+"/api/v1/move/155/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ground
+END MOVE
+MOVE
+NAME
+"Bone-club"
+ACCURACY
+85
+POWER
+65
+PP
+20
+URI
+"/api/v1/move/125/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ground
+END MOVE
+MOVE
+NAME
+"Quick-guard"
+ACCURACY
+0
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/501/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Sky-uppercut"
+ACCURACY
+90
+POWER
+85
+PP
+15
+URI
+"/api/v1/move/327/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Mach-punch"
+ACCURACY
+100
+POWER
+40
+PP
+30
+URI
+"/api/v1/move/183/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Comet-punch"
+ACCURACY
+85
+POWER
+18
+PP
+15
+URI
+"/api/v1/move/4/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Healing-wish"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/361/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Present"
+ACCURACY
+90
+POWER
+1
+PP
+15
+URI
+"/api/v1/move/217/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Dizzy-punch"
+ACCURACY
+100
+POWER
+70
+PP
+10
+URI
+"/api/v1/move/146/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Octazooka"
+ACCURACY
+85
+POWER
+65
+PP
+10
+URI
+"/api/v1/move/190/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+water
+END MOVE
+MOVE
+NAME
+"Constrict"
+ACCURACY
+100
+POWER
+10
+PP
+35
+URI
+"/api/v1/move/132/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Cosmic-power"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/322/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Camouflage"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/293/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Power-split"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/471/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Copycat"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/383/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Storm-throw"
+ACCURACY
+100
+POWER
+40
+PP
+10
+URI
+"/api/v1/move/480/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Heart-stamp"
+ACCURACY
+100
+POWER
+60
+PP
+25
+URI
+"/api/v1/move/531/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Fake-tears"
+ACCURACY
+100
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/313/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+dark
+END MOVE
+MOVE
+NAME
+"Powder-snow"
+ACCURACY
+100
+POWER
+40
+PP
+25
+URI
+"/api/v1/move/181/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+ice
+END MOVE
+MOVE
+NAME
+"Lovely-kiss"
+ACCURACY
+75
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/142/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Lava-plume"
+ACCURACY
+100
+POWER
+80
+PP
+15
+URI
+"/api/v1/move/436/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+fire
+END MOVE
+MOVE
+NAME
+"Stored-power"
+ACCURACY
+100
+POWER
+20
+PP
+10
+URI
+"/api/v1/move/500/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Wish"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/273/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Conversion-2"
+ACCURACY
+0
+POWER
+0
+PP
+30
+URI
+"/api/v1/move/176/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Conversion"
+ACCURACY
+0
+POWER
+0
+PP
+30
+URI
+"/api/v1/move/160/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Sharpen"
+ACCURACY
+0
+POWER
+0
+PP
+30
+URI
+"/api/v1/move/159/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Shell-smash"
+ACCURACY
+0
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/504/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Leaf-tornado"
+ACCURACY
+90
+POWER
+65
+PP
+10
+URI
+"/api/v1/move/536/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+grass
+END MOVE
+MOVE
+NAME
+"Psystrike"
+ACCURACY
+100
+POWER
+100
+PP
+10
+URI
+"/api/v1/move/540/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Draco-meteor"
+ACCURACY
+90
+POWER
+140
+PP
+5
+URI
+"/api/v1/move/434/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+dragon
+END MOVE
+MOVE
+NAME
+"Sweet-kiss"
+ACCURACY
+75
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/186/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fairy
+END MOVE
+MOVE
+NAME
+"Eruption"
+ACCURACY
+100
+POWER
+150
+PP
+5
+URI
+"/api/v1/move/284/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+fire
+END MOVE
+MOVE
+NAME
+"Psycho-shift"
+ACCURACY
+90
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/375/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Follow-me"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/266/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Spider-web"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/169/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+bug
+END MOVE
+MOVE
+NAME
+"Volt-tackle"
+ACCURACY
+100
+POWER
+120
+PP
+15
+URI
+"/api/v1/move/344/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+electric
+END MOVE
+MOVE
+NAME
+"Cotton-guard"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/538/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+grass
+END MOVE
+MOVE
+NAME
+"Cotton-spore"
+ACCURACY
+100
+POWER
+0
+PP
+40
+URI
+"/api/v1/move/178/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+grass
+END MOVE
+MOVE
+NAME
+"Sketch"
+ACCURACY
+0
+POWER
+0
+PP
+1
+URI
+"/api/v1/move/166/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Milk-drink"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/208/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Aeroblast"
+ACCURACY
+95
+POWER
+100
+PP
+5
+URI
+"/api/v1/move/177/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+flying
+END MOVE
+MOVE
+NAME
+"Sacred-fire"
+ACCURACY
+95
+POWER
+100
+PP
+5
+URI
+"/api/v1/move/221/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fire
+END MOVE
+MOVE
+NAME
+"Heal-block"
+ACCURACY
+100
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/377/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Force-palm"
+ACCURACY
+100
+POWER
+60
+PP
+10
+URI
+"/api/v1/move/395/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Arm-thrust"
+ACCURACY
+100
+POWER
+15
+PP
+20
+URI
+"/api/v1/move/292/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Simple-beam"
+ACCURACY
+100
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/493/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Metal-burst"
+ACCURACY
+100
+POWER
+1
+PP
+10
+URI
+"/api/v1/move/368/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+steel
+END MOVE
+MOVE
+NAME
+"Entrainment"
+ACCURACY
+100
+POWER
+0
+PP
+15
+URI
+"/api/v1/move/494/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Tail-glow"
+ACCURACY
+0
+POWER
+0
+PP
+20
+URI
+"/api/v1/move/294/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+bug
+END MOVE
+MOVE
+NAME
+"Needle-arm"
+ACCURACY
+100
+POWER
+60
+PP
+15
+URI
+"/api/v1/move/302/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+grass
+END MOVE
+MOVE
+NAME
+"Meteor-mash"
+ACCURACY
+85
+POWER
+100
+PP
+10
+URI
+"/api/v1/move/309/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+steel
+END MOVE
+MOVE
+NAME
+"Mist-ball"
+ACCURACY
+100
+POWER
+70
+PP
+5
+URI
+"/api/v1/move/296/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Luster-purge"
+ACCURACY
+100
+POWER
+70
+PP
+5
+URI
+"/api/v1/move/295/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Doom-desire"
+ACCURACY
+100
+POWER
+140
+PP
+5
+URI
+"/api/v1/move/353/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+steel
+END MOVE
+MOVE
+NAME
+"Rock-wrecker"
+ACCURACY
+90
+POWER
+150
+PP
+5
+URI
+"/api/v1/move/439/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+rock
+END MOVE
+MOVE
+NAME
+"Roar-of-time"
+ACCURACY
+90
+POWER
+150
+PP
+5
+URI
+"/api/v1/move/459/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+dragon
+END MOVE
+MOVE
+NAME
+"Heal-order"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/456/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+bug
+END MOVE
+MOVE
+NAME
+"Defend-order"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/455/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+bug
+END MOVE
+MOVE
+NAME
+"Attack-order"
+ACCURACY
+100
+POWER
+90
+PP
+15
+URI
+"/api/v1/move/454/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+bug
+END MOVE
+MOVE
+NAME
+"Searing-shot"
+ACCURACY
+100
+POWER
+100
+PP
+5
+URI
+"/api/v1/move/545/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+fire
+END MOVE
+MOVE
+NAME
+"Dark-void"
+ACCURACY
+80
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/464/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+dark
+END MOVE
+MOVE
+NAME
+"Seed-flare"
+ACCURACY
+85
+POWER
+120
+PP
+5
+URI
+"/api/v1/move/465/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+grass
+END MOVE
+MOVE
+NAME
+"Judgment"
+ACCURACY
+100
+POWER
+100
+PP
+10
+URI
+"/api/v1/move/449/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Heat-crash"
+ACCURACY
+100
+POWER
+1
+PP
+10
+URI
+"/api/v1/move/535/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fire
+END MOVE
+MOVE
+NAME
+"Razor-shell"
+ACCURACY
+95
+POWER
+75
+PP
+10
+URI
+"/api/v1/move/534/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+water
+END MOVE
+MOVE
+NAME
+"Heart-swap"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/391/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Crush-grip"
+ACCURACY
+100
+POWER
+1
+PP
+5
+URI
+"/api/v1/move/462/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Shadow-force"
+ACCURACY
+100
+POWER
+120
+PP
+5
+URI
+"/api/v1/move/467/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ghost
+END MOVE
+MOVE
+NAME
+"Night-daze"
+ACCURACY
+95
+POWER
+85
+PP
+10
+URI
+"/api/v1/move/539/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+dark
+END MOVE
+MOVE
+NAME
+"Horn-leech"
+ACCURACY
+100
+POWER
+75
+PP
+10
+URI
+"/api/v1/move/532/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+grass
+END MOVE
+MOVE
+NAME
+"Gear-grind"
+ACCURACY
+85
+POWER
+50
+PP
+15
+URI
+"/api/v1/move/544/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+steel
+END MOVE
+MOVE
+NAME
+"Shift-gear"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/508/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+steel
+END MOVE
+MOVE
+NAME
+"Head-charge"
+ACCURACY
+100
+POWER
+120
+PP
+15
+URI
+"/api/v1/move/543/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Fiery-dance"
+ACCURACY
+100
+POWER
+80
+PP
+10
+URI
+"/api/v1/move/552/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+fire
+END MOVE
+MOVE
+NAME
+"Sacred-sword"
+ACCURACY
+100
+POWER
+90
+PP
+20
+URI
+"/api/v1/move/533/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Fusion-flare"
+ACCURACY
+100
+POWER
+100
+PP
+5
+URI
+"/api/v1/move/558/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+fire
+END MOVE
+MOVE
+NAME
+"Blue-flare"
+ACCURACY
+85
+POWER
+130
+PP
+5
+URI
+"/api/v1/move/551/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+fire
+END MOVE
+MOVE
+NAME
+"Fusion-bolt"
+ACCURACY
+100
+POWER
+100
+PP
+5
+URI
+"/api/v1/move/559/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+electric
+END MOVE
+MOVE
+NAME
+"Bolt-strike"
+ACCURACY
+85
+POWER
+130
+PP
+5
+URI
+"/api/v1/move/550/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+electric
+END MOVE
+MOVE
+NAME
+"Glaciate"
+ACCURACY
+95
+POWER
+65
+PP
+10
+URI
+"/api/v1/move/549/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+ice
+END MOVE
+MOVE
+NAME
+"Secret-sword"
+ACCURACY
+100
+POWER
+85
+PP
+10
+URI
+"/api/v1/move/548/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Relic-song"
+ACCURACY
+100
+POWER
+75
+PP
+10
+URI
+"/api/v1/move/547/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Techno-blast"
+ACCURACY
+100
+POWER
+85
+PP
+5
+URI
+"/api/v1/move/546/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+normal
+END MOVE
+MOVE
+NAME
+"Psycho-boost"
+ACCURACY
+90
+POWER
+140
+PP
+5
+URI
+"/api/v1/move/354/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+psychic
+END MOVE
+MOVE
+NAME
+"Ice-burn"
+ACCURACY
+90
+POWER
+140
+PP
+5
+URI
+"/api/v1/move/554/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+ice
+END MOVE
+MOVE
+NAME
+"Freeze-shock"
+ACCURACY
+90
+POWER
+140
+PP
+5
+URI
+"/api/v1/move/553/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+ice
+END MOVE
+MOVE
+NAME
+"Magma-storm"
+ACCURACY
+75
+POWER
+120
+PP
+5
+URI
+"/api/v1/move/463/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+fire
+END MOVE
+MOVE
+NAME
+"Spacial-rend"
+ACCURACY
+95
+POWER
+100
+PP
+5
+URI
+"/api/v1/move/460/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+dragon
+END MOVE
+MOVE
+NAME
+"Triple-kick"
+ACCURACY
+90
+POWER
+10
+PP
+10
+URI
+"/api/v1/move/167/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+fighting
+END MOVE
+MOVE
+NAME
+"Chatter"
+ACCURACY
+100
+POWER
+60
+PP
+20
+URI
+"/api/v1/move/448/"
+SPECIAL
+True
+EFFECT
+
+TYPE
+flying
+END MOVE
+MOVE
+NAME
+"Lunar-dance"
+ACCURACY
+0
+POWER
+0
+PP
+10
+URI
+"/api/v1/move/461/"
+SPECIAL
+False
+EFFECT
+
+TYPE
+psychic
 END MOVE

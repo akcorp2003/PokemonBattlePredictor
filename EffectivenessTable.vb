@@ -134,6 +134,48 @@
         End If
     End Function
 
+    Public Function GetTypeName(ByVal type_num As Integer) As String
+        If type_num = Types.normal Then
+            Return "normal"
+        ElseIf type_num = Types.fighting Then
+            Return "fighting"
+        ElseIf type_num = Types.flying Then
+            Return "flying"
+        ElseIf type_num = Types.poison Then
+            Return "poison"
+        ElseIf type_num = Types.ground Then
+            Return "ground"
+        ElseIf type_num = Types.rock Then
+            Return "rock"
+        ElseIf type_num = Types.bug Then
+            Return "bug"
+        ElseIf type_num = Types.ghost Then
+            Return "ghost"
+        ElseIf type_num = Types.steel Then
+            Return "steel"
+        ElseIf type_num = Types.fire Then
+            Return "fire"
+        ElseIf type_num = Types.water Then
+            Return "water"
+        ElseIf type_num = Types.grass Then
+            Return "grass"
+        ElseIf type_num = Types.electric Then
+            Return "electric"
+        ElseIf type_num = Types.psychic Then
+            Return "psychic"
+        ElseIf type_num = Types.ice Then
+            Return "ice"
+        ElseIf type_num = Types.dragon Then
+            Return "dragon"
+        ElseIf type_num = Types.dark Then
+            Return "dark"
+        ElseIf type_num = Types.fairy Then
+            Return "fairy"
+        Else
+            Return -1
+        End If
+    End Function
+
 
 
 

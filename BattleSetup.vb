@@ -57,11 +57,36 @@ Public Class BattleSetup
         Else
             MessageBox.Show("Something unexpected happen when adding a pokemon. The pokemon is probably not displaying on the List.", "Check Up!", MessageBoxButtons.OK, MessageBoxIcon.Hand)
         End If
+        Pokemon_Name.Text = ""
 
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         REM everything was already added. All we need to do is to close this form.
         Me.Close()
+    End Sub
+
+    Private Sub Initiate_Build_Click(sender As Object, e As EventArgs) Handles Initiate_Build.Click
+        Dim dic_enum As New Dictionary(Of String, String).Enumerator
+        dic_enum = Form1.Get_ResourceURIDictionary.Get_ResourceURIDictionary.GetEnumerator()
+        dic_enum.MoveNext()
+        Dim i As Integer = 0
+
+        While i < Form1.Get_ResourceURIDictionary.Get_ResourceURIDictionary.Count
+
+            Me.Pokemon_Name.Text = dic_enum.Current.Key.Trim("""")
+
+            Me.InsertPokemon.PerformClick()
+
+            i += 1
+            dic_enum.MoveNext()
+        End While
+
+        MessageBox.Show("All done building!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub Initiate_movebuild_Click(sender As Object, e As EventArgs) Handles Initiate_movebuild.Click
+        Dim csv_reader As New Dex_reader
+        csv_reader.Read_MovesCSV()
     End Sub
 End Class

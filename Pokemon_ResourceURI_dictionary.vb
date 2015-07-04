@@ -4,6 +4,10 @@ Imports System.Collections
 Public Class Pokemon_ResourceURI_dictionary
     Private pokemon_resourceURI_dictionary As New Dictionary(Of String, String)
 
+    Public Function Get_ResourceURIDictionary() As Dictionary(Of String, String)
+        Return pokemon_resourceURI_dictionary
+    End Function
+
     ''' <summary>
     ''' Checks if Pokemon and its URI is in the Dictionary
     ''' </summary>

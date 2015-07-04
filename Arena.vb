@@ -6,6 +6,7 @@ Public Class Arena
     Dim m_Team_Blue As New Pokemon_Team
     Dim m_Team_Red As New Pokemon_Team
     Dim m_turn_number As Integer = 0
+    Dim m_curr_attacker As String
 
     Dim currentbattlingpokemon_blue As New List(Of Pokemon)
     Dim currentbattlingpokemon_red As New List(Of Pokemon)
@@ -34,6 +35,15 @@ Public Class Arena
         End Get
         Set(value As Integer)
             m_turn_number = value
+        End Set
+    End Property
+
+    Public Property Current_Attacker() As String
+        Get
+            Return m_curr_attacker
+        End Get
+        Set(value As String)
+            m_curr_attacker = value
         End Set
     End Property
 
@@ -66,6 +76,17 @@ End Class
 Public Class Pokemon_Arena
     Inherits Arena
     Implements System.ICloneable
+
+    Dim m_last_fainted As String
+
+    Public Property Last_Fainted() As String
+        Get
+            Return m_last_fainted
+        End Get
+        Set(value As String)
+            m_last_fainted = value
+        End Set
+    End Property
 
     Public Function IsBlueFainted() As Boolean
         Dim hasallbluefainted As Boolean = False
@@ -132,6 +153,34 @@ Public Class Pokemon_Arena
     Public Sub AddTo_CurrentBattling_Red(ByVal battle_pokemon As Pokemon)
         Me.CurrentBattlingRed.Add(battle_pokemon)
     End Sub
+
+    Public Function Get_HealthStatusofBlue() As String
+        Dim currentbattling_hp As Integer = Me.CurrentBattlingBlue.First.HP
+        Dim original_hp As Integer = Form1.Get_PokemonDictionary.Get_Pokemon(Me.CurrentBattlingBlue.First.Name).HP
+
+        Dim percent As Double = currentbattling_hp / original_hp
+        If percent <= 0.5 And percent >= 0.2 Then
+            Return "yellow"
+        ElseIf percent < 0.2 Then
+            Return "red"
+        Else
+            Return "green"
+        End If
+    End Function
+
+    Public Function Get_HealthStatusofRed() As String
+        Dim currentbattling_hp As Integer = Me.CurrentBattlingRed.First.HP
+        Dim original_hp As Integer = Form1.Get_PokemonDictionary.Get_Pokemon(Me.CurrentBattlingRed.First.Name).HP
+
+        Dim percent As Double = currentbattling_hp / original_hp
+        If percent <= 0.5 And percent >= 0.2 Then
+            Return "yellow"
+        ElseIf percent < 0.2 Then
+            Return "red"
+        Else
+            Return "green"
+        End If
+    End Function
 
 
     Public Function Clone() As Object Implements ICloneable.Clone

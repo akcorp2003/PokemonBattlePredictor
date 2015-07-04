@@ -44,6 +44,7 @@
 
     Private Sub AddBlue_Click(sender As Object, e As EventArgs) Handles AddBlue.Click
         Dim bluepokemon As New Pokemon
+        Dim dummypokemon As Pokemon
 
         Dim move1 As New Move_Info
         Dim move2 As New Move_Info
@@ -59,6 +60,15 @@
         bluepokemon.Sp_DEF = Me.SpDEF.Text
         bluepokemon.SPD = Me.SPEED.Text
         bluepokemon.HP = Me.HP.Text
+
+        REM secretly update the original pokemon values so the user doesn't need to change them next time.
+        dummypokemon = Form1.Get_PokemonDictionary.Get_Pokemon(Me.Pokemon_Name.Text)
+        dummypokemon.ATK = Convert.ToInt32(Me.ATK.Text)
+        dummypokemon.DEF = Convert.ToInt32(Me.DEF.Text)
+        dummypokemon.Sp_ATK = Convert.ToInt32(Me.SpATK.Text)
+        dummypokemon.Sp_DEF = Convert.ToInt32(Me.SpDEF.Text)
+        dummypokemon.SPD = Convert.ToInt32(Me.SPEED.Text)
+        dummypokemon.HP = Convert.ToInt32(Me.HP.Text)
 
         If Not bluepokemon.Moves_For_Battle.Count = 0 Then
             REM we want the move list to be fresh
@@ -132,6 +142,7 @@
 
     Private Sub AddRed_Click(sender As Object, e As EventArgs) Handles AddRed.Click
         Dim redpokemon As New Pokemon
+        Dim dummypokemon As Pokemon
 
         Dim move1 As New Move_Info
         Dim move2 As New Move_Info
@@ -147,6 +158,15 @@
         redpokemon.Sp_DEF = Me.SpDEF.Text
         redpokemon.SPD = Me.SPEED.Text
         redpokemon.HP = Me.HP.Text
+
+        REM secretly update the original pokemon values so the user doesn't need to change them next time.
+        dummypokemon = Form1.Get_PokemonDictionary.Get_Pokemon(Me.Pokemon_Name.Text)
+        dummypokemon.ATK = Convert.ToInt32(Me.ATK.Text)
+        dummypokemon.DEF = Convert.ToInt32(Me.DEF.Text)
+        dummypokemon.Sp_ATK = Convert.ToInt32(Me.SpATK.Text)
+        dummypokemon.Sp_DEF = Convert.ToInt32(Me.SpDEF.Text)
+        dummypokemon.SPD = Convert.ToInt32(Me.SPEED.Text)
+        dummypokemon.HP = Convert.ToInt32(Me.HP.Text)
 
         If Not redpokemon.Moves_For_Battle.Count = 0 Then
             REM we want the move list to be fresh

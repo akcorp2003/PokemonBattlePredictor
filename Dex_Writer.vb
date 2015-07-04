@@ -1,6 +1,7 @@
 ﻿Imports System
 Imports System.Net
 Imports System.IO
+Imports Microsoft.VisualBasic.FileIO.TextFieldParser
 
 Public Class Dex_Writer
 
@@ -659,4 +660,53 @@ Public Class Dex_reader
 
         filereader.Close()
     End Sub
+
+    Public Sub Read_MovesCSV()
+        Dim move_csv As FileIO.TextFieldParser = New FileIO.TextFieldParser("moves.csv")
+        Dim currentLine As String()
+        move_csv.Delimiters = New String() {","}
+        Dim eff_table As New EffectivenessTable
+
+        REM this should be the line where it's all the headings
+        currentLine = move_csv.ReadFields()
+        While Not move_csv.EndOfData
+            currentLine = move_csv.ReadFields()
+
+            Dim movename As String = currentLine(1)
+            Dim type As String = currentLine(3)
+            Dim damage_type As String = currentLine(9)
+            Dim norm_or_special As Integer = Convert.ToInt32(damage_type)
+            Dim typename As String = eff_table.GetTypeName(Convert.ToInt32(type) - 1)
+
+            movename = Capitalizefirstletter(movename)
+
+            Dim modify_move As Move_Info
+            modify_move = Form1.Get_MoveDictionary.Get_Move(movename)
+            If Not modify_move Is Nothing Then
+                modify_move.Type = typename
+                If norm_or_special = 3 Then
+                    modify_move.Is_Special = True
+                Else
+                    modify_move.Is_Special = False
+                End If
+            End If
+
+
+        End While
+        move_csv.Close()
+    End Sub
+
+    Private Function Capitalizefirstletter(ByVal ugly_string As String) As String
+        For Each c As Char In ugly_string
+            If Char.IsLower(c) Then
+                Dim letter As Char = c
+                Dim Sletter As String = letter.ToString()
+                Sletter = Sletter.ToUpper()
+                ugly_string = ugly_string.Remove(0, 1)
+                ugly_string = ugly_string.Insert(0, Sletter)
+                Exit For
+            End If
+        Next
+        Return ugly_string
+    End Function
 End Class

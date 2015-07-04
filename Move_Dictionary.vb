@@ -123,8 +123,8 @@ Public Class Move_Info
     End Property
 
     ''' <summary>
-    ''' Holds a string of effects. Generally for moves that raises or lowers stats.
-    ''' For instance, a string can be ATK+1SPD+1 means ATK raised by 1 stage and SPD raised by 1 stage
+    ''' Holds a list of string of effects. Generally for moves that raises or lowers stats.
+    ''' For instance, a list can be ATK+1,SPD+1 means ATK raised by 1 stage and SPD raised by 1 stage
     ''' </summary>
     ''' <value></value>
     ''' <returns>A string of effect application</returns>

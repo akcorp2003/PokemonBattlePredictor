@@ -6,7 +6,15 @@ PokemonBattlePredictor
 </name>
 </assembly>
 <members>
-<member name="M:PokemonBattlePredictor.Battle_Prediction.IsThereSuperEffectiveMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.EffectivenessTable)">
+<member name="M:PokemonBattlePredictor.Battle_Prediction.predict_battle(PokemonBattlePredictor.Pokemon_Arena)">
+	<summary>
+ Handles the turn-base mechanics of Pokemon
+ </summary>
+	<param name="battle_arena">An arena filled with two teams of Pokemon</param>
+	<returns>The winning party</returns>
+	<remarks>Only handles the turn mechanics. This function does not know how to calculate damage or which
+ Pokemon is better</remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.IsThereSuperEffectiveMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.EffectivenessTable)">
 	<summary>
  Finds all supereffective moves that attacking_pokemon can use
  </summary>
@@ -26,15 +34,46 @@ PokemonBattlePredictor
 	<param name="poke_calculator"></param>
 	<param name="max_or_min">An integer to indicate if the user wants to project the battle using max(1), min(-1), or regular(0) damage. </param>
 	<returns>The number of turns until second_pokemon faints</returns>
-	<remarks>Non-damaging moves are not accepted</remarks>
-</member><member name="M:PokemonBattlePredictor.Battle_Prediction.apply_battle(PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Poke_Calculator)">
+	<remarks>Non-damaging moves are not accepted. It is strongly encouraged to pass a clone into this function.</remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.apply_battle(PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Pokemon_Arena)">
 	<summary>
- Applys the battle logic for pokemon battles.
- The function looks 
+ Applys the battle logic for pokemon battles. This function does not simulate. It actually applies the damage
  </summary>
 	<param name="first_pokemon">The attacking Pokemon</param>
 	<param name="second_pokemon">The defending Pokemon</param>
 	<param name="poke_calc"></param>
+	<param name="poke_arena">The arena with Pokemon</param>
+	<remarks>The pokemon will be damaged! Do not use this function for simulation purposes unless if you 
+ pass in clones of first_pokemon and second_pokemon</remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.FindBestMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,System.Collections.Generic.List{PokemonBattlePredictor.Move_Info},System.Int32)">
+	<summary>
+ Finds the best (damaging) move for the pokemon to use given a list of moves to choose from
+ </summary>
+	<param name="first_pokemon"></param>
+	<param name="second_pokemon"></param>
+	<param name="poke_calc"></param>
+	<param name="availmoves">A list of moves to choose from</param>
+	<param name="max_or_min">Max(1) choose max damage, Min(-1) choose min damage, Norm(0) choose normal damage</param>
+	<returns>The best move for the pokemon to use</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.Get_BestRaiseAttackStatMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Move_Info,System.Int32)">
+	<summary>
+ Returns a package containing the best raising Attack/SP. Attack stat move for first_pokemon to apply
+  and the number of turns using that move for the pokemon to knock out the second_pokemon.
+ </summary>
+	<param name="first_pokemon">It is advised to pass in a clone.</param>
+	<param name="second_pokemon">It is advised to pass in a clone.</param>
+	<param name="poke_calc"></param>
+	<param name="movetouse">The move to apply the stat move</param>
+	<param name="max_or_min">Max damage (1), min damage (-1), normal damage(0)</param>
+	<returns>A package containing the best stat move for the first_pokemon to apply if the pokemon uses movetouse. Also
+ returns the number of moves using that stat move will take to kill second_pokemon.</returns>
+	<remarks>Function should generally be called for offensive moves</remarks>
+</member><member name="T:PokemonBattlePredictor.Prediction_Package">
+	<summary>
+ A Package containing the winning team, the number of turns it took for the winner to win,
+ and a battle log (not implemented yet)
+ </summary>
 	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Poke_Calculator.CalculateDamage(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info,System.UInt64,System.Int32)">
 	<summary>
@@ -48,6 +87,14 @@ PokemonBattlePredictor
  regular damage. </param>
 	<returns>The damage value</returns>
 	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_stattopokemon(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info)">
+	<summary>
+ Apples statchanging_move to my_pokemon. This could be raising damage_move by 1 stage, 2 stages, or lower 1 stage, etc...
+ This function cannot distinguish between an opponent or user move.
+ </summary>
+	<param name="my_pokemon">The move that applies damage</param>
+	<param name="statchanging_move">The non-damaging move</param>
+	<remarks>This function does not know who the damage_move belongs to.</remarks>
 </member><member name="M:PokemonBattlePredictor.Poke_Calculator.GenerateRandomNumber">
 	<summary>
 	</summary>
@@ -105,6 +152,18 @@ PokemonBattlePredictor
  </summary>
 	<value></value>
 	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon.num_Special">
+	<summary>
+ Returns the number of special moves that the Pokemon has in Moves_For_Battle
+ </summary>
+	<returns>The number of special battling moves</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon.get_Special">
+	<summary>
+ Returns a list of special moves. Make sure to clone these moves if you are going to modify them!
+ </summary>
+	<returns>A list of special moves. Make sure to clone!</returns>
 	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Dex_reader.Execute(System.ComponentModel.BackgroundWorker,System.ComponentModel.DoWorkEventArgs)">
 	<summary>
@@ -176,8 +235,8 @@ PokemonBattlePredictor
 	<remarks>No need to specially format the arguments.</remarks>
 </member><member name="P:PokemonBattlePredictor.Move_Info.Effect">
 	<summary>
- Holds a string of effects. Generally for moves that raises or lowers stats.
- For instance, a string can be ATK+1SPD+1 means ATK raised by 1 stage and SPD raised by 1 stage
+ Holds a list of string of effects. Generally for moves that raises or lowers stats.
+ For instance, a list can be ATK+1,SPD+1 means ATK raised by 1 stage and SPD raised by 1 stage
  </summary>
 	<value></value>
 	<returns>A string of effect application</returns>

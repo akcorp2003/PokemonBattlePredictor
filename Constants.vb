@@ -39,6 +39,38 @@
         End If
     End Function
 
+    Public Function Get_StageBoostValue(ByVal stage As Integer) As Double
+        If stage = 0 Then
+            Return 1.0 REM no effect
+        ElseIf stage = 1 Then
+            Return 3 / 2
+        ElseIf stage = 2 Then
+            Return 4 / 2
+        ElseIf stage = 3 Then
+            Return 5 / 2
+        ElseIf stage = 4 Then
+            Return 6 / 2
+        ElseIf stage = 5 Then
+            Return 7 / 2
+        ElseIf stage = 6 Then
+            Return 8 / 2
+        ElseIf stage = -1 Then
+            Return 2 / 3
+        ElseIf stage = -2 Then
+            Return 2 / 4
+        ElseIf stage = -3 Then
+            Return 2 / 5
+        ElseIf stage = -4 Then
+            Return 2 / 6
+        ElseIf stage = -5 Then
+            Return 2 / 7
+        ElseIf stage = -6 Then
+            Return 2 / 8
+        Else
+            Return 0
+        End If
+    End Function
+
     ''' <summary>
     ''' Takes in a string and formats the string by:
     ''' 1. Removing any leading and ending whitespace

@@ -249,6 +249,12 @@ Partial Class Form1
         'Worker_Pokemonreader
         '
         '
+        'Worker_Movereader
+        '
+        '
+        'Worker_Abilityreader
+        '
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)

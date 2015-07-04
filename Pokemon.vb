@@ -18,6 +18,11 @@ Public Class Pokemon
     Private m_Type As New List(Of String)
     Private m_stage As Integer = 0
     Private m_team As String
+    Private m_ATKboost As Integer
+    Private m_DEFboost As Integer
+    Private m_SPATKboost As Integer
+    Private m_SPDEFboost As Integer
+    Private m_SPDboost As Integer
 
     Public Property Name() As String
         Get
@@ -79,6 +84,51 @@ Public Class Pokemon
         End Get
         Set(value As Integer)
             m_SPD = value
+        End Set
+    End Property
+
+    Public Property ATK_Boost() As Integer
+        Get
+            Return m_ATKboost
+        End Get
+        Set(value As Integer)
+            m_ATKboost = value
+        End Set
+    End Property
+
+    Public Property DEF_Boost() As Integer
+        Get
+            Return m_DEFboost
+        End Get
+        Set(value As Integer)
+            m_DEFboost = value
+        End Set
+    End Property
+
+    Public Property SP_ATK_Boost() As Integer
+        Get
+            Return m_SPATKboost
+        End Get
+        Set(value As Integer)
+            m_SPATKboost = value
+        End Set
+    End Property
+
+    Public Property SP_DEF_Boost() As Integer
+        Get
+            Return m_SPDEFboost
+        End Get
+        Set(value As Integer)
+            m_SPDEFboost = value
+        End Set
+    End Property
+
+    Public Property SPEED_Boost() As Integer
+        Get
+            Return m_SPDboost
+        End Get
+        Set(value As Integer)
+            m_SPDboost = value
         End Set
     End Property
 
@@ -152,6 +202,105 @@ Public Class Pokemon
         End Set
     End Property
 
+    ''' <summary>
+    ''' Returns the number of special moves that the Pokemon has in Moves_For_Battle
+    ''' </summary>
+    ''' <returns>The number of special battling moves</returns>
+    ''' <remarks></remarks>
+    Public Function num_Special() As Integer
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        Dim num_moves As Integer = 0
+        While Not move_enum.Current Is Nothing
+            If move_enum.Current.Is_Special = True Then
+                num_moves += 1
+            End If
+            move_enum.MoveNext()
+        End While
+        Return num_moves
+    End Function
+
+    ''' <summary>
+    ''' Returns a list of special moves. Make sure to clone these moves if you are going to modify them!
+    ''' </summary>
+    ''' <returns>A list of special moves. Make sure to clone!</returns>
+    ''' <remarks></remarks>
+    Public Function get_Special() As List(Of Move_Info)
+        Dim s_list As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            If move_enum.Current.Is_Special = True Then
+                s_list.Add(move_enum.Current)
+            End If
+        End While
+        Return s_list
+    End Function
+
+    Public Function num_Normal() As Integer
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        Dim num_moves As Integer = 0
+        While Not move_enum.Current Is Nothing
+            REM try not to confuse normal damage with stat moves
+            If move_enum.Current.Is_Special = False And move_enum.Current.Power > 0 Then
+                num_moves += 1
+            End If
+            move_enum.MoveNext()
+        End While
+        Return num_moves
+    End Function
+
+    Public Function get_Normal() As List(Of Move_Info)
+        Dim n_list As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+
+        While Not move_enum.Current Is Nothing
+            REM try not to confuse normal damage with stat moves
+            If move_enum.Current.Is_Special = False And move_enum.Current.Power > 0 Then
+                n_list.Add(move_enum.Current)
+            End If
+            move_enum.MoveNext()
+        End While
+        Return n_list
+    End Function
+
+    Public Function num_StatusMoves() As Integer
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        Dim num_moves As Integer = 0
+        While Not move_enum.Current Is Nothing
+            REM try not to confuse normal damage with stat moves
+            If move_enum.Current.Power = 0 Then
+                num_moves += 1
+            End If
+            move_enum.MoveNext()
+        End While
+        Return num_moves
+    End Function
+
+    Public Function get_StatusMoves() As List(Of Move_Info)
+        Dim st_list As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        Dim num_moves As Integer = 0
+        While Not move_enum.Current Is Nothing
+            REM try not to confuse normal damage with stat moves
+            If move_enum.Current.Power = 0 Then
+                st_list.Add(move_enum.Current)
+            End If
+            move_enum.MoveNext()
+        End While
+        Return st_list
+    End Function
+
     Public Function Clone() As Object Implements ICloneable.Clone
         Dim freshpokemon As New Pokemon
         freshpokemon.ATK = Me.ATK
@@ -161,6 +310,11 @@ Public Class Pokemon
         freshpokemon.SPD = Me.SPD
         freshpokemon.Name = Me.Name
         freshpokemon.HP = Me.HP
+        freshpokemon.ATK_Boost = Me.ATK_Boost
+        freshpokemon.DEF_Boost = Me.DEF_Boost
+        freshpokemon.SP_ATK_Boost = Me.SP_ATK_Boost
+        freshpokemon.SP_DEF_Boost = Me.SP_DEF_Boost
+        freshpokemon.SPEED_Boost = Me.SPEED_Boost
         freshpokemon.Moves = Me.Moves.Select(Function(x) x.Clone()).Cast(Of String).ToList()
         freshpokemon.Types = Me.Types.Select(Function(x) x.Clone()).Cast(Of String).ToList()
         freshpokemon.Ability = Me.Ability.Select(Function(x) x.Clone()).Cast(Of Ability_Info).ToList()
