@@ -14,5 +14,7 @@ CURRENT PROGRESS:
 4. 6/24/15 Small Progress: Pokemon is now displayed in the ListView. Battle logic implementation begins here.
  
 5. 6/26/15 Small Progress: IO is now implemented. This reduces the need to constantly go to the server, which is quite slow. Also, this serves as the ability to cache all the data.
+ 
+6. 7/4/2015 Lots of Progress: IO is now more or less finished. Any additional logic that needs to be added can simply be done in the Dex_reader (has a CSV parser), and Dex_Writer classes. Additional change was adding the battle mechanics. The basic turn-based mechanics is now implemented, with the exception of status moves but that will be very easy to modify. Stat moves now have working effects! Most of the prediction engine is functioning now. For stat moves, it is only looking at a one stage boost at a time (not going into a deep recursive stage increments). Next step is getting status ailments (sleeping, poison, etc.) functioning and its corresponding engine analysis. 
 
 CURRENT ACTIVE BRANCH: BattleLogic
