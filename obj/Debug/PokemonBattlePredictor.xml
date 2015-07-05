@@ -56,6 +56,33 @@ PokemonBattlePredictor
 	<param name="max_or_min">Max(1) choose max damage, Min(-1) choose min damage, Norm(0) choose normal damage</param>
 	<returns>The best move for the pokemon to use</returns>
 	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.FindBestStatMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Move_Info,System.Int32,System.Int32)">
+	<summary>
+ Finds the best non-damaging move when using a damaging move (movetouse). Returns a package containing the best
+ stat move to use and the number of turns using it would take using both the stat AND movetouse to take down second_pokemon
+ </summary>
+	<param name="first_pokemon">The attacking pokemon or the pokemon using the move</param>
+	<param name="second_pokemon">The defending pokemon</param>
+	<param name="poke_calc"></param>
+	<param name="movetouse">The damaging move first_pokemon will be using</param>
+	<param name="max_or_min">Max(1) damage, min damage(-1), norm(0)</param>
+	<param name="off_or_def">Choose a more offensive stat move (1) or choose a more defensive move (-1)</param>
+	<returns>A Prediction_Move_Package that contains the stat move to use and the number of turns it takes to kill second_pokemon.</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.FindBestStatMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,System.Int32,System.Int32)">
+	<summary>
+ An overloaded function. Returns the best stat move for first_pokemon to use.
+ </summary>
+	<param name="first_pokemon"></param>
+	<param name="second_pokemon"></param>
+	<param name="poke_calc"></param>
+	<param name="max_or_min">Max(1) for max damage, Min(-1) for min damage, and Norm(0) to allow function to go all out (not yet implemented)</param>
+	<param name="off_or_def">Choose offensive-related stat move (1), choose defensive-related stat move(-1)</param>
+	<returns>
+ A Prediction_Move_Package containing the best move to use. Does not include information on how fast first_pokemon
+ can kill second_pokemon.
+ </returns>
+	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Battle_Prediction.Get_BestRaiseAttackStatMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Move_Info,System.Int32)">
 	<summary>
  Returns a package containing the best raising Attack/SP. Attack stat move for first_pokemon to apply

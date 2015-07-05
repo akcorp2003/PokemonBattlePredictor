@@ -301,6 +301,32 @@ Public Class Pokemon
         Return st_list
     End Function
 
+    Public Function get_StrongestMove() As Move_Info
+        Dim strongmove As New Move_Info
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            If move_enum.Current.Power > strongmove.Power Then
+                strongmove = move_enum.Current
+            ElseIf move_enum.Current.Power = strongmove.Power Then
+                REM choose higher accuracy
+                If move_enum.Current.Accuracy > strongmove.Accuracy Then
+                    strongmove = move_enum.Current
+                ElseIf move_enum.Current.Accuracy = strongmove.Accuracy Then
+                    REM choose higher PP
+                    If move_enum.Current.PP > strongmove.PP Then
+                        strongmove = move_enum.Current
+                        REM otherwise, we'll just stick with the current one (well, there is the type bonus but not
+                        REM going to implement it yet TODO)
+                    End If
+                End If
+            End If
+            move_enum.MoveNext()
+        End While
+        Return strongmove
+    End Function
+
     Public Function Clone() As Object Implements ICloneable.Clone
         Dim freshpokemon As New Pokemon
         freshpokemon.ATK = Me.ATK

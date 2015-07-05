@@ -278,6 +278,26 @@ Public Class Battle_Prediction : Implements Predict
         Return noteffective_Moves
     End Function
 
+    Public Function IsThereStatMoves(ByVal my_pokemon As Pokemon) As List(Of Move_Info)
+        Dim statmoves As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = my_pokemon.Moves_For_Battle.GetEnumerator()
+        move_enum.MoveNext()
+
+        While Not move_enum.Current Is Nothing
+
+            If move_enum.Current.Power = 0 Then
+                If move_enum.Current.Effect.Contains("ATK") Or move_enum.Current.Effect.Contains("DEF") Or move_enum.Current.Effect.Contains("SPD") Or move_enum.Current.Effect.Contains("EVA") _
+                    Or move_enum.Current.Effect.Contains("ACCU") Then
+                    statmoves.Add(move_enum.Current)
+                End If
+            End If
+            move_enum.MoveNext()
+        End While
+
+        Return statmoves
+    End Function
+
     ''' <summary>
     ''' project_battle figures out the number of turns it takes for first_pokemon to destroy the second_pokemon
     ''' using attacking_move. Passing a non-damaging move does not work. 
@@ -329,19 +349,38 @@ Public Class Battle_Prediction : Implements Predict
     Private Sub apply_battle(ByRef first_pokemon As Pokemon, ByRef second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator, ByVal poke_arena As Pokemon_Arena)
         Dim turn_poke_move As New Move_Info
         Dim turn_poke_move2 As New Move_Info
+        Dim turn_poke_move_pack As New Prediction_Move_Package
+        Dim turn_poke_move2_pack As New Prediction_Move_Package
         Dim isthere_SEmove As List(Of Move_Info)
         isthere_SEmove = Me.IsThereSuperEffectiveMove(first_pokemon, second_pokemon, effectiveness_table)
 
         If Not isthere_SEmove.Count = 0 Then
             REM there exists a supereffective move we can use!
 
-            turn_poke_move = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_SEmove, 1)
-            turn_poke_move2 = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move, 1)
+            turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_SEmove, 1)
+            REM check out an available offensive stat move
+            turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, 1)
 
+            If turn_poke_move2_pack Is Nothing Then
+                poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+            Else
+                If turn_poke_move2_pack.Opponent_Turns < turn_poke_move2_pack.My_Turns Then
+                    REM then the opponenet kills us faster than we can kill it... No good. Just apply damage man...
+                    'TODO: in a future edition, analyze these numbers carefully, as in look at the difference
+                    'between these 2 values and if it is too great, then go for offensive but if it is not too great
+                    'go into greater detail
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                ElseIf turn_poke_move2_pack.Opponent_Turns > turn_poke_move2_pack.My_Turns Then
+                    REM we can apply the stat move
+                    poke_calc.apply_stattopokemon(first_pokemon, turn_poke_move2_pack.Move)
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                Else
+                    REM we have a tie...just apply damage
+                    REM I like to always inflict damage, so even if it's equal
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                End If
+            End If
 
-
-            REM once we have selected the move to use, apply the damage
-            poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move, poke_calc, 1)
 
         Else
             REM TODO: add check for status moves and stat lowering moves
@@ -352,39 +391,31 @@ Public Class Battle_Prediction : Implements Predict
 
             If Not isthere_normmove.Count = 0 Then
                 REM we can apply a normal damaging move!
-                'Dim turnstofaint As Integer = Integer.MaxValue
-                'Dim attacker As New Pokemon
-                'Dim defender As New Pokemon
-                'attacker = first_pokemon.Clone()
-                'defender = second_pokemon.Clone()
 
-                'REM find normal move with max damage
-                'Dim i As Integer = 0
-                'Dim new_turnstofaint As Integer = 0
-                'Dim normmove_enum As New List(Of Move_Info).Enumerator
-                'normmove_enum = isthere_normmove.GetEnumerator()
-                'normmove_enum.MoveNext()
-                'While i < isthere_normmove.Count
-                '    new_turnstofaint = Me.Project_Battle(first_pokemon.Clone(), second_pokemon.Clone(), normmove_enum.Current(), poke_calc, 1)
+                turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_normmove, 1)
+                turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, 1)
 
-                '    If new_turnstofaint < turnstofaint Then
-                '        turnstofaint = new_turnstofaint
-                '        turn_poke_move = normmove_enum.Current
-                '    ElseIf new_turnstofaint = turnstofaint Then
-                '        REM choose the higher power
-                '        If normmove_enum.Current.Power > turn_poke_move.Power Then
-                '            turn_poke_move = normmove_enum.Current
-                '        End If
+                If turn_poke_move2_pack Is Nothing Then
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                Else
+                    If turn_poke_move2_pack.Opponent_Turns < turn_poke_move2_pack.My_Turns Then
+                        REM then the opponenet kills us faster than we can kill it... No good. Just apply damage man...
+                        'TODO: in a future edition, analyze these numbers carefully, as in look at the difference
+                        'between these 2 values and if it is too great, then go for offensive but if it is not too great
+                        'go into greater detail
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                    ElseIf turn_poke_move2_pack.Opponent_Turns > turn_poke_move2_pack.My_Turns Then
+                        REM we can apply the stat move
+                        poke_calc.apply_stattopokemon(first_pokemon, turn_poke_move2_pack.Move)
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                    Else
+                        REM we have a tie...just apply damage
+                        REM For normal moves, it is better to go and rip apart the second_pokemon
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                    End If
+                End If
 
-                '    End If
-                '    normmove_enum.MoveNext()
-                '    i += 1
-
-                'End While
-                turn_poke_move = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_normmove, 1)
-                turn_poke_move2 = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move, 1)
-
-                poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move, poke_calc, 1)
+                poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
             Else
                 REM all we have are noneffective or status moves
                 Dim oppo_health As String
@@ -396,15 +427,15 @@ Public Class Battle_Prediction : Implements Predict
 
                 If oppo_health = "green" Then
                     REM choose a status/lower stat move
-                    turn_poke_move2 = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, Nothing, 1)
+                    turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, Nothing, 1, 1)
                 Else
                     REM choose the best damaging move
                     Dim isthere_noneffectivemove As New List(Of Move_Info)
                     isthere_noneffectivemove = Me.IsThereNotEffectiveMoves(first_pokemon, second_pokemon, effectiveness_table)
                     If Not isthere_noneffectivemove.Count = 0 Then
 
-                        turn_poke_move = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_noneffectivemove, 1)
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move, poke_calc, 1)
+                        turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_noneffectivemove, 1)
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
 
                     End If
                 End If
@@ -425,7 +456,8 @@ Public Class Battle_Prediction : Implements Predict
     ''' <returns>The best move for the pokemon to use</returns>
     ''' <remarks></remarks>
     Public Function FindBestMove(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
-                                 ByVal availmoves As List(Of Move_Info), ByVal max_or_min As Integer) As Move_Info
+                                 ByVal availmoves As List(Of Move_Info), ByVal max_or_min As Integer) As Prediction_Move_Package
+        Dim move_pack As New Prediction_Move_Package
         Dim turn_poke_move As New Move_Info
 
         Dim turnstofaint As Integer = Integer.MaxValue
@@ -459,33 +491,292 @@ Public Class Battle_Prediction : Implements Predict
             i += 1
         End While
 
-        Return turn_poke_move
+        move_pack.Move = turn_poke_move
+        move_pack.My_Turns = turnstofaint
+
+        Return move_pack
     End Function
 
+    ''' <summary>
+    ''' Finds the best non-damaging move when using a damaging move (movetouse). Returns a package containing the best
+    ''' stat move to use and the number of turns using it would take using both the stat AND movetouse to take down second_pokemon
+    ''' </summary>
+    ''' <param name="first_pokemon">The attacking pokemon or the pokemon using the move</param>
+    ''' <param name="second_pokemon">The defending pokemon</param>
+    ''' <param name="poke_calc"></param>
+    ''' <param name="movetouse">The damaging move first_pokemon will be using</param>
+    ''' <param name="max_or_min">Max(1) damage, min damage(-1), norm(0)</param>
+    ''' <param name="off_or_def">Choose a more offensive stat move (1) or choose a more defensive move (-1)</param>
+    ''' <returns>A Prediction_Move_Package that contains the stat move to use and the number of turns it takes to kill second_pokemon.</returns>
+    ''' <remarks></remarks>
     Public Function FindBestStatMove(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
-                                     ByVal movetouse As Move_Info, ByVal max_or_min As Integer) As Move_Info
+                                     ByVal movetouse As Move_Info, ByVal max_or_min As Integer, ByVal off_or_def As Integer) As Prediction_Move_Package
         Dim statmove_touse As New Move_Info
+        Dim statmove_touse_pack As New Prediction_Move_Package
         Dim attack_move As New Prediction_Move_Package
         Dim defense_move As New Prediction_Move_Package
 
-        REM first checkout offensive moves
-        attack_move = Me.Get_BestRaiseAttackStatMove(first_pokemon.Clone(), second_pokemon.Clone(), poke_calc, movetouse.Clone(), max_or_min)
-        defense_move = Me.Get_BestLowerDefenseStatMove(first_pokemon.Clone(), second_pokemon.Clone(), poke_calc, movetouse.Clone(), max_or_min)
+        If off_or_def = 1 Then
+            attack_move = Me.Get_BestRaiseAttackStatMove(first_pokemon.Clone(), second_pokemon.Clone(), poke_calc, movetouse.Clone(), max_or_min)
+            defense_move = Me.Get_BestLowerDefenseStatMove(first_pokemon.Clone(), second_pokemon.Clone(), poke_calc, movetouse.Clone(), max_or_min)
+
+            If attack_move Is Nothing Or defense_move Is Nothing Then
+                If attack_move Is Nothing And Not defense_move Is Nothing Then
+                    statmove_touse_pack.Move = defense_move.Move
+                    statmove_touse_pack.My_Turns = defense_move.My_Turns
+                    statmove_touse_pack.Opponent_Turns = defense_move.Opponent_Turns
+                ElseIf defense_move Is Nothing And Not attack_move Is Nothing Then
+                    statmove_touse_pack.Move = attack_move.Move
+                    statmove_touse_pack.My_Turns = attack_move.My_Turns
+                    statmove_touse_pack.Opponent_Turns = attack_move.Opponent_Turns
+                Else
+                    Return Nothing REM we absolutely got nothing out of it
+                End If
+               
+            Else
+                REM both are valid
+                If attack_move.My_Turns < defense_move.My_Turns Then
+                    REM the attack move is better
+                    statmove_touse_pack.Move = attack_move.Move
+                    statmove_touse_pack.My_Turns = attack_move.My_Turns
+                    statmove_touse_pack.Opponent_Turns = attack_move.Opponent_Turns
+                ElseIf attack_move.My_Turns > defense_move.My_Turns Then
+                    REM defense move is better
+                    statmove_touse_pack.Move = defense_move.Move
+                    statmove_touse_pack.My_Turns = defense_move.My_Turns
+                    statmove_touse_pack.Opponent_Turns = defense_move.Opponent_Turns
+                Else
+                    REM just choose one, I prefer increasing my attack
+                    REM TODO: for a future release, we can project it to the next few pokemon that the other team has
+                    statmove_touse_pack.Move = attack_move.Move
+                    statmove_touse_pack.My_Turns = attack_move.My_Turns
+                    statmove_touse_pack.Opponent_Turns = attack_move.Opponent_Turns
+                End If
 
 
-        REM for testing purposes:
+            End If
+        ElseIf off_or_def = -1 Then
+            attack_move = Me.Get_BestLowerAttackStatMove(first_pokemon.Clone(), second_pokemon.Clone(), poke_calc, movetouse.Clone(), max_or_min)
+            defense_move = Me.Get_BestRaiseDefenseStatMove(first_pokemon.Clone(), second_pokemon.Clone(), poke_calc, movetouse.Clone(), max_or_min)
 
-        If attack_move.Turns <= defense_move.Turns Then
-            statmove_touse = attack_move.Move
+            If attack_move Is Nothing Or defense_move Is Nothing Then
+                If attack_move Is Nothing And Not defense_move Is Nothing Then
+                    statmove_touse_pack.Move = defense_move.Move
+                    statmove_touse_pack.My_Turns = defense_move.My_Turns
+                    statmove_touse_pack.Opponent_Turns = defense_move.Opponent_Turns
+                ElseIf defense_move Is Nothing And Not attack_move Is Nothing Then
+                    statmove_touse_pack.Move = attack_move.Move
+                    statmove_touse_pack.My_Turns = attack_move.My_Turns
+                    statmove_touse_pack.Opponent_Turns = attack_move.Opponent_Turns
+                Else
+                    Return Nothing REM we absolutely got nothing out of it
+                End If
+
+            Else
+                REM both are valid
+                REM for defensive situations, it's better to take the longer turn
+                If attack_move.My_Turns > defense_move.My_Turns Then
+                    REM the attack move is better
+                    statmove_touse_pack.Move = attack_move.Move
+                    statmove_touse_pack.My_Turns = attack_move.My_Turns
+                    statmove_touse_pack.Opponent_Turns = attack_move.Opponent_Turns
+                ElseIf attack_move.My_Turns < defense_move.My_Turns Then
+                    REM defense move is better
+                    statmove_touse_pack.Move = defense_move.Move
+                    statmove_touse_pack.My_Turns = defense_move.My_Turns
+                    statmove_touse_pack.Opponent_Turns = defense_move.Opponent_Turns
+                Else
+                    REM just choose one, I prefer increasing my defense
+                    REM TODO: for a future release, we can project it to the next few pokemon that the other team has
+                    statmove_touse_pack.Move = defense_move.Move
+                    statmove_touse_pack.My_Turns = defense_move.My_Turns
+                    statmove_touse_pack.Opponent_Turns = defense_move.Opponent_Turns
+                End If
+
+
+            End If
         Else
-            statmove_touse = defense_move.Move
+            Return Nothing
+
         End If
 
 
 
+        Return statmove_touse_pack
 
-        Return statmove_touse
+    End Function
 
+    ''' <summary>
+    ''' An overloaded function. Returns the best stat move for first_pokemon to use.
+    ''' </summary>
+    ''' <param name="first_pokemon"></param>
+    ''' <param name="second_pokemon"></param>
+    ''' <param name="poke_calc"></param>
+    ''' <param name="max_or_min">Max(1) for max damage, Min(-1) for min damage, and Norm(0) to allow function to go all out (not yet implemented)</param>
+    ''' <param name="off_or_def">Choose offensive-related stat move (1), choose defensive-related stat move(-1)</param>
+    ''' <returns>
+    ''' A Prediction_Move_Package containing the best move to use. Does not include information on how fast first_pokemon
+    ''' can kill second_pokemon.
+    ''' </returns>
+    ''' <remarks></remarks>
+    Public Function FindBestStatMove(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
+                                     ByVal max_or_min As Integer, ByVal off_or_def As Integer) As Prediction_Move_Package
+
+        Dim listofstatmoves As List(Of Move_Info) = Me.IsThereStatMoves(first_pokemon)
+        Dim move_pack As New Prediction_Move_Package
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum.MoveNext()
+
+        If off_or_def = 1 Then
+            REM look at offensive based stat moves
+            If second_pokemon.num_Normal() > second_pokemon.num_Special() Then
+                REM choose increasing ATK and lower DEF types
+                While Not move_enum.Current Is Nothing
+                    If move_enum.Current.Effect.Contains("ATKU+") Or move_enum.Current.Effect.Contains("DEFO-") Then
+                        listofstatmoves.Add(move_enum.Current)
+                    End If
+                    move_enum.MoveNext()
+                End While
+            ElseIf second_pokemon.num_Normal() < second_pokemon.num_Special() Then
+                While Not move_enum.Current Is Nothing
+                    If move_enum.Current.Effect.Contains("SPATKU+") Or move_enum.Current.Effect.Contains("SPDEFO-") Then
+                        listofstatmoves.Add(move_enum.Current)
+                    End If
+                    move_enum.MoveNext()
+                End While
+            Else
+                REM the opponent got an equal number of moves (perhaps even only status moves...)
+                If first_pokemon.num_Normal() > first_pokemon.num_Special() Then
+                    REM choose increasing ATK and lower DEF types
+                    While Not move_enum.Current Is Nothing
+                        If move_enum.Current.Effect.Contains("ATKU+") Or move_enum.Current.Effect.Contains("DEFO-") Then
+                            listofstatmoves.Add(move_enum.Current)
+                        End If
+                        move_enum.MoveNext()
+                    End While
+                ElseIf first_pokemon.num_Normal() < first_pokemon.num_Special() Then
+                    While Not move_enum.Current Is Nothing
+                        If move_enum.Current.Effect.Contains("SPATKU+") Or move_enum.Current.Effect.Contains("SPDEFO-") Then
+                            listofstatmoves.Add(move_enum.Current)
+                        End If
+                        move_enum.MoveNext()
+                    End While
+                Else
+                    REM we will take a look at the hard stats of the pokemon and depending on the result we will choose
+                    REM the appropriate offensive move
+                    If first_pokemon.ATK > first_pokemon.Sp_ATK Then
+                        While Not move_enum.Current Is Nothing
+                            If move_enum.Current.Effect.Contains("ATKU+") Or move_enum.Current.Effect.Contains("DEFO-") Then
+                                listofstatmoves.Add(move_enum.Current)
+                            End If
+                            move_enum.MoveNext()
+                        End While
+                    ElseIf first_pokemon.Sp_ATK > first_pokemon.ATK Then
+                        While Not move_enum.Current Is Nothing
+                            If move_enum.Current.Effect.Contains("SPATKU+") Or move_enum.Current.Effect.Contains("SPDEFO-") Then
+                                listofstatmoves.Add(move_enum.Current)
+                            End If
+                            move_enum.MoveNext()
+                        End While
+                    Else
+                        REM we have an equal ATK and SP_ATK...
+                        If first_pokemon.get_StrongestMove().Is_Special Then
+                            REM find a stat move that can boost it!
+                            While Not move_enum.Current Is Nothing
+                                If move_enum.Current.Effect.Contains("SPATKU+") Or move_enum.Current.Effect.Contains("SPDEFO-") Then
+                                    listofstatmoves.Add(move_enum.Current)
+                                End If
+                                move_enum.MoveNext()
+                            End While
+                        Else
+                            While Not move_enum.Current Is Nothing
+                                If move_enum.Current.Effect.Contains("ATKU+") Or move_enum.Current.Effect.Contains("DEFO-") Then
+                                    listofstatmoves.Add(move_enum.Current)
+                                End If
+                                move_enum.MoveNext()
+                            End While
+                        End If
+                    End If
+                End If
+            End If
+        ElseIf off_or_def = -1 Then
+            REM look at defensive moves
+            If second_pokemon.num_Normal() > second_pokemon.num_Special() Then
+                REM choose raise my defense or opposing ATK
+                While Not move_enum.Current Is Nothing
+                    If move_enum.Current.Effect.Contains("ATKO-") Or move_enum.Current.Effect.Contains("DEFU+") Then
+                        listofstatmoves.Add(move_enum.Current)
+                    End If
+                    move_enum.MoveNext()
+                End While
+            ElseIf second_pokemon.num_Normal() < second_pokemon.num_Special() Then
+                REM likewise as above
+                While Not move_enum.Current Is Nothing
+                    If move_enum.Current.Effect.Contains("SPATKO-") Or move_enum.Current.Effect.Contains("SPDEFU+") Then
+                        listofstatmoves.Add(move_enum.Current)
+                    End If
+                    move_enum.MoveNext()
+                End While
+            Else
+                REM boost our best defense stat
+                If first_pokemon.DEF > first_pokemon.Sp_DEF Then
+                    While Not move_enum.Current Is Nothing
+                        If move_enum.Current.Effect.Contains("DEFU+") Then
+                            listofstatmoves.Add(move_enum.Current)
+                        End If
+                        move_enum.MoveNext()
+                    End While
+                ElseIf first_pokemon.DEF < first_pokemon.Sp_DEF Then
+                    While Not move_enum.Current Is Nothing
+                        If move_enum.Current.Effect.Contains("SPDEFU+") Then
+                            listofstatmoves.Add(move_enum.Current)
+                        End If
+                        move_enum.MoveNext()
+                    End While
+                Else
+                    REM literally go all random... 
+                    REM TODO: Implement a better system, possibly on the projecting the other team's pokemon situation
+                    Dim random As New Random()
+                    Dim norm_or_special As Integer = random.Next(0, 100)
+                    If norm_or_special <= 5 Then
+                        While Not move_enum.Current Is Nothing
+                            If move_enum.Current.Effect.Contains("DEFU+") Then
+                                listofstatmoves.Add(move_enum.Current)
+                            End If
+                            move_enum.MoveNext()
+                        End While
+                    Else
+                        While Not move_enum.Current Is Nothing
+                            If move_enum.Current.Effect.Contains("SPDEFU+") Then
+                                listofstatmoves.Add(move_enum.Current)
+                            End If
+                            move_enum.MoveNext()
+                        End While
+                    End If
+                End If
+            End If
+        Else
+            REM we'll do something else later...
+        End If
+
+        move_enum.Dispose()
+
+        If listofstatmoves.Count = 1 Then
+            move_pack.Move = listofstatmoves.First
+        Else
+            Dim move_enum2 As New List(Of Move_Info).Enumerator
+            move_enum2 = listofstatmoves.GetEnumerator()
+            REM just go with PP, not the best idea. TODO: find a better method of doing this
+            move_enum2.MoveNext()
+            While Not move_enum2.Current Is Nothing
+                If move_enum2.Current.PP > move_pack.Move.PP Then
+                    move_pack.Move = move_enum2.Current
+                End If
+                move_enum2.MoveNext()
+            End While
+        End If
+
+        Return move_pack
     End Function
 
     ''' <summary>
@@ -551,8 +842,8 @@ Public Class Battle_Prediction : Implements Predict
         Dim turnstofaint_before As Integer = Me.Project_Battle(attacker.Clone(), defender.Clone(), movetouse, poke_calc, max_or_min)
 
         REM test how long it takes for the second_pokemon to kill first_pokemon
-        Dim oppo_move As Move_Info = Me.FindBestMove(second_pokemon, first_pokemon, poke_calc, second_pokemon.Moves_For_Battle, max_or_min)
-        Dim me_turnstofaint As Integer = Me.Project_Battle(second_pokemon.Clone(), first_pokemon.Clone(), oppo_move, poke_calc, max_or_min)
+        Dim oppo_move As Prediction_Move_Package = Me.FindBestMove(second_pokemon, first_pokemon, poke_calc, second_pokemon.Moves_For_Battle, max_or_min)
+        Dim me_turnstofaint As Integer = Me.Project_Battle(second_pokemon.Clone(), first_pokemon.Clone(), oppo_move.Move, poke_calc, max_or_min)
 
 
         Dim j As Integer = 0
@@ -579,7 +870,8 @@ Public Class Battle_Prediction : Implements Predict
         End While
 
         move_package.Move = statmove_touse
-        move_package.Turns = newmovestofaint
+        move_package.My_Turns = newmovestofaint + 1 REM to compensate for the 1 stage boost turn
+        move_package.Opponent_Turns = me_turnstofaint
 
         Return move_package
     End Function
@@ -602,7 +894,7 @@ Public Class Battle_Prediction : Implements Predict
         move_enum.MoveNext()
         While Not move_enum.Current Is Nothing
             'Dim effects As String() = movetouse.Effect.Split(New Char() {","c})
-            REM search for an effect that has ATKU+...
+            REM search for an effect that has DEFO-...
             Dim effects As String() = move_enum.Current.Effect.Split(",")
             Dim i As Integer = 0
             While i < effects.Length
@@ -634,8 +926,8 @@ Public Class Battle_Prediction : Implements Predict
         Dim turnstofaint_before As Integer = Me.Project_Battle(attacker, defender, movetouse, poke_calc, max_or_min)
 
         REM test how long it takes for the second_pokemon to kill first_pokemon
-        Dim oppo_move As Move_Info = Me.FindBestMove(second_pokemon, first_pokemon, poke_calc, second_pokemon.Moves_For_Battle, max_or_min)
-        Dim me_turnstofaint As Integer = Me.Project_Battle(second_pokemon.Clone(), first_pokemon.Clone(), oppo_move, poke_calc, max_or_min)
+        Dim oppo_move As Prediction_Move_Package = Me.FindBestMove(second_pokemon, first_pokemon, poke_calc, second_pokemon.Moves_For_Battle, max_or_min)
+        Dim me_turnstofaint As Integer = Me.Project_Battle(second_pokemon.Clone(), first_pokemon.Clone(), oppo_move.Move, poke_calc, max_or_min)
 
         Dim finalmove_enum As New List(Of Move_Info).Enumerator
         finalmove_enum = final_statmoves.GetEnumerator()
@@ -659,10 +951,173 @@ Public Class Battle_Prediction : Implements Predict
         End While
 
         move_package.Move = statmove_touse
-        move_package.Turns = newmovestofaint
+        move_package.My_Turns = newmovestofaint
+        move_package.Opponent_Turns = me_turnstofaint
 
         Return move_package
+    End Function
 
+    Public Function Get_BestLowerAttackStatMove(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
+                                                ByVal movetouse As Move_Info, ByVal max_or_min As Integer) As Prediction_Move_Package
+        Dim move_package As New Prediction_Move_Package
+        Dim statmove_touse As New Move_Info
+        Dim is_special As Boolean = False
+
+        If movetouse.Is_Special = True Then
+            is_special = True
+        End If
+
+        REM first look at lowering opponent's move stats, select the one that lowers their attack
+        Dim listof_statmoves As List(Of Move_Info) = first_pokemon.get_StatusMoves()
+        Dim final_statmoves As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = listof_statmoves.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            REM search for an effect that has ATKO-...
+            Dim effects As String() = move_enum.Current.Effect.Split(",")
+            Dim i As Integer = 0
+            While i < effects.Length
+                If second_pokemon.num_Special() > second_pokemon.num_Normal() Then
+                    If effects(i).Contains("SPATKO-") Then
+                        final_statmoves.Add(move_enum.Current)
+                        Exit While
+                    End If
+                Else
+                    If effects(i).Contains("ATKO-") Then
+                        REM we can add this move to the final list!
+                        final_statmoves.Add(move_enum.Current)
+                        Exit While
+                    End If
+                End If
+            End While
+            move_enum.MoveNext()
+            i += 1
+        End While
+
+        If final_statmoves.Count = 0 Then
+            Return Nothing REM the pokemon has no available lowering attack moves!
+        End If
+
+        REM this is more of a defensive function so we are going to see how long we can "prolong" the battle
+        REM first figure out the best move the opponent can use and how long it will take for it to kill us
+        Dim oppo_move As Prediction_Move_Package = Me.FindBestMove(second_pokemon, first_pokemon, poke_calc, second_pokemon.Moves_For_Battle, max_or_min)
+        Dim me_turnstofaint As Integer = Me.Project_Battle(second_pokemon.Clone(), first_pokemon.Clone(), oppo_move.Move, poke_calc, max_or_min)
+
+        REM project how long I need to take to kill opponent
+        Dim oppo_turnstofaint As Integer = Me.Project_Battle(first_pokemon.Clone(), second_pokemon.Clone(), movetouse, poke_calc, max_or_min)
+
+        Dim attacker As Pokemon = first_pokemon.Clone()
+        Dim defender As Pokemon = second_pokemon.Clone()
+        Dim finalmove_enum As New List(Of Move_Info).Enumerator
+        finalmove_enum = final_statmoves.GetEnumerator()
+        finalmove_enum.MoveNext()
+        Dim newmovestofaint As Integer = Integer.MinValue
+        While Not finalmove_enum.Current Is Nothing
+
+            poke_calc.apply_stattopokemon(defender, finalmove_enum.Current)
+            REM see how long it takes for opponent to kill us with the boost!
+            Dim turnstofaint As Integer = Me.Project_Battle(defender.Clone(), first_pokemon.Clone(), movetouse, poke_calc, max_or_min)
+            REM see if the 
+            If oppo_turnstofaint + 1 < turnstofaint Then
+                REM check if the new result is better than the old one
+                REM we want to select the one that takes the longest to kill us
+                If turnstofaint > newmovestofaint Then
+                    newmovestofaint = turnstofaint
+                    statmove_touse = finalmove_enum.Current
+                End If
+            End If
+
+
+            finalmove_enum.MoveNext()
+        End While
+
+        move_package.Move = statmove_touse
+        move_package.My_Turns = newmovestofaint
+        move_package.Opponent_Turns = me_turnstofaint
+
+        Return move_package
+    End Function
+
+    Public Function Get_BestRaiseDefenseStatMove(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
+                                                ByVal movetouse As Move_Info, ByVal max_or_min As Integer) As Prediction_Move_Package
+        Dim move_package As New Prediction_Move_Package
+        Dim statmove_touse As New Move_Info
+        Dim is_special As Boolean = False
+
+        If movetouse.Is_Special = True Then
+            is_special = True
+        End If
+
+        REM first look at lowering opponent's move stats, select the one that raises our defense
+        Dim listof_statmoves As List(Of Move_Info) = first_pokemon.get_StatusMoves()
+        Dim final_statmoves As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = listof_statmoves.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            REM search for an effect that has ATKO-...
+            Dim effects As String() = move_enum.Current.Effect.Split(",")
+            Dim i As Integer = 0
+            While i < effects.Length
+                If second_pokemon.num_Special() > second_pokemon.num_Normal() Then
+                    REM it's more likely the pokemon will choose a special move
+                    If effects(i).Contains("SPDEFU+") Then
+                        final_statmoves.Add(move_enum.Current)
+                        Exit While
+                    End If
+                Else
+                    If effects(i).Contains("DEFU+") Then
+                        REM we can add this move to the final list!
+                        final_statmoves.Add(move_enum.Current)
+                        Exit While
+                    End If
+                End If
+            End While
+            move_enum.MoveNext()
+            i += 1
+        End While
+
+        If final_statmoves.Count = 0 Then
+            Return Nothing REM the pokemon has no available lowering attack moves!
+        End If
+
+        REM this is more of a defensive function so we are going to see how long we can "prolong" the battle
+        REM first figure out the best move the opponent can use and how long it will take for it to kill us
+        Dim oppo_move As Prediction_Move_Package = Me.FindBestMove(second_pokemon, first_pokemon, poke_calc, second_pokemon.Moves_For_Battle, max_or_min)
+        Dim me_turnstofaint As Integer = Me.Project_Battle(second_pokemon.Clone(), first_pokemon.Clone(), oppo_move.Move, poke_calc, max_or_min)
+
+        REM project how long I need to take to kill opponent
+        Dim oppo_turnstofaint As Integer = Me.Project_Battle(first_pokemon.Clone(), second_pokemon.Clone(), movetouse, poke_calc, max_or_min)
+
+        Dim attacker As Pokemon = first_pokemon.Clone()
+        Dim defender As Pokemon = second_pokemon.Clone()
+        Dim finalmove_enum As New List(Of Move_Info).Enumerator
+        finalmove_enum = final_statmoves.GetEnumerator()
+        finalmove_enum.MoveNext()
+        Dim newmovestofaint As Integer = Integer.MinValue
+        While Not finalmove_enum.Current Is Nothing
+
+            poke_calc.apply_stattopokemon(attacker, finalmove_enum.Current)
+            REM see how long it takes for opponent to kill us with the boost!
+            Dim turnstofaint As Integer = Me.Project_Battle(defender.Clone(), attacker.Clone(), movetouse, poke_calc, max_or_min)
+            REM see if the 
+            If oppo_turnstofaint + 1 < turnstofaint Then
+                REM check if the new result is better than the old one
+                REM we want to select the one that takes the longest to kill us
+                If turnstofaint > newmovestofaint Then
+                    newmovestofaint = turnstofaint
+                    statmove_touse = finalmove_enum.Current
+                End If
+            End If
+
+
+            finalmove_enum.MoveNext()
+        End While
+
+        move_package.Move = statmove_touse
+        move_package.My_Turns = newmovestofaint
+        move_package.Opponent_Turns = me_turnstofaint
 
         Return move_package
     End Function
@@ -700,7 +1155,8 @@ End Class
 
 Public Class Prediction_Move_Package
     Dim m_move As Move_Info
-    Dim m_turns As Integer
+    Dim m_myturns As Integer
+    Dim m_oppturns As Integer
 
     Public Property Move() As Move_Info
         Get
@@ -711,12 +1167,21 @@ Public Class Prediction_Move_Package
         End Set
     End Property
 
-    Public Property Turns As Integer
+    Public Property My_Turns As Integer
         Get
-            Return m_turns
+            Return m_myturns
         End Get
         Set(value As Integer)
-            m_turns = value
+            m_myturns = value
+        End Set
+    End Property
+
+    Public Property Opponent_Turns As Integer
+        Get
+            Return m_oppturns
+        End Get
+        Set(value As Integer)
+            m_oppturns = value
         End Set
     End Property
 End Class
