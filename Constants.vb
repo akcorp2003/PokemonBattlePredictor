@@ -1,6 +1,6 @@
 ﻿Module Constants
     Public Const LEVEL As Integer = 100 REM for TPP levels
-
+    Public Const CONFUSE_DAMAGE As Integer = 40
 
     Enum Types
         normal = 0
@@ -32,6 +32,7 @@
         badly_poisoned = 5
         sleep = 6
         confused = 7
+        attracted = 8
     End Enum
 
     Public Function Get_CriticalStageValue(ByVal stage As Integer) As Double

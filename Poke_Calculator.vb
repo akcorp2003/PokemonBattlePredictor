@@ -1,7 +1,7 @@
 ﻿Public Class Poke_Calculator
 
     ''' <summary>
-    ''' Uses the Formula provided by bulbapedia
+    ''' Calculates damage done by attack_move. Uses the Formula provided by bulbapedia.
     ''' </summary>
     ''' <param name="attacking_pokemon"></param>
     ''' <param name="defending_pokemon"></param>
@@ -93,6 +93,22 @@
         REM in the future we will apply the special damages such as burn, poison type
         defender.HP = defender.HP - damagevalue
 
+    End Sub
+
+    Public Sub apply_confusion(ByVal confused_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator)
+        If confused_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
+            Dim chance As Integer = Poke_Calculator.GenerateRandomNumber()
+            If chance <= 50 Then
+                REM 50% chance that the pokemon will hit itself
+                Dim confusemove As New Move_Info
+                confusemove.Is_Special = False
+                confusemove.Power = Constants.CONFUSE_DAMAGE
+                confusemove.Name = "confused"
+                Dim damage As Integer = poke_calc.CalculateDamage(confused_pokemon, confused_pokemon, confusemove, 1, 1)
+                confused_pokemon.HP -= damage
+            End If
+        End If
+        Return
     End Sub
 
     ''' <summary>

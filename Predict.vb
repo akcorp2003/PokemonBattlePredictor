@@ -386,6 +386,11 @@ Public Class Battle_Prediction : Implements Predict
             End If
         End If
 
+        REM check for confusion (or attraction TODO)
+        If first_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
+            poke_calc.apply_confusion(first_pokemon, poke_calc)
+        End If
+
         Dim isthere_SEmove As List(Of Move_Info)
         isthere_SEmove = Me.IsThereSuperEffectiveMove(first_pokemon, second_pokemon, effectiveness_table)
 

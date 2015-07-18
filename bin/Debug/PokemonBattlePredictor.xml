@@ -109,7 +109,7 @@ PokemonBattlePredictor
 	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Poke_Calculator.CalculateDamage(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info,System.UInt64,System.Int32)">
 	<summary>
- Uses the Formula provided by bulbapedia
+ Calculates damage done by attack_move. Uses the Formula provided by bulbapedia.
  </summary>
 	<param name="attacking_pokemon"></param>
 	<param name="defending_pokemon"></param>
