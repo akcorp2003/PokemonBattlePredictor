@@ -6,6 +6,7 @@ PokemonBattlePredictor
 </name>
 </assembly>
 <members>
+<<<<<<< HEAD
 <member name="M:PokemonBattlePredictor.Pokemon_Arena.ManageTurns">
 	<summary>
  Increases the count for toxic and sleep counters
@@ -180,6 +181,9 @@ PokemonBattlePredictor
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="P:PokemonBattlePredictor.My.Resources.Resources.ResourceManager">
+=======
+<member name="P:PokemonBattlePredictor.My.Resources.Resources.ResourceManager">
+>>>>>>> master
 	<summary>
   Returns the cached ResourceManager instance used by this class.
 </summary>
@@ -208,6 +212,7 @@ PokemonBattlePredictor
 	<param name="tomodify_string"></param>
 	<returns>A string with a hyphen and all lowercase except for the first one.</returns>
 	<remarks></remarks>
+<<<<<<< HEAD
 </member><member name="P:PokemonBattlePredictor.Pokemon.Stage">
 	<summary>
  Stage for determining critical hits
@@ -234,6 +239,8 @@ PokemonBattlePredictor
  </summary>
 	<returns>A list of special moves. Make sure to clone!</returns>
 	<remarks></remarks>
+=======
+>>>>>>> master
 </member><member name="M:PokemonBattlePredictor.Dex_reader.Execute(System.ComponentModel.BackgroundWorker,System.ComponentModel.DoWorkEventArgs)">
 	<summary>
  Begins reading files. The object will determine which function to run based on the filename it holds.
@@ -302,6 +309,7 @@ PokemonBattlePredictor
  the formattting. FYI: the formatting is "Cut" (no quotes)</param>
 	<param name="move_info"></param>
 	<remarks>No need to specially format the arguments.</remarks>
+<<<<<<< HEAD
 </member><member name="P:PokemonBattlePredictor.Move_Info.Effect">
 	<summary>
  Holds a list of string of effects. Generally for moves that raises or lowers stats.
@@ -310,6 +318,8 @@ PokemonBattlePredictor
 	<value></value>
 	<returns>A string of effect application</returns>
 	<remarks></remarks>
+=======
+>>>>>>> master
 </member><member name="M:PokemonBattlePredictor.Move_Package.ProcessLine(System.String)">
 	<summary>
  Given an unorganized moves text string, this function will parse it into one lines into
@@ -322,6 +332,7 @@ PokemonBattlePredictor
 	<summary>
  Returns the effectiveness of the pokemon as an unsigned long.
  </summary>
+<<<<<<< HEAD
 	<param name="Attacking_Type">No need to format it. Function will format it accordingly.</param>
 	<param name="Defending_Type">No need to format it. Function will format it accordingly.</param>
 	<returns>An unsigned long. 0 is no effect, 0.5 is not very effective, 1 is normal, 
@@ -335,6 +346,13 @@ PokemonBattlePredictor
 	<param name="Defending_Types">List of Strings of the types of the pokemon</param>
 	<returns>An ULong that indicates the effective type of the battle</returns>
 	<remarks></remarks>
+=======
+	<param name="Attacking_Type"></param>
+	<param name="Defending_Type"></param>
+	<returns>An unsigned long. 0 is no effect, 0.5 is not very effective, 1 is normal, 
+ 2 is super effective, 100 is couldn't locate</returns>
+	<remarks></remarks>
+>>>>>>> master
 </member>
 </members>
 </doc>

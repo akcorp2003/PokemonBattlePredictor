@@ -114,7 +114,10 @@
     <Compile Include="Pokemon_Dictionary.vb" />
     <Compile Include="Pokemon_ResourceURI_dictionary.vb" />
     <Compile Include="Pokemon_Team.vb" />
+<<<<<<< HEAD
     <Compile Include="Poke_Calculator.vb" />
+=======
+>>>>>>> master
     <Compile Include="Predict.vb" />
     <Compile Include="Progress.Designer.vb">
       <DependentUpon>Progress.vb</DependentUpon>

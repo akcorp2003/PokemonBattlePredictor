@@ -238,6 +238,7 @@ Public Class Pokemon
         End Set
     End Property
 
+<<<<<<< HEAD
     ''' <summary>
     ''' Returns the number of special moves that the Pokemon has in Moves_For_Battle
     ''' </summary>
@@ -378,6 +379,8 @@ Public Class Pokemon
         Return strongmove
     End Function
 
+=======
+>>>>>>> master
     Public Function Clone() As Object Implements ICloneable.Clone
         Dim freshpokemon As New Pokemon
         freshpokemon.ATK = Me.ATK
@@ -387,11 +390,14 @@ Public Class Pokemon
         freshpokemon.SPD = Me.SPD
         freshpokemon.Name = Me.Name
         freshpokemon.HP = Me.HP
+<<<<<<< HEAD
         freshpokemon.ATK_Boost = Me.ATK_Boost
         freshpokemon.DEF_Boost = Me.DEF_Boost
         freshpokemon.SP_ATK_Boost = Me.SP_ATK_Boost
         freshpokemon.SP_DEF_Boost = Me.SP_DEF_Boost
         freshpokemon.SPEED_Boost = Me.SPEED_Boost
+=======
+>>>>>>> master
         freshpokemon.Moves = Me.Moves.Select(Function(x) x.Clone()).Cast(Of String).ToList()
         freshpokemon.Types = Me.Types.Select(Function(x) x.Clone()).Cast(Of String).ToList()
         freshpokemon.Ability = Me.Ability.Select(Function(x) x.Clone()).Cast(Of Ability_Info).ToList()

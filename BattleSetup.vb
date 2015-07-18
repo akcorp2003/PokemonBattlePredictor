@@ -60,6 +60,7 @@ Public Class BattleSetup
         Pokemon_Name.Text = ""
 
     End Sub
+<<<<<<< HEAD
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         REM update labels on Form1
@@ -134,5 +135,11 @@ Public Class BattleSetup
         Dim csv_reader As New Dex_reader
         csv_reader.Read_MovesCSV()
         MessageBox.Show("All done building moves!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
+=======
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        REM everything was already added. All we need to do is to close this form.
+        Me.Close()
+>>>>>>> master
     End Sub
 End Class

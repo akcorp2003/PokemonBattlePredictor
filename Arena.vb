@@ -6,7 +6,10 @@ Public Class Arena
     Dim m_Team_Blue As New Pokemon_Team
     Dim m_Team_Red As New Pokemon_Team
     Dim m_turn_number As Integer = 0
+<<<<<<< HEAD
     Dim m_curr_attacker As String
+=======
+>>>>>>> master
 
     Dim currentbattlingpokemon_blue As New List(Of Pokemon)
     Dim currentbattlingpokemon_red As New List(Of Pokemon)
@@ -38,6 +41,7 @@ Public Class Arena
         End Set
     End Property
 
+<<<<<<< HEAD
     Public Property Current_Attacker() As String
         Get
             Return m_curr_attacker
@@ -47,6 +51,8 @@ Public Class Arena
         End Set
     End Property
 
+=======
+>>>>>>> master
     Public Function Get_TeamBlue() As Pokemon_Team
         Return m_Team_Blue
     End Function
@@ -77,6 +83,7 @@ Public Class Pokemon_Arena
     Inherits Arena
     Implements System.ICloneable
 
+<<<<<<< HEAD
     Dim m_last_fainted As String
     Dim m_sleepturns_blue As Integer
     Dim m_sleepturns_red As Integer
@@ -144,12 +151,19 @@ Public Class Pokemon_Arena
         End Set
     End Property
 
+=======
+>>>>>>> master
     Public Function IsBlueFainted() As Boolean
         Dim hasallbluefainted As Boolean = False
         Dim my_enumerator As List(Of Pokemon).Enumerator = Me.Get_TeamBlue().Get_Team("blue").GetEnumerator
         my_enumerator.MoveNext() REM initialize the enumerator
+<<<<<<< HEAD
         For i As Integer = 1 To Me.Get_TeamBlue().Get_Team("blue").Count Step 1
             If Not my_enumerator.Current.HP <= 0 Then
+=======
+        For i As Integer = 0 To Me.Get_TeamBlue().Get_Team("blue").Count Step 1
+            If Not my_enumerator.Current.HP = 0 Then
+>>>>>>> master
                 Return False
             End If
             my_enumerator.MoveNext()
@@ -163,8 +177,13 @@ Public Class Pokemon_Arena
         Dim hasallredfainted As Boolean = False
         Dim my_enumerator As List(Of Pokemon).Enumerator = Me.Get_TeamRed().Get_Team("red").GetEnumerator
         my_enumerator.MoveNext() REM initialize the enumerator
+<<<<<<< HEAD
         For i As Integer = 1 To Me.Get_TeamRed().Get_Team("red").Count Step 1
             If Not my_enumerator.Current.HP <= 0 Then
+=======
+        For i As Integer = 0 To Me.Get_TeamRed().Get_Team("red").Count Step 1
+            If Not my_enumerator.Current.HP = 0 Then
+>>>>>>> master
                 Return False
             End If
             my_enumerator.MoveNext()
@@ -179,7 +198,11 @@ Public Class Pokemon_Arena
         Dim my_enumerator As List(Of Pokemon).Enumerator = Me.Get_TeamBlue().Get_Team("blue").GetEnumerator
         my_enumerator.MoveNext()
         For i As Integer = 0 To Me.Get_TeamBlue().Get_Team("blue").Count Step 1
+<<<<<<< HEAD
             If my_enumerator.Current.HP <= 0 Then
+=======
+            If my_enumerator.Current.HP = 0 Then
+>>>>>>> master
                 num_fainted += 1
             End If
             my_enumerator.MoveNext()
@@ -193,7 +216,11 @@ Public Class Pokemon_Arena
         Dim my_enumerator As List(Of Pokemon).Enumerator = Me.Get_TeamRed().Get_Team("red").GetEnumerator
         my_enumerator.MoveNext()
         For i As Integer = 0 To Me.Get_TeamRed().Get_Team("red").Count Step 1
+<<<<<<< HEAD
             If my_enumerator.Current.HP <= 0 Then
+=======
+            If my_enumerator.Current.HP = 0 Then
+>>>>>>> master
                 num_fainted += 1
             End If
             my_enumerator.MoveNext()
@@ -210,6 +237,7 @@ Public Class Pokemon_Arena
         Me.CurrentBattlingRed.Add(battle_pokemon)
     End Sub
 
+<<<<<<< HEAD
     Public Function Get_HealthStatusofBlue() As String
         Dim currentbattling_hp As Integer = Me.CurrentBattlingBlue.First.HP
         Dim original_hp As Integer = Form1.Get_PokemonDictionary.Get_Pokemon(Me.CurrentBattlingBlue.First.Name).HP
@@ -273,14 +301,20 @@ Public Class Pokemon_Arena
         Me.Current_Attacker = ""
     End Sub
 
+=======
+>>>>>>> master
 
     Public Function Clone() As Object Implements ICloneable.Clone
         Dim freshbattlearena As New Pokemon_Arena
         freshbattlearena.Team_Blue = Me.Team_Blue.Clone()
         freshbattlearena.Team_Red = Me.Team_Red.Clone()
         freshbattlearena.Turn_Number = Me.Turn_Number
+<<<<<<< HEAD
         freshbattlearena.Red_NumSleep = Me.Red_NumSleep
         freshbattlearena.Blue_NumSleep = Me.Blue_NumSleep
+=======
+
+>>>>>>> master
         Return freshbattlearena
     End Function
 End Class

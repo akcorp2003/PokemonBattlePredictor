@@ -1,5 +1,6 @@
 ﻿POKEMON
 NAME
+<<<<<<< HEAD
 Raichu
 ATK
 306
@@ -179,6 +180,8 @@ END TYPES
 END POKEMON
 POKEMON
 NAME
+=======
+>>>>>>> master
 Mew
 ATK
 100
@@ -680,6 +683,7 @@ END TYPES
 END POKEMON
 POKEMON
 NAME
+<<<<<<< HEAD
 Blastoise
 ATK
 291
@@ -732,17 +736,71 @@ NAME
 Flash-cannon
 NAME
 Avalanche
+=======
+Raichu
+ATK
+90
+DEF
+55
+SP_ATK
+90
+SP_DEF
+80
+HP
+60
+SPD
+110
+BEGIN ABILITY
+NAME
+"static"
+URI
+"/api/v1/ability/9/"
+NAME
+"lightningrod"
+URI
+"/api/v1/ability/31/"
+END ABILITY
+BEGIN MOVES
+NAME
+Covet
+NAME
+Wild-charge
+NAME
+Volt-switch
+NAME
+Echoed-voice
+NAME
+Round
+NAME
+Magnet-rise
+NAME
+Signal-beam
+NAME
+Knock-off
+NAME
+Helping-hand
+NAME
+Charge-beam
+NAME
+Grass-knot
+NAME
+Captivate
+>>>>>>> master
 NAME
 Giga-impact
 NAME
 Focus-blast
 NAME
+<<<<<<< HEAD
 Aqua-tail
 NAME
+=======
+>>>>>>> master
 Fling
 NAME
 Natural-gift
 NAME
+<<<<<<< HEAD
 Brine
 NAME
 Gyro-ball
@@ -756,6 +814,11 @@ NAME
 Water-pulse
 NAME
 Dive
+=======
+Counter
+NAME
+Shock-wave
+>>>>>>> master
 NAME
 Secret-power
 NAME
@@ -765,11 +828,19 @@ Focus-punch
 NAME
 Facade
 NAME
+<<<<<<< HEAD
 Hail
 NAME
 Whirlpool
 NAME
 Rock-smash
+=======
+Rock-smash
+NAME
+Light-screen
+NAME
+Dig
+>>>>>>> master
 NAME
 Rain-dance
 NAME
@@ -777,8 +848,11 @@ Hidden-power
 NAME
 Iron-tail
 NAME
+<<<<<<< HEAD
 Rapid-spin
 NAME
+=======
+>>>>>>> master
 Dynamicpunch
 NAME
 Frustration
@@ -795,7 +869,13 @@ Rollout
 NAME
 Endure
 NAME
+<<<<<<< HEAD
 Icy-wind
+=======
+Detect
+NAME
+Zap-cannon
+>>>>>>> master
 NAME
 Mud-slap
 NAME
@@ -805,6 +885,7 @@ Curse
 NAME
 Snore
 NAME
+<<<<<<< HEAD
 Waterfall
 NAME
 Defense-curl
@@ -1001,11 +1082,31 @@ NAME
 Curse
 NAME
 Snore
+=======
+Thief
+NAME
+Defense-curl
+NAME
+Quick-attack
+NAME
+Strength
+NAME
+Tail-whip
+NAME
+Headbutt
+NAME
+Thunderpunch
+NAME
+Substitute
+NAME
+Rest
+>>>>>>> master
 NAME
 Flash
 NAME
 Skull-bash
 NAME
+<<<<<<< HEAD
 Light-screen
 NAME
 Defense-curl
@@ -1019,6 +1120,9 @@ NAME
 Substitute
 NAME
 Rest
+=======
+Swift
+>>>>>>> master
 NAME
 Bide
 NAME
@@ -1032,6 +1136,7 @@ Rage
 NAME
 Toxic
 NAME
+<<<<<<< HEAD
 Sleep-powder
 NAME
 Poisonpowder
@@ -1045,6 +1150,21 @@ NAME
 Leech-seed
 NAME
 Mega-drain
+=======
+Thunder
+NAME
+Thunder-wave
+NAME
+Thunderbolt
+NAME
+Thundershock
+NAME
+Seismic-toss
+NAME
+Submission
+NAME
+Hyper-beam
+>>>>>>> master
 NAME
 Growl
 NAME
@@ -1054,6 +1174,7 @@ Take-down
 NAME
 Body-slam
 NAME
+<<<<<<< HEAD
 Tackle
 NAME
 Vine-whip
@@ -116016,5 +116137,15 @@ END MOVES
 BEGIN TYPES
 "normal"
 "fire"
+=======
+Mega-kick
+NAME
+Pay-day
+NAME
+Mega-punch
+END MOVES
+BEGIN TYPES
+"electric"
+>>>>>>> master
 END TYPES
 END POKEMON

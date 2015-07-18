@@ -60,6 +60,7 @@
         bluepokemon.Sp_DEF = Me.SpDEF.Text
         bluepokemon.SPD = Me.SPEED.Text
         bluepokemon.HP = Me.HP.Text
+<<<<<<< HEAD
 
         REM secretly update the original pokemon values so the user doesn't need to change them next time.
         dummypokemon = Form1.Get_PokemonDictionary.Get_Pokemon(Me.Pokemon_Name.Text)
@@ -69,6 +70,8 @@
         dummypokemon.Sp_DEF = Convert.ToInt32(Me.SpDEF.Text)
         dummypokemon.SPD = Convert.ToInt32(Me.SPEED.Text)
         dummypokemon.HP = Convert.ToInt32(Me.HP.Text)
+=======
+>>>>>>> master
 
         If Not bluepokemon.Moves_For_Battle.Count = 0 Then
             REM we want the move list to be fresh
@@ -108,7 +111,11 @@
             bluepokemon.Moves_For_Battle.Add(move4)
         End If
 
+<<<<<<< HEAD
         Form1.Get_PokemonArena.Get_TeamBlue.Addto_Team(bluepokemon.Clone(), "blue")
+=======
+        Form1.Get_PokemonArena.Get_TeamBlue.Addto_Team(bluepokemon, "blue")
+>>>>>>> master
         m_lastadded_pokemon = "blue"
         Me.Close()
     End Sub
@@ -135,12 +142,16 @@
             End If
         Next
 
+<<<<<<< HEAD
         returnstring = Change_FirstLetterToUppercase(returnstring)
 
+=======
+>>>>>>> master
         Return returnstring
 
     End Function
 
+<<<<<<< HEAD
     Private Function Change_FirstLetterToUppercase(ByVal my_string As String) As String
         If String.IsNullOrEmpty(my_string) Then
             Return my_string
@@ -152,6 +163,8 @@
         Return New String(str_array)
     End Function
 
+=======
+>>>>>>> master
 
     Private Sub AddRed_Click(sender As Object, e As EventArgs) Handles AddRed.Click
         Dim redpokemon As New Pokemon
@@ -171,6 +184,7 @@
         redpokemon.Sp_DEF = Me.SpDEF.Text
         redpokemon.SPD = Me.SPEED.Text
         redpokemon.HP = Me.HP.Text
+<<<<<<< HEAD
 
         REM secretly update the original pokemon values so the user doesn't need to change them next time.
         dummypokemon = Form1.Get_PokemonDictionary.Get_Pokemon(Me.Pokemon_Name.Text)
@@ -180,6 +194,8 @@
         dummypokemon.Sp_DEF = Convert.ToInt32(Me.SpDEF.Text)
         dummypokemon.SPD = Convert.ToInt32(Me.SPEED.Text)
         dummypokemon.HP = Convert.ToInt32(Me.HP.Text)
+=======
+>>>>>>> master
 
         If Not redpokemon.Moves_For_Battle.Count = 0 Then
             REM we want the move list to be fresh
@@ -219,7 +235,11 @@
             redpokemon.Moves_For_Battle.Add(move4)
         End If
 
+<<<<<<< HEAD
         Form1.Get_PokemonArena.Get_TeamRed.Addto_Team(redpokemon.Clone(), "red")
+=======
+        Form1.Get_PokemonArena.Get_TeamRed.Addto_Team(redpokemon, "red")
+>>>>>>> master
         m_lastadded_pokemon = "red"
         Me.Close()
     End Sub

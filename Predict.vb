@@ -36,6 +36,7 @@ Public Class Battle_Prediction : Implements Predict
         Return winningparty
     End Function
 
+<<<<<<< HEAD
     ''' <summary>
     ''' Handles the turn-base mechanics of Pokemon
     ''' </summary>
@@ -43,6 +44,8 @@ Public Class Battle_Prediction : Implements Predict
     ''' <returns>The winning party</returns>
     ''' <remarks>Only handles the turn mechanics. This function does not know how to calculate damage or which
     ''' Pokemon is better</remarks>
+=======
+>>>>>>> master
     Private Function predict_battle(ByVal battle_arena As Pokemon_Arena) As String
 
         If battle_arena.Get_TurnNumber = 0 Then
@@ -51,6 +54,7 @@ Public Class Battle_Prediction : Implements Predict
             battle_arena.AddTo_CurrentBattling_Blue(battle_arena.Get_TeamBlue.Get_Team("blue").First)
         End If
 
+<<<<<<< HEAD
         Dim poke_calc As New Poke_Calculator
         Dim first_pokemon As New Pokemon REM the first pokemon to move during this turn cycle
         Dim second_pokemon As New Pokemon REM the second pokemon to move during this turn cycle
@@ -65,10 +69,13 @@ Public Class Battle_Prediction : Implements Predict
         redteam_enum.MoveNext()
         blueteam_enum.MoveNext()
 
+=======
+>>>>>>> master
         'loop until one team is dead
         While Not battle_arena.IsBlueFainted And Not battle_arena.IsRedFainted
             REM begin actual battle logic
 
+<<<<<<< HEAD
             If turn_queue.Count = 0 Then
 
                 REM check to make sure no Pokemon has fainted
@@ -186,19 +193,40 @@ Public Class Battle_Prediction : Implements Predict
 
 
 
+=======
+            REM check speed, the higher speed stat pokemon moves first
+            If battle_arena.CurrentBattlingBlue.First.SPD > battle_arena.CurrentBattlingRed.First.SPD Then
+                REM blue goes first
+                Dim isthere_SEmove As String = ""
+                isthere_SEmove = Me.IsThereSuperEffectiveMove(battle_arena.CurrentBattlingBlue.First, battle_arena.CurrentBattlingRed.First, effectiveness_table)
+
+
+            ElseIf battle_arena.CurrentBattlingBlue.First.SPD < battle_arena.CurrentBattlingRed.First.SPD Then
+                REM red goes first
+            Else
+                REM same speed, in this case, it will be random
+            End If
+>>>>>>> master
         End While
 
 
         If battle_arena.IsBlueFainted = True Then
+<<<<<<< HEAD
             Return "red"
         ElseIf battle_arena.IsRedFainted = True Then
             Return "blue"
+=======
+            Return "blue"
+        ElseIf battle_arena.IsRedFainted = True Then
+            Return "red"
+>>>>>>> master
         Else
             Return ""
         End If
 
     End Function
 
+<<<<<<< HEAD
     ''' <summary>
     ''' Finds all supereffective moves that attacking_pokemon can use
     ''' </summary>
@@ -210,6 +238,10 @@ Public Class Battle_Prediction : Implements Predict
     Public Function IsThereSuperEffectiveMove(ByVal attacking_pokemon As Pokemon, ByVal defending_pokemon As Pokemon, ByVal effectiveness_table As EffectivenessTable) As List(Of Move_Info)
         Dim movename As String = ""
         Dim SEmoves As New List(Of Move_Info)
+=======
+    Public Function IsThereSuperEffectiveMove(ByVal attacking_pokemon As Pokemon, ByVal defending_pokemon As Pokemon, ByVal effectiveness_table As EffectivenessTable) As String
+        Dim movename As String = ""
+>>>>>>> master
 
         Dim nummoves_attacking As Integer = attacking_pokemon.Moves_For_Battle.Count
         'Dim nummoves_defending As Integer = defending_pokemon.Moves_For_Battle.Count
@@ -229,6 +261,7 @@ Public Class Battle_Prediction : Implements Predict
                 If effect_value = 2 Then
                     REM we found a super effective move
                     movename = my_attackenum.Current.Name REM set the name of the move
+<<<<<<< HEAD
                     SEmoves.Add(my_attackenum.Current.Clone()) REM get a copy of that move
 
                 End If
@@ -291,11 +324,14 @@ Public Class Battle_Prediction : Implements Predict
                     'movename = my_attackenum.Current.Name REM set the name of the move
                     noteffective_Moves.Add(my_attackenum.Current.Clone()) REM get a copy of that move
 
+=======
+>>>>>>> master
                 End If
             Next
 
             my_attackenum.MoveNext()
         Next
+<<<<<<< HEAD
         Return noteffective_Moves
     End Function
 
@@ -1270,4 +1306,9 @@ Public Class Prediction_Move_Package
             m_oppturns = value
         End Set
     End Property
+=======
+
+        Return movename
+    End Function
+>>>>>>> master
 End Class
