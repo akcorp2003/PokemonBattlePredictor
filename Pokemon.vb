@@ -16,7 +16,10 @@ Public Class Pokemon
     Private m_Moves As New List(Of String)
     Private m_Moves_for_Battle As New List(Of Move_Info)
     Private m_Type As New List(Of String)
+    Private m_NextMove As New Move_Info
     Private m_stage As Integer = 0
+    Private m_statuscondition As Integer
+    Private m_otherstatus As Integer
     Private m_team As String
     Private m_ATKboost As Integer
     Private m_DEFboost As Integer
@@ -144,6 +147,39 @@ Public Class Pokemon
         End Get
         Set(value As Integer)
             m_stage = value
+        End Set
+    End Property
+
+    Public Property Status_Condition() As Integer
+        Get
+            Return m_statuscondition
+        End Get
+        Set(value As Integer)
+            m_statuscondition = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Other status refers to Confusion, attraction
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Property Other_Status_Condition() As Integer
+        Get
+            Return m_otherstatus
+        End Get
+        Set(value As Integer)
+            m_otherstatus = value
+        End Set
+    End Property
+
+    Public Property Next_Move() As Move_Info
+        Get
+            Return m_NextMove
+        End Get
+        Set(value As Move_Info)
+            m_NextMove = value
         End Set
     End Property
 
@@ -294,6 +330,21 @@ Public Class Pokemon
         While Not move_enum.Current Is Nothing
             REM try not to confuse normal damage with stat moves
             If move_enum.Current.Power = 0 Then
+                st_list.Add(move_enum.Current)
+            End If
+            move_enum.MoveNext()
+        End While
+        Return st_list
+    End Function
+
+    Public Function get_StatusCondMoves() As List(Of Move_Info)
+        Dim st_list As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            Dim stats_indic As String() = {"BRN", "FRZ", "PRLYZ", "SLP", "PSN"}
+            If stats_indic.Contains(move_enum.Current.Effect) Then
                 st_list.Add(move_enum.Current)
             End If
             move_enum.MoveNext()

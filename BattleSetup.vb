@@ -62,7 +62,52 @@ Public Class BattleSetup
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        REM update labels on Form1
+        Dim poke_enum1 As List(Of Pokemon).Enumerator
+        poke_enum1 = Form1.Get_PokemonArena.Get_TeamBlue().Get_Team("blue").GetEnumerator
+        poke_enum1.MoveNext()
+        For i = Form1.Get_PokemonArena.Get_TeamBlue().Get_Team("blue").Count - 1 To 0 Step -1
+            If i = 2 Then
+                Form1.BluePoke_Three.Text = poke_enum1.Current.Name
+            ElseIf i = 1 Then
+                Form1.BluePoke_Two.Text = poke_enum1.Current.Name
+            ElseIf i = 0 Then
+                Form1.BluePoke_One.Text = poke_enum1.Current.Name
+            Else
+                Continue For
+            End If
+            poke_enum1.MoveNext()
+        Next
+
+        Dim poke_enum2 As List(Of Pokemon).Enumerator
+        poke_enum2 = Form1.Get_PokemonArena.Get_TeamRed().Get_Team("red").GetEnumerator
+        poke_enum2.MoveNext()
+        For i = Form1.Get_PokemonArena.Get_TeamRed().Get_Team("red").Count - 1 To 0 Step -1
+            If i = 2 Then
+                Form1.RedPoke_Three.Text = poke_enum2.Current.Name
+            ElseIf i = 1 Then
+                Form1.RedPoke_Two.Text = poke_enum2.Current.Name
+            ElseIf i = 0 Then
+                Form1.RedPoke_One.Text = poke_enum2.Current.Name
+            Else
+                Continue For
+            End If
+            poke_enum2.MoveNext()
+        Next
+
+        poke_enum1.Dispose()
+        poke_enum2.Dispose()
+
         REM everything was already added. All we need to do is to close this form.
+        Dim listItem As ListViewItem
+        For i = TeamBlue_List.Items.Count - 1 To 0 Step -1
+            listItem = TeamBlue_List.Items(i)
+            TeamBlue_List.Items.Remove(listItem)
+        Next
+        For j = TeamRed_List.Items.Count - 1 To 0 Step -1
+            listItem = TeamRed_List.Items(j)
+            TeamRed_List.Items.Remove(listItem)
+        Next
         Me.Close()
     End Sub
 

@@ -53,6 +53,7 @@ Public Class Battle_Prediction : Implements Predict
 
         Dim poke_calc As New Poke_Calculator
         Dim first_pokemon As New Pokemon REM the first pokemon to move during this turn cycle
+        Dim second_pokemon As New Pokemon REM the second pokemon to move during this turn cycle
         Dim turn_queue As New Queue(Of Pokemon)
         Dim redteam_enum As New List(Of Pokemon).Enumerator
         Dim blueteam_enum As New List(Of Pokemon).Enumerator
@@ -118,7 +119,15 @@ Public Class Battle_Prediction : Implements Predict
             If turn_queue.Count = 2 Then
 
                 first_pokemon = turn_queue.Dequeue()
-                Me.apply_battle(first_pokemon, turn_queue.Peek(), poke_calc, battle_arena)
+                If poke_calc.apply_turnparalysis(first_pokemon) = False Then
+                    poke_calc.apply_statustopokemon_before(first_pokemon, battle_arena)
+
+                    If Not first_pokemon.Status_Condition = Constants.StatusCondition.freeze And Not first_pokemon.Status_Condition = Constants.StatusCondition.sleep Then
+                        Me.apply_battle(first_pokemon, turn_queue.Peek(), poke_calc, battle_arena) 'THE IMPORTANT FUNCTION!!!
+                    End If
+
+                End If
+
 
                 If battle_arena.Current_Attacker = "blue" Then
                     REM check if red has fainted
@@ -139,8 +148,16 @@ Public Class Battle_Prediction : Implements Predict
 
             ElseIf turn_queue.Count = 1 Then
 
-                Me.apply_battle(turn_queue.Peek(), first_pokemon, poke_calc, battle_arena)
-                turn_queue.Dequeue()
+                If poke_calc.apply_turnparalysis(turn_queue.Peek()) = False Then
+                    poke_calc.apply_statustopokemon_before(turn_queue.Peek(), battle_arena)
+
+                    If Not turn_queue.Peek().Status_Condition = Constants.StatusCondition.freeze And Not turn_queue.Peek().Status_Condition = Constants.StatusCondition.sleep Then
+                        Me.apply_battle(turn_queue.Peek(), first_pokemon, poke_calc, battle_arena) 'THE IMPORTANT FUNCTION!!
+                    End If
+
+                End If
+
+                second_pokemon = turn_queue.Dequeue()
 
                 If battle_arena.Current_Attacker = "blue" Then
                     REM check if red has fainted
@@ -157,10 +174,14 @@ Public Class Battle_Prediction : Implements Predict
                     battle_arena.Current_Attacker = "blue"
                 End If
 
+                battle_arena.ManageTurns()
+                REM now statuses are applied after all pokemon have gone
+                poke_calc.apply_statustopokemon_after(first_pokemon, battle_arena)
+                poke_calc.apply_statustopokemon_after(second_pokemon, battle_arena)
+
             Else
                 MessageBox.Show("Something went wrong in predict_battle(), specifically with the queue. Returning...", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
-            REM pop first thing off stack, that will be the first pokemon to move
 
 
 
@@ -351,6 +372,20 @@ Public Class Battle_Prediction : Implements Predict
         Dim turn_poke_move2 As New Move_Info
         Dim turn_poke_move_pack As New Prediction_Move_Package
         Dim turn_poke_move2_pack As New Prediction_Move_Package
+
+        REM check for any status conditions that prohibit movement
+        If first_pokemon.Status_Condition = Constants.StatusCondition.freeze Then
+            Return
+        ElseIf first_pokemon.Status_Condition = Constants.StatusCondition.sleep Then
+            Return
+        ElseIf first_pokemon.Status_Condition = Constants.StatusCondition.paralyzed Then
+            Dim random As Double = Poke_Calculator.GenerateRandomNumber(0.0, 100.0)
+            REM paralysis has a 25% chance of hitting so if it hits, then first_pokemon cannot move
+            If random >= 75 Or random <= 100 Then
+                Return
+            End If
+        End If
+
         Dim isthere_SEmove As List(Of Move_Info)
         isthere_SEmove = Me.IsThereSuperEffectiveMove(first_pokemon, second_pokemon, effectiveness_table)
 
@@ -373,7 +408,7 @@ Public Class Battle_Prediction : Implements Predict
                 ElseIf turn_poke_move2_pack.Opponent_Turns > turn_poke_move2_pack.My_Turns Then
                     REM we can apply the stat move
                     poke_calc.apply_stattopokemon(first_pokemon, turn_poke_move2_pack.Move)
-                    poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                    'poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
                 Else
                     REM we have a tie...just apply damage
                     REM I like to always inflict damage, so even if it's equal
@@ -407,7 +442,7 @@ Public Class Battle_Prediction : Implements Predict
                     ElseIf turn_poke_move2_pack.Opponent_Turns > turn_poke_move2_pack.My_Turns Then
                         REM we can apply the stat move
                         poke_calc.apply_stattopokemon(first_pokemon, turn_poke_move2_pack.Move)
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                        'poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
                     Else
                         REM we have a tie...just apply damage
                         REM For normal moves, it is better to go and rip apart the second_pokemon
@@ -415,7 +450,7 @@ Public Class Battle_Prediction : Implements Predict
                     End If
                 End If
 
-                poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                'poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
             Else
                 REM all we have are noneffective or status moves
                 Dim oppo_health As String
@@ -427,7 +462,8 @@ Public Class Battle_Prediction : Implements Predict
 
                 If oppo_health = "green" Then
                     REM choose a status/lower stat move
-                    turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, Nothing, 1, 1)
+                    turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, 1, 1)
+                    poke_calc.apply_stattopokemon(first_pokemon, turn_poke_move2_pack.Move)
                 Else
                     REM choose the best damaging move
                     Dim isthere_noneffectivemove As New List(Of Move_Info)
@@ -476,7 +512,8 @@ Public Class Battle_Prediction : Implements Predict
             REM TODO: for the 1, we are going to implement a "Derp" factor based on what the user think is the stupidity of the players
             new_turnstofaint = Me.Project_Battle(first_pokemon.Clone(), second_pokemon.Clone(), move_enum.Current, poke_calc, 1)
 
-            If new_turnstofaint < turnstofaint Then
+            REM check to make sure the move is not a status move
+            If new_turnstofaint < turnstofaint And Not new_turnstofaint = -1 Then
                 REM we have a new move in town
                 turnstofaint = new_turnstofaint
                 turn_poke_move = move_enum.Current
@@ -607,7 +644,7 @@ Public Class Battle_Prediction : Implements Predict
     End Function
 
     ''' <summary>
-    ''' An overloaded function. Returns the best stat move for first_pokemon to use.
+    ''' An overloaded function. Returns the best stat move for first_pokemon to use given no damaging move to use
     ''' </summary>
     ''' <param name="first_pokemon"></param>
     ''' <param name="second_pokemon"></param>
@@ -804,6 +841,10 @@ Public Class Battle_Prediction : Implements Predict
 
         REM first look at raising our move stats, select the one that raises our attack
         Dim listof_statmoves As List(Of Move_Info) = first_pokemon.get_StatusMoves()
+        If listof_statmoves.Count = 0 Then
+            REM well...
+            Return Nothing
+        End If
         Dim final_statmoves As New List(Of Move_Info)
         Dim move_enum As New List(Of Move_Info).Enumerator
         move_enum = listof_statmoves.GetEnumerator()
@@ -826,6 +867,7 @@ Public Class Battle_Prediction : Implements Predict
                         Exit While
                     End If
                 End If
+                i += 1
             End While
             move_enum.MoveNext()
 
@@ -869,9 +911,16 @@ Public Class Battle_Prediction : Implements Predict
             j += 1
         End While
 
-        move_package.Move = statmove_touse
-        move_package.My_Turns = newmovestofaint + 1 REM to compensate for the 1 stage boost turn
-        move_package.Opponent_Turns = me_turnstofaint
+        If newmovestofaint = Integer.MaxValue Then
+            REM no suitable move was found 
+            Return Nothing
+        Else
+            move_package.Move = statmove_touse
+            move_package.My_Turns = newmovestofaint + 1 REM to compensate for the 1 stage boost turn
+            move_package.Opponent_Turns = me_turnstofaint
+        End If
+
+        
 
         Return move_package
     End Function
@@ -888,6 +937,9 @@ Public Class Battle_Prediction : Implements Predict
 
         REM first look at lowering opponent's move stats, select the one that lowers their defense
         Dim listof_statmoves As List(Of Move_Info) = first_pokemon.get_StatusMoves()
+        If listof_statmoves.Count = 0 Then
+            Return Nothing
+        End If
         Dim final_statmoves As New List(Of Move_Info)
         Dim move_enum As New List(Of Move_Info).Enumerator
         move_enum = listof_statmoves.GetEnumerator()
@@ -910,9 +962,9 @@ Public Class Battle_Prediction : Implements Predict
                         Exit While
                     End If
                 End If
+                i += 1
             End While
             move_enum.MoveNext()
-            i += 1
         End While
 
         REM now we have established our final list of stat moves that can lower their attack, we can simulate
@@ -950,9 +1002,15 @@ Public Class Battle_Prediction : Implements Predict
             finalmove_enum.MoveNext()
         End While
 
-        move_package.Move = statmove_touse
-        move_package.My_Turns = newmovestofaint
-        move_package.Opponent_Turns = me_turnstofaint
+        If newmovestofaint = Integer.MaxValue Then
+            Return Nothing
+        Else
+            move_package.Move = statmove_touse
+            move_package.My_Turns = newmovestofaint
+            move_package.Opponent_Turns = me_turnstofaint
+        End If
+
+        
 
         Return move_package
     End Function
@@ -969,6 +1027,9 @@ Public Class Battle_Prediction : Implements Predict
 
         REM first look at lowering opponent's move stats, select the one that lowers their attack
         Dim listof_statmoves As List(Of Move_Info) = first_pokemon.get_StatusMoves()
+        If listof_statmoves.Count = 0 Then
+            Return Nothing
+        End If
         Dim final_statmoves As New List(Of Move_Info)
         Dim move_enum As New List(Of Move_Info).Enumerator
         move_enum = listof_statmoves.GetEnumerator()
@@ -1032,9 +1093,13 @@ Public Class Battle_Prediction : Implements Predict
             finalmove_enum.MoveNext()
         End While
 
-        move_package.Move = statmove_touse
-        move_package.My_Turns = newmovestofaint
-        move_package.Opponent_Turns = me_turnstofaint
+        If newmovestofaint = Integer.MinValue Then
+            Return Nothing
+        Else
+            move_package.Move = statmove_touse
+            move_package.My_Turns = newmovestofaint
+            move_package.Opponent_Turns = me_turnstofaint
+        End If
 
         Return move_package
     End Function
@@ -1051,6 +1116,9 @@ Public Class Battle_Prediction : Implements Predict
 
         REM first look at lowering opponent's move stats, select the one that raises our defense
         Dim listof_statmoves As List(Of Move_Info) = first_pokemon.get_StatusMoves()
+        If listof_statmoves.Count = 0 Then
+            Return Nothing
+        End If
         Dim final_statmoves As New List(Of Move_Info)
         Dim move_enum As New List(Of Move_Info).Enumerator
         move_enum = listof_statmoves.GetEnumerator()
@@ -1115,11 +1183,24 @@ Public Class Battle_Prediction : Implements Predict
             finalmove_enum.MoveNext()
         End While
 
-        move_package.Move = statmove_touse
-        move_package.My_Turns = newmovestofaint
-        move_package.Opponent_Turns = me_turnstofaint
+        If newmovestofaint = Integer.MinValue Then
+            Return Nothing
+        Else
+            move_package.Move = statmove_touse
+            move_package.My_Turns = newmovestofaint
+            move_package.Opponent_Turns = me_turnstofaint
+        End If
+
+        
 
         Return move_package
+    End Function
+
+    Public Function FindBestStatusMove(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
+                                     ByVal movetouse As Move_Info, ByVal max_or_min As Integer, ByVal off_or_def As Integer) As Prediction_Move_Package
+
+        Dim listofstatus As List(Of Move_Info) = first_pokemon.get_StatusCondMoves()
+        Return Nothing
     End Function
 
 End Class

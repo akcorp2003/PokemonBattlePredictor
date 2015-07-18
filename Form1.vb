@@ -411,6 +411,8 @@ Public Class Form1
         winner = predictor.predict_outcome(battle_arena)
         Dim josh As Integer = 9
         MessageBox.Show("The winning party is: " & winner & ". ", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        REM clear out the arena
+        battle_arena.Clear()
     End Sub
 
 End Class

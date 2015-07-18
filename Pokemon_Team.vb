@@ -16,8 +16,10 @@ Public Class Pokemon_Team
     Public Sub Addto_Team(ByVal pokemon As Pokemon, ByVal team As String)
         Dim team_name As String = team.ToLower()
         If team_name = "blue" Then
+            pokemon.Team = "blue"
             Team_Blue.Add(pokemon)
         ElseIf team_name = "red" Then
+            pokemon.Team = "red"
             Team_Red.Add(pokemon)
         Else
             MessageBox.Show("Unable to add pokemon to a team. Please make sure you spelled Blue or Red properly.", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)

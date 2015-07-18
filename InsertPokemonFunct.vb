@@ -108,7 +108,7 @@
             bluepokemon.Moves_For_Battle.Add(move4)
         End If
 
-        Form1.Get_PokemonArena.Get_TeamBlue.Addto_Team(bluepokemon, "blue")
+        Form1.Get_PokemonArena.Get_TeamBlue.Addto_Team(bluepokemon.Clone(), "blue")
         m_lastadded_pokemon = "blue"
         Me.Close()
     End Sub
@@ -135,8 +135,21 @@
             End If
         Next
 
+        returnstring = Change_FirstLetterToUppercase(returnstring)
+
         Return returnstring
 
+    End Function
+
+    Private Function Change_FirstLetterToUppercase(ByVal my_string As String) As String
+        If String.IsNullOrEmpty(my_string) Then
+            Return my_string
+        End If
+
+        Dim str_array() As Char = my_string.ToArray
+        str_array(0) = Char.ToUpper(str_array(0))
+
+        Return New String(str_array)
     End Function
 
 
@@ -206,7 +219,7 @@
             redpokemon.Moves_For_Battle.Add(move4)
         End If
 
-        Form1.Get_PokemonArena.Get_TeamRed.Addto_Team(redpokemon, "red")
+        Form1.Get_PokemonArena.Get_TeamRed.Addto_Team(redpokemon.Clone(), "red")
         m_lastadded_pokemon = "red"
         Me.Close()
     End Sub

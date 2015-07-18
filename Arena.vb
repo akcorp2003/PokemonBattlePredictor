@@ -78,6 +78,62 @@ Public Class Pokemon_Arena
     Implements System.ICloneable
 
     Dim m_last_fainted As String
+    Dim m_sleepturns_blue As Integer
+    Dim m_sleepturns_red As Integer
+    Dim m_bpoisonturns_blue As Integer
+    Dim m_bpoisonturns_red As Integer
+
+    Public Property Blue_NumSleep As Integer
+        Get
+            Return m_sleepturns_blue
+        End Get
+        Set(value As Integer)
+            m_sleepturns_blue = value
+        End Set
+    End Property
+
+    Public Sub IncreaseNumSleep_Blue()
+        m_sleepturns_blue += 1
+    End Sub
+
+    Public Property Red_NumSleep As Integer
+        Get
+            Return m_sleepturns_red
+        End Get
+        Set(value As Integer)
+            m_sleepturns_red = value
+        End Set
+    End Property
+
+    Public Sub IncreaseNumSleep_Red()
+        m_sleepturns_red += 1
+    End Sub
+
+    Public Property Blue_NumBadPoison As Integer
+        Get
+            Return m_bpoisonturns_blue
+        End Get
+        Set(value As Integer)
+            m_bpoisonturns_blue = value
+        End Set
+    End Property
+
+    Public Sub IncreaseNumBadPoison_Blue()
+        m_bpoisonturns_blue += 1
+    End Sub
+
+    Public Property Red_NumBadPoison As Integer
+        Get
+            Return m_bpoisonturns_red
+        End Get
+        Set(value As Integer)
+            m_bpoisonturns_red = value
+        End Set
+    End Property
+
+    Public Sub IncreaseNumBadPoison_Red()
+        m_bpoisonturns_red += 1
+    End Sub
 
     Public Property Last_Fainted() As String
         Get
@@ -182,13 +238,49 @@ Public Class Pokemon_Arena
         End If
     End Function
 
+    ''' <summary>
+    ''' Increases the count for toxic and sleep counters
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Sub ManageTurns()
+        If Me.CurrentBattlingBlue.First.Status_Condition = Constants.StatusCondition.badly_poisoned Then
+            Me.IncreaseNumBadPoison_Blue()
+        End If
+        If Me.CurrentBattlingRed.First.Status_Condition = Constants.StatusCondition.badly_poisoned Then
+            Me.IncreaseNumBadPoison_Red()
+        End If
+
+        If Me.CurrentBattlingBlue.First.Status_Condition = Constants.StatusCondition.sleep Then
+            Me.IncreaseNumSleep_Blue()
+        End If
+        If Me.CurrentBattlingRed.First.Status_Condition = Constants.StatusCondition.sleep Then
+            Me.IncreaseNumSleep_Red()
+        End If
+    End Sub
+
+    Public Sub Clear()
+        REM clear out the current battling pokemon
+        CurrentBattlingBlue.Clear()
+        CurrentBattlingRed.Clear()
+
+        REM clear out the teams
+        Me.Get_TeamBlue().Get_Team("blue").Clear()
+        Me.Get_TeamRed().Get_Team("red").Clear()
+
+        REM clear out the stats
+        Me.Turn_Number = 0
+        Me.Last_Fainted = ""
+        Me.Current_Attacker = ""
+    End Sub
+
 
     Public Function Clone() As Object Implements ICloneable.Clone
         Dim freshbattlearena As New Pokemon_Arena
         freshbattlearena.Team_Blue = Me.Team_Blue.Clone()
         freshbattlearena.Team_Red = Me.Team_Red.Clone()
         freshbattlearena.Turn_Number = Me.Turn_Number
-
+        freshbattlearena.Red_NumSleep = Me.Red_NumSleep
+        freshbattlearena.Blue_NumSleep = Me.Blue_NumSleep
         Return freshbattlearena
     End Function
 End Class

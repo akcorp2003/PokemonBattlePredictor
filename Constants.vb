@@ -23,6 +23,17 @@
         fairy = 17
     End Enum
 
+    Enum StatusCondition
+        none = 0
+        burn = 1
+        freeze = 2
+        paralyzed = 3
+        poison = 4
+        badly_poisoned = 5
+        sleep = 6
+        confused = 7
+    End Enum
+
     Public Function Get_CriticalStageValue(ByVal stage As Integer) As Double
         If stage = 0 Then
             Return 1 / 16
@@ -71,8 +82,18 @@
         End If
     End Function
 
-    Public Function Get_EffectString(ByVal effect_id As Integer) As String
-        If effect_id = 11 Then
+    Public Function Get_EffectString(ByVal effect_id As Integer, ByVal CSV_line As String()) As String
+        If effect_id = 2 Then
+            Return "SLPO"
+        ElseIf effect_id = 3 Then
+            Return "PSNchanceO," + CSV_line(11) REM poison target with chance
+        ElseIf effect_id = 5 Then
+            Return "BRNchanceO" + CSV_line(11)
+        ElseIf effect_id = 6 Then
+            Return "FRZchanceO" + CSV_line(11)
+        ElseIf effect_id = 7 Then
+            Return "PRLYZchanceO," + CSV_line(11)
+        ElseIf effect_id = 11 Then
             Return "ATKU+1"
         ElseIf effect_id = 12 Then
             Return "DEFU+1"
@@ -90,6 +111,11 @@
             Return "ACCUO-1"
         ElseIf effect_id = 25 Then
             Return "EVAO-1"
+        ElseIf effect_id = 34 Then
+            Return "PSNBO"
+            REM explore 37, *38
+        ElseIf effect_id = 50 Then
+            Return "CONFO"
         ElseIf effect_id = 51 Then
             Return "ATKU+2"
         ElseIf effect_id = 52 Then
@@ -108,24 +134,47 @@
             Return "SPDO-2"
         ElseIf effect_id = 63 Then
             Return "SPDEFO-2"
+        ElseIf effect_id = 67 Then
+            Return "PSNO"
+        ElseIf effect_id = 68 Then
+            Return "PRLYZO"
+        ElseIf effect_id = 77 Then
+            Return "CONFchanceO," + CSV_line(11)
+        ElseIf effect_id = 78 Then
+            Return "DAM2," + "PSNchanceO," + CSV_line(11)
             REM explore 101
         ElseIf effect_id = 109 Then
             Return "EVAU+2"
         ElseIf effect_id = 119 Then
             Return "ATKO+2,CONFO"
+        ElseIf effect_id = 126 Then
+            Return "BRNchanceO," + CSV_line(11) REM thaw opponent 
         ElseIf effect_id = 146 Then
             Return "DEFU+1" REM also user charges for one turn before attacking
+        ElseIf effect_id = 153 Then
+            Return "PRLYZchanceO," + CSV_line(11)
         ElseIf effect_id = 157 Then
             Return "DEFU+1"
         ElseIf effect_id = 167 Then
             Return "SPATKO+1,CONFO"
+        ElseIf effect_id = 168 Then
+            Return "BRNO"
         ElseIf effect_id = 169 Then
             Return "ATKO-2,SPATKO-2,FAINTU"
         ElseIf effect_id = 175 Then
             Return "SPDEFU+1" REM also electric power doubled next turn
         ElseIf effect_id = 183 Then
             Return "ATKU-1,DEFU-1" REM after inflicting damage
+        ElseIf effect_id = 188 Then
+            Return "SLPnextO" REM opponent sleeps on next turn
             REM Explore 190
+        ElseIf effect_id = 200 Then
+            Return "CONFO"
+        ElseIf effect_id = 201 Then
+            Return "BRNchanceO," + CSV_line(11) REM increase critical hit chance
+        ElseIf effect_id = 203 Then
+            Dim chance As String = "," + CSV_line(11)
+            Return "PSNBchanceO" + chance REM chance to badly affect target
         ElseIf effect_id = 205 Then
             Return "SPATKU-2" REM afer inflicting damage
         ElseIf effect_id = 206 Then
@@ -134,6 +183,9 @@
             Return "DEFU+1,SPDEFU+1"
         ElseIf effect_id = 209 Then
             Return "ATKU+1,DEFU+1"
+        ElseIf effect_id = 210 Then
+            Dim chance As String = "," + CSV_line(11)
+            Return "PSNchanceO" + chance
         ElseIf effect_id = 212 Then
             Return "SPATKU+1,SPDEFU+1"
         ElseIf effect_id = 213 Then
@@ -142,9 +194,21 @@
             Return "SPDU-1"
         ElseIf effect_id = 230 Then
             Return "DEFU-1,SPDEFU-1" REM after inflicting damage
+        ElseIf effect_id = 254 Then
+            Return "BRNchanceO," + CSV_line(11) + "RECL,1/3"
         ElseIf effect_id = 259 Then
             Return "EVAO-1" REM removes field effects on other side
+        ElseIf effect_id = 261 Then
+            Return "FRZchanceO," + CSV_line(11)
+        ElseIf effect_id = 263 Then
+            Return "RECL,1/3," + "PRLYZchanceO," + CSV_line(11)
             REM explore 266
+        ElseIf effect_id = 274 Then
+            Return "FLNCHchanceO," + CSV_line(11) + ",BRNchanceO," + CSV_line(11)
+        ElseIf effect_id = 275 Then
+            Return "FLNCHchanceO," + CSV_line(11) + ",FRZchanceO," + CSV_line(11)
+        ElseIf effect_id = 276 Then
+            Return "PRLYZchanceO," + CSV_line(11) + ",FLNCHchanceO," + CSV_line(11)
         ElseIf effect_id = 278 Then
             Return "ATKU+1,ACCUU+1"
         ElseIf effect_id = 285 Then
@@ -169,13 +233,22 @@
             Return "ATKU+1,SPATKU+1"
         ElseIf effect_id = 329 Then
             Return "DEFU+3"
+        ElseIf effect_id = 330 Then
+            Return "SLPchanceO," + CSV_line(11)
         ElseIf effect_id = 331 Then
             Return "SPDO-1"
+        ElseIf effect_id = 332 Then
+            Return "PRLYZchanceO," + CSV_line(11) REM also requires one turn to charge
+        ElseIf effect_id = 333 Then
+            Return "BRNchanceO," + CSV_line(11) REM also requires one turn to charge
         ElseIf effect_id = 335 Then
             Return "DEFU-1,SPDEFU-1,SPDU-1"
+        ElseIf effect_id = 338 Then
+            Return "CONFchanceO," + CSV_line(11)
             REM explore 342, 344, 355later
         ElseIf effect_id = 346 Then
             Return "ATKO-1,SPATKO-1"
+            REM explore 350
         ElseIf effect_id = 351 Then
             Return "ATKO-1,SPATKO-1" REM user switches out
             REM explore 360

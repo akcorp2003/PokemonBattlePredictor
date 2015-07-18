@@ -78,12 +78,96 @@
 
         EFF = eff_table.Effective_Type(attack_move.Type, defender.Types)
 
+        Me.apply_moveeffect(attacker, defender, attack_move)
         damagevalue = Me.CalculateDamage(attacker, defender, attack_move, EFF, max_or_min)
+
+        REM damage value differs depending on the status condition of the attacker
+        If attacker.Status_Condition = Constants.StatusCondition.burn Then
+            If attack_move.Is_Special = False Then
+                damagevalue = damagevalue / 2
+            End If
+
+        End If
 
         REM apply the damage to the defending pokemon
         REM in the future we will apply the special damages such as burn, poison type
         defender.HP = defender.HP - damagevalue
 
+    End Sub
+
+    ''' <summary>
+    ''' Applies the effect for all status moves.
+    ''' </summary>
+    ''' <param name="my_pokemon">The Pokemon using the move</param>
+    ''' <param name="opponent_pokemon">The target pokemon (if the status applies to the opponent)</param>
+    ''' <param name="move">The move used</param>
+    ''' <remarks></remarks>
+    Public Sub apply_moveeffect(ByVal my_pokemon As Pokemon, ByVal opponent_pokemon As Pokemon, ByVal move As Move_Info)
+        Dim effectlist As String() = move.Effect.Split(",")
+        If effectlist.Length = 0 Then
+            Return
+        End If
+
+        Dim chance As Integer
+        Dim chance_success As Boolean = False
+        For i As Integer = 0 To effectlist.Length - 1 Step 1
+            If effectlist(i).Contains("chance") Then
+                chance = Convert.ToInt32(effectlist(i + 1)) REM since the next array element contains the chance value, guaranteed. CAN LEAD TO REFERENCE ISSUE!
+            End If
+
+            REM compute the chance
+            Dim value As Integer = Poke_Calculator.GenerateRandomNumber()
+            If value <= chance Then
+                chance_success = True
+            Else
+                Continue For REM don't even bother with the next steps since we are not going to apply the effect anyway
+            End If
+
+            REM now test to see what kind of effect to apply
+            If effectlist(i).Contains("SLP") And chance_success = True Then
+                REM confirm it is targeting opponent
+                If effectlist(i).Contains("O") Then
+                    If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
+                        opponent_pokemon.Status_Condition = Constants.StatusCondition.sleep
+                    End If
+                    REM else we do nothing since every pokemon can only have one status condition at a time
+                End If
+            ElseIf effectlist(i).Contains("PSNB") And chance_success = True Then
+                If effectlist(i).Contains("O") Then
+                    If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
+                        opponent_pokemon.Status_Condition = Constants.StatusCondition.badly_poisoned
+                    End If
+                End If
+            ElseIf effectlist(i).Contains("PSN") And chance_success = True Then
+                If effectlist(i).Contains("O") Then
+                    If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
+                        opponent_pokemon.Status_Condition = Constants.StatusCondition.poison
+                    End If
+                End If
+            ElseIf effectlist(i).Contains("BRN") And chance_success = True Then
+                If effectlist(i).Contains("O") Then
+                    If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
+                        opponent_pokemon.Status_Condition = Constants.StatusCondition.burn
+                    End If
+                End If
+            ElseIf effectlist(i).Contains("FRZ") And chance_success = True Then
+                If effectlist(i).Contains("O") Then
+                    If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
+                        opponent_pokemon.Status_Condition = Constants.StatusCondition.freeze
+                    End If
+                End If
+            ElseIf effectlist(i).Contains("PRLYZ") And chance_success = True Then
+                If effectlist(i).Contains("O") Then
+                    If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
+                        opponent_pokemon.Status_Condition = Constants.StatusCondition.paralyzed
+                    End If
+                End If
+            ElseIf effectlist(i).Contains("CONF") And chance_success = True Then
+                If effectlist(i).Contains("CONFO") Or effectlist(i).Contains("CONFchanceO") Then
+                    opponent_pokemon.Other_Status_Condition = Constants.StatusCondition.confused
+                End If
+            End If
+        Next
     End Sub
 
     ''' <summary>
@@ -180,13 +264,106 @@
         End While
     End Sub
 
+    ''' <summary>
+    ''' Applies any status damage that the_pokemon may have. Only deals with burn, poison, and badly poisoned (toxic). 
+    ''' </summary>
+    ''' <param name="the_pokemon"></param>
+    ''' <param name="arena"></param>
+    ''' <remarks>Only computes damaging status.</remarks>
+    Public Sub apply_statustopokemon_after(ByVal the_pokemon As Pokemon, ByVal arena As Pokemon_Arena)
+        If the_pokemon.Status_Condition = Constants.StatusCondition.none Then
+            Return
+        End If
+
+        If the_pokemon.Status_Condition = Constants.StatusCondition.burn Then
+            the_pokemon.HP = the_pokemon.HP * (1 / 8)
+        ElseIf the_pokemon.Status_Condition = Constants.StatusCondition.poison Then
+            REM query the database for the original HP of the pokemon
+            Dim original_hp As Integer = Form1.Get_PokemonDictionary.Get_Pokemon(Constants.Get_FormattedString(the_pokemon.Name)).HP
+            Dim damage As Integer = original_hp * 1 / 8
+            the_pokemon.HP = the_pokemon.HP - damage
+        ElseIf the_pokemon.Status_Condition = Constants.StatusCondition.badly_poisoned Then
+            Dim total_damage As Double = 1 / 16
+            If the_pokemon.Team = "blue" Then
+                For i As Integer = 1 To arena.Blue_NumBadPoison Step 1
+                    total_damage = total_damage * i
+                Next
+                the_pokemon.HP -= total_damage
+            ElseIf the_pokemon.Team = "red" Then
+                For i As Integer = 1 To arena.Red_NumBadPoison Step 1
+                    total_damage = total_damage * i
+                Next
+                the_pokemon.HP -= total_damage
+            End If
+
+        Else
+            Return
+        End If
+        Return
+    End Sub
+
+    ''' <summary>
+    ''' Determines if the_pokemon's status should be changed. This includes sleep, freeze
+    ''' </summary>
+    ''' <param name="the_pokemon"></param>
+    ''' <param name="arena"></param>
+    ''' <remarks></remarks>
+    Public Sub apply_statustopokemon_before(ByVal the_pokemon As Pokemon, ByVal arena As Pokemon_Arena)
+
+        If the_pokemon.Status_Condition = Constants.StatusCondition.sleep Then
+            REM first check if the sleep counters should expire
+            If the_pokemon.Team = "red" Then
+                If arena.Red_NumSleep > 3 Then
+                    the_pokemon.Status_Condition = Constants.StatusCondition.none
+                    Return
+                End If
+            ElseIf the_pokemon.Team = "blue" Then
+                If arena.Blue_NumSleep > 3 Then
+                    the_pokemon.Status_Condition = Constants.StatusCondition.none
+                    Return
+                End If
+            End If
+
+            Dim random As Integer = Poke_Calculator.GenerateRandomNumber()
+            If random <= 33 AndAlso random >= 0 Then
+                REM pokemon has a 33% chance of waking up each turn
+                the_pokemon.Status_Condition = Constants.StatusCondition.none
+            End If
+        ElseIf the_pokemon.Status_Condition = Constants.StatusCondition.freeze Then
+            Dim random As Integer = Poke_Calculator.GenerateRandomNumber()
+            If random <= 20 AndAlso random >= 0 Then
+                REM the pokemon has a 20% chance of thawing
+                the_pokemon.Status_Condition = Constants.StatusCondition.none
+            End If
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Determines if the pokemon is paralyzed and if so, if paralysis prohibits pokemon from moving
+    ''' </summary>
+    ''' <param name="pokemon"></param>
+    ''' <returns>If paralysis prevents pokemon from moving</returns>
+    ''' <remarks></remarks>
+    Public Function apply_turnparalysis(ByVal pokemon As Pokemon) As Boolean
+        If Not pokemon.Status_Condition = Constants.StatusCondition.paralyzed Then
+            Return False
+        End If
+        Dim random As Integer
+        random = Poke_Calculator.GenerateRandomNumber()
+        If random <= 25 AndAlso random >= 0 Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
     Public Shared Function GenerateRandomNumber(ByVal minimum As Double, ByVal maximum As Double) As Double
         Dim random As New Random()
         Return random.NextDouble() * (maximum - minimum) + minimum
     End Function
 
     ''' <summary>
-    ''' 
+    ''' Generates a number between 0 and 100
     ''' </summary>
     ''' <returns>A number between 0 and 100</returns>
     ''' <remarks></remarks>

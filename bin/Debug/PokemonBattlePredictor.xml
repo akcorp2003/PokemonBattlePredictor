@@ -6,7 +6,12 @@ PokemonBattlePredictor
 </name>
 </assembly>
 <members>
-<member name="M:PokemonBattlePredictor.Battle_Prediction.predict_battle(PokemonBattlePredictor.Pokemon_Arena)">
+<member name="M:PokemonBattlePredictor.Pokemon_Arena.ManageTurns">
+	<summary>
+ Increases the count for toxic and sleep counters
+ </summary>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.predict_battle(PokemonBattlePredictor.Pokemon_Arena)">
 	<summary>
  Handles the turn-base mechanics of Pokemon
  </summary>
@@ -71,7 +76,7 @@ PokemonBattlePredictor
 	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Battle_Prediction.FindBestStatMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,System.Int32,System.Int32)">
 	<summary>
- An overloaded function. Returns the best stat move for first_pokemon to use.
+ An overloaded function. Returns the best stat move for first_pokemon to use given no damaging move to use
  </summary>
 	<param name="first_pokemon"></param>
 	<param name="second_pokemon"></param>
@@ -114,6 +119,14 @@ PokemonBattlePredictor
  regular damage. </param>
 	<returns>The damage value</returns>
 	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_moveeffect(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info)">
+	<summary>
+ Applies the effect for all status moves.
+ </summary>
+	<param name="my_pokemon">The Pokemon using the move</param>
+	<param name="opponent_pokemon">The target pokemon (if the status applies to the opponent)</param>
+	<param name="move">The move used</param>
+	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_stattopokemon(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info)">
 	<summary>
  Apples statchanging_move to my_pokemon. This could be raising damage_move by 1 stage, 2 stages, or lower 1 stage, etc...
@@ -122,9 +135,31 @@ PokemonBattlePredictor
 	<param name="my_pokemon">The move that applies damage</param>
 	<param name="statchanging_move">The non-damaging move</param>
 	<remarks>This function does not know who the damage_move belongs to.</remarks>
+</member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_statustopokemon_after(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon_Arena)">
+	<summary>
+ Applies any status damage that the_pokemon may have. Only deals with burn, poison, and badly poisoned (toxic). 
+ </summary>
+	<param name="the_pokemon"></param>
+	<param name="arena"></param>
+	<remarks>Only computes damaging status.</remarks>
+</member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_statustopokemon_before(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon_Arena)">
+	<summary>
+ Determines if the_pokemon's status should be changed. This includes sleep, freeze
+ </summary>
+	<param name="the_pokemon"></param>
+	<param name="arena"></param>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_turnparalysis(PokemonBattlePredictor.Pokemon)">
+	<summary>
+ Determines if the pokemon is paralyzed and if so, if paralysis prohibits pokemon from moving
+ </summary>
+	<param name="pokemon"></param>
+	<returns>If paralysis prevents pokemon from moving</returns>
+	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Poke_Calculator.GenerateRandomNumber">
 	<summary>
-	</summary>
+ Generates a number between 0 and 100
+ </summary>
 	<returns>A number between 0 and 100</returns>
 	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Poke_Calculator.GetCriticalStage(PokemonBattlePredictor.Pokemon)">
@@ -176,6 +211,13 @@ PokemonBattlePredictor
 </member><member name="P:PokemonBattlePredictor.Pokemon.Stage">
 	<summary>
  Stage for determining critical hits
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:PokemonBattlePredictor.Pokemon.Other_Status_Condition">
+	<summary>
+ Other status refers to Confusion, attraction
  </summary>
 	<value></value>
 	<returns></returns>

@@ -680,7 +680,7 @@ Public Class Dex_reader
             Dim typename As String = eff_table.GetTypeName(Convert.ToInt32(type) - 1)
 
             Dim effectclass As Integer = Convert.ToInt32(effect)
-            Dim effect_string As String = Constants.Get_EffectString(effectclass)
+            Dim effect_string As String = Constants.Get_EffectString(effectclass, currentLine)
 
             movename = Capitalizefirstletter(movename)
 
