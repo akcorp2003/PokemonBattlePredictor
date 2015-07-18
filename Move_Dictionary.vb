@@ -55,6 +55,9 @@ Public Class Move_Info
     Private m_power As Integer
     Private m_pp As Integer
     Private m_uri As String
+    Private m_boost As Integer
+    Private m_isSpecial As Boolean
+    Private m_effect As String
 
     Public Property Name As String
         Get
@@ -110,14 +113,61 @@ Public Class Move_Info
         End Set
     End Property
 
+<<<<<<< HEAD
+    Public Property Boost As Integer
+        Get
+            Return m_boost
+        End Get
+        Set(value As Integer)
+            m_boost = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Holds a list of string of effects. Generally for moves that raises or lowers stats.
+    ''' For instance, a list can be ATK+1,SPD+1 means ATK raised by 1 stage and SPD raised by 1 stage
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>A string of effect application</returns>
+    ''' <remarks></remarks>
+    Public Property Effect As String
+        Get
+            Return m_effect
+        End Get
+        Set(value As String)
+            m_effect = value
+        End Set
+    End Property
+
+    Public Property Is_Special As Boolean
+        Get
+            Return m_isSpecial
+        End Get
+        Set(value As Boolean)
+            m_isSpecial = value
+        End Set
+    End Property
+
     Public Function Clone() As Object Implements ICloneable.Clone
         Dim freshmoveinfo As New Move_Info
         freshmoveinfo.Accuracy = Me.Accuracy
+        freshmoveinfo.Type = Me.Type
+=======
+    Public Function Clone() As Object Implements ICloneable.Clone
+        Dim freshmoveinfo As New Move_Info
+        freshmoveinfo.Accuracy = Me.Accuracy
+>>>>>>> master
         freshmoveinfo.Name = Me.Name
         freshmoveinfo.Power = Me.Power
         freshmoveinfo.PP = Me.PP
         'freshmoveinfo.Type = Me.Type.Clone() for a future release
         freshmoveinfo.URI = Me.URI
+<<<<<<< HEAD
+        freshmoveinfo.Boost = Me.Boost
+        freshmoveinfo.Is_Special = Me.Is_Special
+        freshmoveinfo.Effect = Me.Effect
+=======
+>>>>>>> master
 
         Return freshmoveinfo
     End Function
@@ -147,6 +197,16 @@ Public Class Move_Package
     End Property
 
     Public Sub InsertMove(ByRef pokemon As Pokemon, ByVal package As Move_Package)
+
+        Dim movename As String = package.Name.Trim("""")
+        movename.Trim()
+
+        REM first check if the move is already in our dictionary, we can save a lot of time
+        If Form1.Get_MoveDictionary.IsMoveInDictionary(movename) Then
+            pokemon.Moves.Add(movename)
+            Return
+        End If
+
         Dim base_url As String = "http://pokeapi.co/"
         Dim uri As String = package.URI
         uri = uri.Trim("""")
@@ -196,8 +256,6 @@ Public Class Move_Package
         End While
         master_filereader.Close()
 
-        Dim movename As String = package.Name.Trim("""")
-        movename.Trim()
         Form1.Get_MoveDictionary.Add_Move(movename, poke_moveinfo)
         pokemon.Moves.Add(movename)
 

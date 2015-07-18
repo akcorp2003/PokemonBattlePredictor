@@ -1,6 +1,7 @@
 ﻿Imports System
 Imports System.Net
 Imports System.IO
+Imports Microsoft.VisualBasic.FileIO.TextFieldParser
 
 Public Class Dex_Writer
 
@@ -240,6 +241,18 @@ Public Class Dex_Writer
             filewriter.WriteLine(Convert.ToString(move_enum.Current.Value.PP))
             filewriter.WriteLine("URI")
             filewriter.WriteLine(move_enum.Current.Value.URI)
+<<<<<<< HEAD
+            filewriter.WriteLine("SPECIAL")
+            filewriter.WriteLine(Convert.ToString(move_enum.Current.Value.Is_Special))
+
+            filewriter.WriteLine("EFFECT")
+            If move_enum.Current.Value.Effect Is Nothing Then
+                filewriter.WriteLine() REM write an empty string, we can fill it in in the file
+            Else
+                filewriter.WriteLine(move_enum.Current.Value.Effect)
+            End If
+=======
+>>>>>>> master
 
             filewriter.WriteLine("TYPE")
             If move_enum.Current.Value.Type Is Nothing Then
@@ -505,7 +518,12 @@ Public Class Dex_reader
         Try
             filereader = My.Computer.FileSystem.OpenTextFileReader(filename)
         Catch ex As Exception
+<<<<<<< HEAD
+            MessageBox.Show("Could not load moves_formatted.txt. Make sure the file exists or it is not being used by someone else." & Environment.NewLine & _
+                            "Don't worry about this because after you close the program moves should be written to the file.", "Whoops!", _
+=======
             MessageBox.Show("Could not load moves_formatted.txt. Make sure the file exists or it is not being used by someone else.", "Whoops!", _
+>>>>>>> master
                             MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End Try
@@ -558,7 +576,27 @@ Public Class Dex_reader
                 readingline = filereader.ReadLine()
                 toadd_move.URI = readingline
 
+<<<<<<< HEAD
+                readingline = filereader.ReadLine() REM this line should contain SPECIAL
+                If Not readingline = "SPECIAL" Then
+                    MessageBox.Show("There is unknown text in moves_formatted.txt. Aborting to be safe.", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Return
+                End If
                 readingline = filereader.ReadLine()
+                toadd_move.Is_Special = Convert.ToBoolean(readingline)
+
+                readingline = filereader.ReadLine()
+                If Not readingline = "EFFECT" Then
+                    MessageBox.Show("There is unknown text in moves_formatted.txt. Aborting to be safe.", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Return
+                End If
+                readingline = filereader.ReadLine()
+                toadd_move.Effect = readingline
+
+                readingline = filereader.ReadLine() REM this line should contain TYPE
+=======
+                readingline = filereader.ReadLine()
+>>>>>>> master
                 If Not readingline = "TYPE" Then
                     MessageBox.Show("There is unknown text in moves_formatted.txt. Aborting to be safe.", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Return
@@ -580,6 +618,11 @@ Public Class Dex_reader
             readingline = filereader.ReadLine()
         End While
 
+<<<<<<< HEAD
+        filereader.Close()
+
+=======
+>>>>>>> master
     End Sub
 
     Public Sub Read_Ability(ByVal calling_form As Form1)
@@ -628,5 +671,65 @@ Public Class Dex_reader
             End If
             readingline = filereader.ReadLine()
         End While
+<<<<<<< HEAD
+
+        filereader.Close()
     End Sub
+
+    Public Sub Read_MovesCSV()
+        Dim move_csv As FileIO.TextFieldParser = New FileIO.TextFieldParser("moves.csv")
+        Dim currentLine As String()
+        move_csv.Delimiters = New String() {","}
+        Dim eff_table As New EffectivenessTable
+
+        REM this should be the line where it's all the headings
+        currentLine = move_csv.ReadFields()
+        While Not move_csv.EndOfData
+            currentLine = move_csv.ReadFields()
+
+            Dim movename As String = currentLine(1)
+            Dim type As String = currentLine(3)
+            Dim damage_type As String = currentLine(9)
+            Dim effect As String = currentLine(10)
+            Dim norm_or_special As Integer = Convert.ToInt32(damage_type)
+            Dim typename As String = eff_table.GetTypeName(Convert.ToInt32(type) - 1)
+
+            Dim effectclass As Integer = Convert.ToInt32(effect)
+            Dim effect_string As String = Constants.Get_EffectString(effectclass, currentLine)
+
+            movename = Capitalizefirstletter(movename)
+
+            Dim modify_move As Move_Info
+            modify_move = Form1.Get_MoveDictionary.Get_Move(movename)
+            If Not modify_move Is Nothing Then
+                modify_move.Type = typename
+                modify_move.Effect = effect_string
+                If norm_or_special = 3 Then
+                    modify_move.Is_Special = True
+                Else
+                    modify_move.Is_Special = False
+                End If
+            End If
+
+
+        End While
+        move_csv.Close()
+    End Sub
+
+    Private Function Capitalizefirstletter(ByVal ugly_string As String) As String
+        For Each c As Char In ugly_string
+            If Char.IsLower(c) Then
+                Dim letter As Char = c
+                Dim Sletter As String = letter.ToString()
+                Sletter = Sletter.ToUpper()
+                ugly_string = ugly_string.Remove(0, 1)
+                ugly_string = ugly_string.Insert(0, Sletter)
+                Exit For
+            End If
+        Next
+        Return ugly_string
+    End Function
+=======
+    End Sub
+>>>>>>> master
 End Class
