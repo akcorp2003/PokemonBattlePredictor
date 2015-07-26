@@ -113,7 +113,6 @@ Public Class Move_Info
         End Set
     End Property
 
-<<<<<<< HEAD
     Public Property Boost As Integer
         Get
             Return m_boost
@@ -152,22 +151,14 @@ Public Class Move_Info
         Dim freshmoveinfo As New Move_Info
         freshmoveinfo.Accuracy = Me.Accuracy
         freshmoveinfo.Type = Me.Type
-=======
-    Public Function Clone() As Object Implements ICloneable.Clone
-        Dim freshmoveinfo As New Move_Info
-        freshmoveinfo.Accuracy = Me.Accuracy
->>>>>>> master
         freshmoveinfo.Name = Me.Name
         freshmoveinfo.Power = Me.Power
         freshmoveinfo.PP = Me.PP
         'freshmoveinfo.Type = Me.Type.Clone() for a future release
         freshmoveinfo.URI = Me.URI
-<<<<<<< HEAD
         freshmoveinfo.Boost = Me.Boost
         freshmoveinfo.Is_Special = Me.Is_Special
         freshmoveinfo.Effect = Me.Effect
-=======
->>>>>>> master
 
         Return freshmoveinfo
     End Function

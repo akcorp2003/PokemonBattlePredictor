@@ -238,7 +238,6 @@ Public Class Pokemon
         End Set
     End Property
 
-<<<<<<< HEAD
     ''' <summary>
     ''' Returns the number of special moves that the Pokemon has in Moves_For_Battle
     ''' </summary>
@@ -345,12 +344,98 @@ Public Class Pokemon
         move_enum.MoveNext()
         While Not move_enum.Current Is Nothing
             Dim stats_indic As String() = {"BRN", "FRZ", "PRLYZ", "SLP", "PSN"}
-            If stats_indic.Contains(move_enum.Current.Effect) Then
-                st_list.Add(move_enum.Current)
-            End If
+            For i As Integer = 0 To stats_indic.Length - 1 Step 1
+                If move_enum.Current.Effect.Contains(stats_indic(i)) Then
+                    st_list.Add(move_enum.Current)
+                End If
+            Next
             move_enum.MoveNext()
         End While
         Return st_list
+    End Function
+
+    Public Function get_BRNMoves() As List(Of Move_Info)
+        Dim brn_list As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            If move_enum.Current.Effect.Contains("BRN") Then
+                brn_list.Add(move_enum.Current)
+            End If
+            move_enum.MoveNext()
+        End While
+        Return brn_list
+    End Function
+
+    Public Function get_FRZMoves() As List(Of Move_Info)
+        Dim frz_list As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            If move_enum.Current.Effect.Contains("FRZ") Then
+                frz_list.Add(move_enum.Current)
+            End If
+            move_enum.MoveNext()
+        End While
+        Return frz_list
+    End Function
+
+    Public Function get_PRLYZMoves() As List(Of Move_Info)
+        Dim prlyz_list As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            If move_enum.Current.Effect.Contains("PRLYZ") Then
+                prlyz_list.Add(move_enum.Current)
+            End If
+            move_enum.MoveNext()
+        End While
+        Return prlyz_list
+    End Function
+
+    Public Function get_SLPMoves() As List(Of Move_Info)
+        Dim SLP_list As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            If move_enum.Current.Effect.Contains("SLP") Then
+                SLP_list.Add(move_enum.Current)
+            End If
+            move_enum.MoveNext()
+        End While
+        Return SLP_list
+    End Function
+
+    Public Function get_PSNMoves() As List(Of Move_Info)
+        Dim PSN_list As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            If move_enum.Current.Effect.Contains("PSN") Then
+                PSN_list.Add(move_enum.Current)
+            End If
+            move_enum.MoveNext()
+        End While
+        Return PSN_list
+    End Function
+
+    Public Function get_CONFMoves() As List(Of Move_Info)
+        Dim CONF_list As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            If move_enum.Current.Effect.Contains("CONF") Then
+                CONF_list.Add(move_enum.Current)
+            End If
+            move_enum.MoveNext()
+        End While
+        Return CONF_list
     End Function
 
     Public Function get_StrongestMove() As Move_Info
@@ -379,8 +464,6 @@ Public Class Pokemon
         Return strongmove
     End Function
 
-=======
->>>>>>> master
     Public Function Clone() As Object Implements ICloneable.Clone
         Dim freshpokemon As New Pokemon
         freshpokemon.ATK = Me.ATK
@@ -390,14 +473,14 @@ Public Class Pokemon
         freshpokemon.SPD = Me.SPD
         freshpokemon.Name = Me.Name
         freshpokemon.HP = Me.HP
-<<<<<<< HEAD
         freshpokemon.ATK_Boost = Me.ATK_Boost
         freshpokemon.DEF_Boost = Me.DEF_Boost
         freshpokemon.SP_ATK_Boost = Me.SP_ATK_Boost
         freshpokemon.SP_DEF_Boost = Me.SP_DEF_Boost
         freshpokemon.SPEED_Boost = Me.SPEED_Boost
-=======
->>>>>>> master
+        freshpokemon.Status_Condition = Me.Status_Condition
+        freshpokemon.Other_Status_Condition = Me.Other_Status_Condition
+        freshpokemon.Team = Me.Team
         freshpokemon.Moves = Me.Moves.Select(Function(x) x.Clone()).Cast(Of String).ToList()
         freshpokemon.Types = Me.Types.Select(Function(x) x.Clone()).Cast(Of String).ToList()
         freshpokemon.Ability = Me.Ability.Select(Function(x) x.Clone()).Cast(Of Ability_Info).ToList()

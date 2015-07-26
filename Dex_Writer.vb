@@ -241,7 +241,6 @@ Public Class Dex_Writer
             filewriter.WriteLine(Convert.ToString(move_enum.Current.Value.PP))
             filewriter.WriteLine("URI")
             filewriter.WriteLine(move_enum.Current.Value.URI)
-<<<<<<< HEAD
             filewriter.WriteLine("SPECIAL")
             filewriter.WriteLine(Convert.ToString(move_enum.Current.Value.Is_Special))
 
@@ -251,8 +250,6 @@ Public Class Dex_Writer
             Else
                 filewriter.WriteLine(move_enum.Current.Value.Effect)
             End If
-=======
->>>>>>> master
 
             filewriter.WriteLine("TYPE")
             If move_enum.Current.Value.Type Is Nothing Then
@@ -518,12 +515,8 @@ Public Class Dex_reader
         Try
             filereader = My.Computer.FileSystem.OpenTextFileReader(filename)
         Catch ex As Exception
-<<<<<<< HEAD
             MessageBox.Show("Could not load moves_formatted.txt. Make sure the file exists or it is not being used by someone else." & Environment.NewLine & _
                             "Don't worry about this because after you close the program moves should be written to the file.", "Whoops!", _
-=======
-            MessageBox.Show("Could not load moves_formatted.txt. Make sure the file exists or it is not being used by someone else.", "Whoops!", _
->>>>>>> master
                             MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return
         End Try
@@ -576,7 +569,6 @@ Public Class Dex_reader
                 readingline = filereader.ReadLine()
                 toadd_move.URI = readingline
 
-<<<<<<< HEAD
                 readingline = filereader.ReadLine() REM this line should contain SPECIAL
                 If Not readingline = "SPECIAL" Then
                     MessageBox.Show("There is unknown text in moves_formatted.txt. Aborting to be safe.", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -594,9 +586,6 @@ Public Class Dex_reader
                 toadd_move.Effect = readingline
 
                 readingline = filereader.ReadLine() REM this line should contain TYPE
-=======
-                readingline = filereader.ReadLine()
->>>>>>> master
                 If Not readingline = "TYPE" Then
                     MessageBox.Show("There is unknown text in moves_formatted.txt. Aborting to be safe.", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Return
@@ -618,11 +607,8 @@ Public Class Dex_reader
             readingline = filereader.ReadLine()
         End While
 
-<<<<<<< HEAD
         filereader.Close()
 
-=======
->>>>>>> master
     End Sub
 
     Public Sub Read_Ability(ByVal calling_form As Form1)
@@ -671,7 +657,6 @@ Public Class Dex_reader
             End If
             readingline = filereader.ReadLine()
         End While
-<<<<<<< HEAD
 
         filereader.Close()
     End Sub
@@ -729,7 +714,4 @@ Public Class Dex_reader
         Next
         Return ugly_string
     End Function
-=======
-    End Sub
->>>>>>> master
 End Class

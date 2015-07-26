@@ -1,6 +1,7 @@
 ﻿Module Constants
     Public Const LEVEL As Integer = 100 REM for TPP levels
     Public Const CONFUSE_DAMAGE As Integer = 40
+    Public Const ACCURACY_HIGH As Integer = 25
 
     Enum Types
         normal = 0

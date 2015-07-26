@@ -12,9 +12,9 @@
     ''' <returns>The damage value</returns>
     ''' <remarks></remarks>
     Public Function CalculateDamage(ByVal attacking_pokemon As Pokemon, ByVal defending_pokemon As Pokemon, ByVal attack_move As Move_Info, _
-                                    ByVal EFF As ULong, ByVal MAXMIN As Integer) As Integer
+                                    ByVal EFF As Double, ByVal MAXMIN As Integer) As Integer
         Dim damage As Integer = 0
-        Dim MODIFIER As ULong
+        Dim MODIFIER As Double
         Dim CRITICAL As Integer
         Dim STAB As Integer
         Dim OTHER As Integer = 1
@@ -65,16 +65,26 @@
         Return damage
     End Function
 
+    ''' <summary>
+    ''' Applies the damage that attack_move inflicts on defender. The function can accept non-damaging moves.
+    ''' The function also applies any effects attack_move may have.
+    ''' </summary>
+    ''' <param name="attacker"></param>
+    ''' <param name="defender"></param>
+    ''' <param name="attack_move">The move used by attacker.</param>
+    ''' <param name="poke_calc"></param>
+    ''' <param name="max_or_min">Max(1) damage, Min(-1) damage, or Norm(0) damage.</param>
+    ''' <remarks></remarks>
     Public Sub apply_damage(ByRef attacker As Pokemon, ByRef defender As Pokemon, ByVal attack_move As Move_Info,
                             ByVal poke_calc As Poke_Calculator, ByVal max_or_min As Integer)
-        REM first check if attacking_move is a damaging move. If not, this function cannot accept it.
-        If attack_move.Power = 0 Then
-            Return
-        End If
+        'REM first check if attacking_move is a damaging move. If not, this function cannot accept it.
+        'If attack_move.Power = 0 Then
+        '    Return
+        'End If
 
         Dim eff_table As New EffectivenessTable
         Dim damagevalue As Integer = 0
-        Dim EFF As ULong
+        Dim EFF As Double
 
         EFF = eff_table.Effective_Type(attack_move.Type, defender.Types)
 
@@ -95,11 +105,20 @@
 
     End Sub
 
-    Public Sub apply_confusion(ByVal confused_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator)
+    ''' <summary>
+    ''' Applies the damage when the confused_pokemon is confused.
+    ''' </summary>
+    ''' <param name="confused_pokemon">The confused pokemon</param>
+    ''' <param name="poke_calc"></param>
+    ''' <returns>A boolean value indicating whether the confused_pokemon hit itself or not.</returns>
+    ''' <remarks></remarks>
+    Public Function apply_confusion(ByVal confused_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator) As Boolean
+        Dim confuse_success As Boolean = False
         If confused_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
             Dim chance As Integer = Poke_Calculator.GenerateRandomNumber()
             If chance <= 50 Then
                 REM 50% chance that the pokemon will hit itself
+                confuse_success = True
                 Dim confusemove As New Move_Info
                 confusemove.Is_Special = False
                 confusemove.Power = Constants.CONFUSE_DAMAGE
@@ -108,15 +127,15 @@
                 confused_pokemon.HP -= damage
             End If
         End If
-        Return
-    End Sub
+        Return confuse_success
+    End Function
 
     ''' <summary>
-    ''' Applies the effect for all status moves.
+    ''' Applies the effect for all status moves. The move can be damaging or non-damaging.
     ''' </summary>
     ''' <param name="my_pokemon">The Pokemon using the move</param>
     ''' <param name="opponent_pokemon">The target pokemon (if the status applies to the opponent)</param>
-    ''' <param name="move">The move used</param>
+    ''' <param name="move">The move used. Can be damaging or non-damaging.</param>
     ''' <remarks></remarks>
     Public Sub apply_moveeffect(ByVal my_pokemon As Pokemon, ByVal opponent_pokemon As Pokemon, ByVal move As Move_Info)
         Dim effectlist As String() = move.Effect.Split(",")
@@ -129,15 +148,17 @@
         For i As Integer = 0 To effectlist.Length - 1 Step 1
             If effectlist(i).Contains("chance") Then
                 chance = Convert.ToInt32(effectlist(i + 1)) REM since the next array element contains the chance value, guaranteed. CAN LEAD TO REFERENCE ISSUE!
+                REM compute the chance
+                Dim value As Integer = Poke_Calculator.GenerateRandomNumber()
+                If value <= chance Then
+                    chance_success = True
+                Else
+                    Continue For REM don't even bother with the next steps since we are not going to apply the effect anyway
+                End If
+            Else
+                chance_success = True
             End If
 
-            REM compute the chance
-            Dim value As Integer = Poke_Calculator.GenerateRandomNumber()
-            If value <= chance Then
-                chance_success = True
-            Else
-                Continue For REM don't even bother with the next steps since we are not going to apply the effect anyway
-            End If
 
             REM now test to see what kind of effect to apply
             If effectlist(i).Contains("SLP") And chance_success = True Then
@@ -281,6 +302,28 @@
     End Sub
 
     ''' <summary>
+    ''' A wrapper that applies the functions apply_statustopokemon_before or apply_statustopokemon_after depending on the flag "before_or_after."
+    ''' Call this when you do not want to manage the functions yourself.
+    ''' </summary>
+    ''' <param name="first_pokemon">First pokemon to check for and apply status conditions.</param>
+    ''' <param name="second_pokemon">Second pokemon to check for and apply status conditions.</param>
+    ''' <param name="arena"></param>
+    ''' <param name="before_or_after">Before (-1) or After (1)</param>
+    ''' <remarks></remarks>
+    Public Sub apply_statustopokemon_wrapper(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal arena As Pokemon_Arena, ByVal before_or_after As Integer)
+        If before_or_after = -1 Then
+            Me.apply_statustopokemon_before(first_pokemon, arena)
+            Me.apply_statustopokemon_before(second_pokemon, arena)
+        ElseIf before_or_after = 1 Then
+            Me.apply_statustopokemon_after(first_pokemon, arena)
+            Me.apply_statustopokemon_after(second_pokemon, arena)
+        Else
+            Return
+        End If
+        Return
+    End Sub
+
+    ''' <summary>
     ''' Applies any status damage that the_pokemon may have. Only deals with burn, poison, and badly poisoned (toxic). 
     ''' </summary>
     ''' <param name="the_pokemon"></param>
@@ -319,7 +362,7 @@
     End Sub
 
     ''' <summary>
-    ''' Determines if the_pokemon's status should be changed. This includes sleep, freeze
+    ''' Determines if the_pokemon's status should be changed. This includes sleep, freeze.
     ''' </summary>
     ''' <param name="the_pokemon"></param>
     ''' <param name="arena"></param>
