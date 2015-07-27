@@ -600,9 +600,19 @@ Public Class Battle_Prediction : Implements Predict
                     If turn_poke_move3_pack Is Nothing OrElse turn_poke_move3_pack.Move Is Nothing Then
                         poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
                     Else
-                        REM we will apply the status move
-                        'TODO: possibly consider more advanced analytics to analyze whether to go with the normal or status effect move
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, poke_calc, 1)
+                        REM we will apply the status move if the pokemon doesn't have a status already
+                        REM (if FindBestStatusMove chose a confusion move, it's acceptable if the pokemon is not confused already)
+                        If Not turn_poke_move3_pack.Move.get_StatusType() = Constants.StatusCondition.none And second_pokemon.Status_Condition = Constants.StatusCondition.none Then
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, poke_calc, 1)
+
+                            REM give the move one more chance: evaluate if it is a confusion type of move. If pokemon is already confused though...
+                        ElseIf turn_poke_move3_pack.Move.isConfusion() = True And Not second_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, poke_calc, 1)
+                        Else
+                            'TODO: possibly consider more advanced analytics to analyze whether to go with the normal or status effect move
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                        End If
+
                     End If
 
                 Else
@@ -623,7 +633,6 @@ Public Class Battle_Prediction : Implements Predict
                     End If
                 End If
 
-                'poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
             Else
                 REM all we have are noneffective or status moves
                 Dim oppo_health As String

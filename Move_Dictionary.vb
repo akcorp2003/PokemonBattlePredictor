@@ -147,6 +147,38 @@ Public Class Move_Info
         End Set
     End Property
 
+    ''' <summary>
+    ''' Determines the status type of the move, if any. Confusion and attraction are NOT considered status types.
+    ''' </summary>
+    ''' <returns>An integer indicating what kind of status affliction the move is.</returns>
+    ''' <remarks>Confusion and attraction are NOT considered status affliction.</remarks>
+    Public Function get_StatusType() As Integer
+        If m_effect.Contains("BRN") Then
+            Return Constants.StatusCondition.burn
+        ElseIf m_effect.Contains("SLP") Then
+            Return Constants.StatusCondition.sleep
+        ElseIf m_effect.Contains("PSNB") Then
+            Return Constants.StatusCondition.badly_poisoned
+        ElseIf m_effect.Contains("PSN") Then
+            Return Constants.StatusCondition.poison
+        ElseIf m_effect.Contains("FRZ") Then
+            Return Constants.StatusCondition.freeze
+        ElseIf m_effect.Contains("PRLYZ") Then
+            Return Constants.StatusCondition.paralyzed
+        Else
+            REM we will not consider attraction and confused as status conditions
+            Return Constants.StatusCondition.none
+        End If
+    End Function
+
+    Public Function isConfusion() As Boolean
+        If m_effect.Contains("CONF") Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
     Public Function Clone() As Object Implements ICloneable.Clone
         Dim freshmoveinfo As New Move_Info
         freshmoveinfo.Accuracy = Me.Accuracy

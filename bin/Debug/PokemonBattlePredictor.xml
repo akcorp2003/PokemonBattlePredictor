@@ -427,6 +427,12 @@ PokemonBattlePredictor
 	<value></value>
 	<returns>A string of effect application</returns>
 	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Move_Info.get_StatusType">
+	<summary>
+ Determines the status type of the move, if any. Confusion and attraction are NOT considered status types.
+ </summary>
+	<returns>An integer indicating what kind of status affliction the move is.</returns>
+	<remarks>Confusion and attraction are NOT considered status affliction.</remarks>
 </member><member name="M:PokemonBattlePredictor.Move_Package.ProcessLine(System.String)">
 	<summary>
  Given an unorganized moves text string, this function will parse it into one lines into
