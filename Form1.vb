@@ -375,10 +375,6 @@ Public Class Form1
         dex_reader3.Parent_Form = Me
         Worker_Abilityreader.RunWorkerAsync(dex_reader3)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> master
     End Sub
 
     Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As FormClosedEventArgs) Handles Me.FormClosed
@@ -414,12 +410,9 @@ Public Class Form1
         temp_battlearena.Team_Blue.Get_Team("blue").Clear()
         winner = predictor.predict_outcome(battle_arena)
         Dim josh As Integer = 9
-<<<<<<< HEAD
         MessageBox.Show("The winning party is: " & winner & ". ", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
         REM clear out the arena
         battle_arena.Clear()
-=======
->>>>>>> master
     End Sub
 
 End Class

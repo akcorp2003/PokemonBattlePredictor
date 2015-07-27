@@ -1,6 +1,9 @@
 ﻿Module Constants
     Public Const LEVEL As Integer = 100 REM for TPP levels
     Public Const CONFUSE_DAMAGE As Integer = 40
+    Public Const ACCURACY_HIGH As Integer = 25
+
+    Dim m_iterationdict As New Dictionary(Of Integer, Integer)
 
     Enum Types
         normal = 0
@@ -33,6 +36,11 @@
         sleep = 6
         confused = 7
         attracted = 8
+    End Enum
+
+    Enum Funct_IDs
+        IterateParalysis = 10
+        IterateConfusion = 20
     End Enum
 
     Public Function Get_CriticalStageValue(ByVal stage As Integer) As Double
@@ -265,6 +273,39 @@
             Return "EVAO-2"
         Else
             Return ""
+        End If
+    End Function
+
+    Public Sub turnon_iterationflag(ByVal funct_id As Integer)
+        If m_iterationdict.ContainsKey(funct_id) Then
+            m_iterationdict.Item(funct_id) = 1
+        Else
+            m_iterationdict.Add(funct_id, 1)
+        End If
+    End Sub
+
+    Public Sub turnoff_iterationflag(ByVal funct_id As Integer)
+        If m_iterationdict.ContainsKey(funct_id) Then
+            m_iterationdict.Item(funct_id) = 0
+        Else
+            m_iterationdict.Add(funct_id, 0)
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' Returns the state of the iteration flag for a function. -100 means that the function does not exist in the dictionary.
+    ''' 1 -> flag is on
+    ''' 0 -> flag is off
+    ''' </summary>
+    ''' <param name="funct_id"></param>
+    ''' <returns>An integer specifying the state of the iteration flag.</returns>
+    ''' <remarks></remarks>
+    Public Function stateof_iterationflag(ByVal funct_id As Integer) As Integer
+        Dim value As Integer = -100
+        If m_iterationdict.TryGetValue(funct_id, value) Then
+            Return value
+        Else
+            Return value
         End If
     End Function
 
