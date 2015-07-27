@@ -217,7 +217,8 @@ Public Class Battle_Prediction : Implements Predict
     ''' from the same team results in unexpected behaviour.
     ''' </remarks>
     Public Function predict_battle(ByVal first_pokemon As Pokemon, ByVal movetouse As Move_Info, ByVal second_pokemon As Pokemon, ByVal arena As Pokemon_Arena, ByVal poke_calc As Poke_Calculator,
-                                   ByVal max_or_min As Integer) As String
+                                   ByVal max_or_min As Integer,
+                                   Optional ByVal funct_id As Integer = -1000) As String
         Dim turn_queue As New Queue(Of Pokemon)
         Dim f_pokemon As Pokemon
         Dim s_pokemon As Pokemon
@@ -227,23 +228,24 @@ Public Class Battle_Prediction : Implements Predict
 
             REM check if we are on a new cycle and need to populate the queue
             If turn_queue.Count = 0 Then
-                If first_pokemon.SPD > second_pokemon.SPD Then
-                    turn_queue.Enqueue(first_pokemon)
-                    turn_queue.Enqueue(second_pokemon)
-                ElseIf first_pokemon.SPD < second_pokemon.SPD Then
-                    turn_queue.Enqueue(second_pokemon)
-                    turn_queue.Enqueue(first_pokemon)
-                Else
-                    REM same speed
-                    Dim value As Integer = Poke_Calculator.GenerateRandomNumber()
-                    If value <= 50 Then
-                        turn_queue.Enqueue(first_pokemon)
-                        turn_queue.Enqueue(second_pokemon)
-                    Else
-                        turn_queue.Enqueue(second_pokemon)
-                        turn_queue.Enqueue(first_pokemon)
-                    End If
-                End If
+                'If first_pokemon.SPD > second_pokemon.SPD Then
+                '    turn_queue.Enqueue(first_pokemon)
+                '    turn_queue.Enqueue(second_pokemon)
+                'ElseIf first_pokemon.SPD < second_pokemon.SPD Then
+                '    turn_queue.Enqueue(second_pokemon)
+                '    turn_queue.Enqueue(first_pokemon)
+                'Else
+                '    REM same speed
+                '    Dim value As Integer = Poke_Calculator.GenerateRandomNumber()
+                '    If value <= 50 Then
+                '        turn_queue.Enqueue(first_pokemon)
+                '        turn_queue.Enqueue(second_pokemon)
+                '    Else
+                '        turn_queue.Enqueue(second_pokemon)
+                '        turn_queue.Enqueue(first_pokemon)
+                '    End If
+                'End If
+                turn_queue = enqueue_Pokemon(first_pokemon, second_pokemon)
             End If
 
             If turn_queue.Count = 2 Then
@@ -263,7 +265,17 @@ Public Class Battle_Prediction : Implements Predict
                             End If
                         Else
                             REM we need to carry through apply_battle in order to let the function select the best move for us
-                            apply_battle(f_pokemon, turn_queue.Peek(), poke_calc, arena)
+                            If funct_id = -1000 Then
+                                apply_battle(f_pokemon, turn_queue.Peek(), poke_calc, arena)
+                            Else
+                                REM begin mitigating an infinite loop
+                                'In this case, we determined that f_pokemon is not the same as first_pokemon, which implies
+                                'that movetouse is NOT first_pokemon's. So, we need to call apply_battle() to figure out second_pokemon's (a.k.a f_pokemon)
+                                'best move. To prevent a possible paralysis iteration, we will call an "overloaded" apply_battle() that calls an IterateParalysis
+                                'that does not go looping forever...
+                                apply_battle(f_pokemon, turn_queue.Peek(), poke_calc, arena, funct_id, movetouse)
+                            End If
+
                         End If
 
                     End If
@@ -280,7 +292,12 @@ Public Class Battle_Prediction : Implements Predict
                     If Not s_pokemon.Status_Condition = Constants.StatusCondition.freeze And Not s_pokemon.Status_Condition = Constants.StatusCondition.sleep Then
                         REM do the same thing as above
                         If s_pokemon.Team = second_pokemon.Team Then
-                            apply_battle(s_pokemon, f_pokemon, poke_calc, arena)
+                            If funct_id = -1000 Then
+                                apply_battle(s_pokemon, f_pokemon, poke_calc, arena)
+                            Else
+                                apply_battle(s_pokemon, f_pokemon, poke_calc, arena, funct_id, movetouse)
+                            End If
+
                         Else
                             If poke_calc.apply_confusion(s_pokemon, poke_calc) = False Then
                                 poke_calc.apply_damage(s_pokemon, f_pokemon, movetouse, poke_calc, max_or_min)
@@ -311,6 +328,132 @@ Public Class Battle_Prediction : Implements Predict
         End If
 
 
+    End Function
+
+    ''' <summary>
+    ''' An overloaded function. Predicts the winning Pokemon between first_ and second_pokemon. This function assumes that both Pokemon have
+    ''' discovered their best move to use and will use that move throughout the battle.
+    ''' </summary>
+    ''' <param name="first_pokemon">Pokemon A</param>
+    ''' <param name="movetouse_first">The move that first_pokemon believes is its best move.</param>
+    ''' <param name="second_pokemon">Pokemon B</param>
+    ''' <param name="movetouse_second">The move that second_pokemon believes is its best move.</param>
+    ''' <param name="arena">The arena that contains first_ and second_pokemon.</param>
+    ''' <param name="poke_calc"></param>
+    ''' <param name="max_or_min">Max(1) damage, Min(-1) damage, and Norm(0) damage.</param>
+    ''' <returns>A string "red" or "blue" of the winning team.</returns>
+    ''' <remarks>
+    ''' Unlike its counterpart, this function does not need to be alerted of a possible infinite loop
+    ''' because it does not call any functions that could call apply_battle()
+    ''' </remarks>
+    Public Function predict_battle(ByVal first_pokemon As Pokemon, ByVal movetouse_first As Move_Info, ByVal second_pokemon As Pokemon, ByVal movetouse_second As Move_Info,
+                                   ByVal arena As Pokemon_Arena, ByVal poke_calc As Poke_Calculator, ByVal max_or_min As Integer) As String
+        Dim turn_queue As New Queue(Of Pokemon)
+        Dim f_pokemon As Pokemon
+        Dim s_pokemon As Pokemon
+
+        While first_pokemon.HP > 0 AndAlso second_pokemon.HP > 0
+            REM populate the queue according to speed
+
+            REM check if we are on a new cycle and need to populate the queue
+            If turn_queue.Count = 0 Then
+                turn_queue = enqueue_Pokemon(first_pokemon, second_pokemon)
+            End If
+
+            If turn_queue.Count = 2 Then
+                f_pokemon = turn_queue.Dequeue()
+                If poke_calc.apply_turnparalysis(f_pokemon) = False Then
+                    poke_calc.apply_statustopokemon_before(f_pokemon, arena)
+
+                    If Not f_pokemon.Status_Condition = Constants.StatusCondition.freeze And Not f_pokemon.Status_Condition = Constants.StatusCondition.sleep Then
+                        'we are not going to call apply_battle. We already know the move that apply_battle chose
+                        'so we are going to directly call poke_calc.apply_damage()
+                        REM first we need to determine that f_pokemon is the same as first_pokemon: check if same team
+                        If f_pokemon.Team = first_pokemon.Team Then
+                            REM check for confusion. The reason we are wrapping checking confusion around apply_damage is because
+                            REM apply_battle() determines confusion. So we do not want to calculate confusion two times.
+                            If poke_calc.apply_confusion(f_pokemon, poke_calc) = False Then
+                                poke_calc.apply_damage(f_pokemon, turn_queue.Peek(), movetouse_first, poke_calc, max_or_min)
+                            End If
+                        Else
+                            REM we need to carry through apply_battle in order to let the function select the best move for us
+                            'apply_battle(f_pokemon, turn_queue.Peek(), poke_calc, arena) REM causing a potential infinite loop
+                            poke_calc.apply_damage(f_pokemon, turn_queue.Peek(), movetouse_second, poke_calc, max_or_min)
+                        End If
+
+                    End If
+
+
+
+                End If
+
+            ElseIf turn_queue.Count = 1 Then
+                s_pokemon = turn_queue.Dequeue()
+                If poke_calc.apply_turnparalysis(s_pokemon) = False Then
+                    poke_calc.apply_statustopokemon_before(s_pokemon, arena)
+
+                    If Not s_pokemon.Status_Condition = Constants.StatusCondition.freeze And Not s_pokemon.Status_Condition = Constants.StatusCondition.sleep Then
+                        REM do the same thing as above
+                        If s_pokemon.Team = second_pokemon.Team Then
+                            'apply_battle(s_pokemon, f_pokemon, poke_calc, arena) REM possible infinite loop
+                            poke_calc.apply_damage(s_pokemon, f_pokemon, movetouse_second, poke_calc, max_or_min)
+                        Else
+                            If poke_calc.apply_confusion(s_pokemon, poke_calc) = False Then
+                                poke_calc.apply_damage(s_pokemon, f_pokemon, movetouse_first, poke_calc, max_or_min)
+                            End If
+                        End If
+                    End If
+
+                End If
+
+            End If
+
+        End While
+
+        If first_pokemon.HP <= 0 Then
+            If first_pokemon.Team = "blue" Then
+                Return "blue"
+            Else
+                Return "red"
+            End If
+        ElseIf second_pokemon.HP <= 0 Then
+            If second_pokemon.Team = "blue" Then
+                Return "blue"
+            Else
+                Return "red"
+            End If
+        Else
+            Return Nothing
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Orders the Pokemon according to speed. Prepares for the turn-based system of Pokemon
+    ''' </summary>
+    ''' <param name="first_pokemon">Pokemon A (order doesn't matter)</param>
+    ''' <param name="second_pokemon">Pokemon B (order doesn't matter)</param>
+    ''' <returns>A queue of pokemon ordered by their speeds.</returns>
+    ''' <remarks></remarks>
+    Public Function enqueue_Pokemon(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon) As Queue(Of Pokemon)
+        Dim turn_queue As New Queue(Of Pokemon)
+        If first_pokemon.SPD > second_pokemon.SPD Then
+            turn_queue.Enqueue(first_pokemon)
+            turn_queue.Enqueue(second_pokemon)
+        ElseIf first_pokemon.SPD < second_pokemon.SPD Then
+            turn_queue.Enqueue(second_pokemon)
+            turn_queue.Enqueue(first_pokemon)
+        Else
+            REM same speed
+            Dim value As Integer = Poke_Calculator.GenerateRandomNumber()
+            If value <= 50 Then
+                turn_queue.Enqueue(first_pokemon)
+                turn_queue.Enqueue(second_pokemon)
+            Else
+                turn_queue.Enqueue(second_pokemon)
+                turn_queue.Enqueue(first_pokemon)
+            End If
+        End If
+        Return turn_queue
     End Function
 
     ''' <summary>
@@ -528,11 +671,15 @@ Public Class Battle_Prediction : Implements Predict
     ''' <param name="second_pokemon">The defending Pokemon</param>
     ''' <param name="poke_calc"></param>
     ''' <param name="poke_arena">The arena with Pokemon</param>
+    ''' <param name="funct_id">OPTIONAL. The id of the calling function. Used to mitigate infinite loops.</param>
+    ''' <param name="movetouse_second">OPTIONAL. A pre-selected best move for second_pokemon. This may be known because a previous call to apply_battle 
+    ''' discovered this is the best move for second_pokemon. </param>
     ''' <remarks>
     ''' The pokemon will be damaged! Do not use this function for simulation purposes unless if you 
     ''' pass in clones of first_pokemon and second_pokemon. The function also only applies one battle.
     ''' </remarks>
-    Private Sub apply_battle(ByRef first_pokemon As Pokemon, ByRef second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator, ByVal poke_arena As Pokemon_Arena)
+    Private Sub apply_battle(ByRef first_pokemon As Pokemon, ByRef second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator, ByVal poke_arena As Pokemon_Arena,
+                             Optional ByVal funct_id As Integer = -1000, Optional ByVal movetouse_second As Move_Info = Nothing)
         Dim turn_poke_move_pack As New Prediction_Move_Package
         Dim turn_poke_move2_pack As New Prediction_Move_Package
         Dim turn_poke_move3_pack As New Prediction_Move_Package
@@ -593,7 +740,15 @@ Public Class Battle_Prediction : Implements Predict
                 REM we can apply a normal damaging move!
 
                 turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_normmove, 1, poke_arena.Clone())
-                turn_poke_move3_pack = Me.FindBestStatusMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone())
+                If funct_id = -1000 Then
+                    REM proceed normally
+                    turn_poke_move3_pack = Me.FindBestStatusMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone())
+                Else
+                    REM something is signaling us. Call the "overloaded" FindBestStatusMove(). This should initiate a chain reaction where the program computes the best status move
+                    REM in a different fashion.
+                    turn_poke_move3_pack = Me.FindBestStatusMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone(), funct_id, movetouse_second)
+                End If
+
                 turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, 1, poke_arena.Clone())
 
                 If turn_poke_move2_pack Is Nothing Then
@@ -1440,10 +1595,13 @@ Public Class Battle_Prediction : Implements Predict
     ''' <param name="poke_calc"></param>
     ''' <param name="movetouse">Move used by first_pokemon. This is a damaging move.</param>
     ''' <param name="max_or_min">Max(1) damage, Min(-1) damage, or Normal(0) damage</param>
+    ''' <param name="arena">The arena that contains the pokemon.</param>
+    ''' <param name="funct_id">OPTIONAL. The id of the function. Used to help mitigate any infinite loops.</param>
     ''' <returns>A Prediction_Move_Package containing the status move. Nothing if none found</returns>
     ''' <remarks>Confusion and paralysis algorithms are not yet refined. A future release should resolve this issue.</remarks>
     Public Function FindBestStatusMove(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
-                                     ByVal movetouse As Move_Info, ByVal max_or_min As Integer, ByVal arena As Pokemon_Arena) As Prediction_Move_Package
+                                     ByVal movetouse As Move_Info, ByVal max_or_min As Integer, ByVal arena As Pokemon_Arena,
+                                     Optional ByVal funct_id As Integer = -1000, Optional ByVal movetouse_second As Move_Info = Nothing) As Prediction_Move_Package
 
         Dim return_package As New Prediction_Move_Package
 
@@ -1519,32 +1677,62 @@ Public Class Battle_Prediction : Implements Predict
             ElseIf s_pokemon.Status_Condition = Constants.StatusCondition.paralyzed Then
                 REM since paralysis cannot be erased (aside from rest and other things) and it depends on random numbers
                 REM we will need to loop a few times to see the general projected result
-                Dim resulting_team As String = IterateParalysis(f_pokemon, s_pokemon, poke_calc, movetouse, max_or_min, arena, Constants.ACCURACY_HIGH)
-                If resulting_team IsNot Nothing Then
-                    If resulting_team = first_pokemon.Team Then
-                        REM IterateParalysis has helped us determine that we can beat the pokemon using this move
-                        REM ASSUMPTION: assume that paralysis is ALWAYS the better move to chooose
-                        return_package.Move = move_enum.Current
-                        return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's paralyzed
+
+                Dim resulting_team As String
+                If funct_id = -1000 Or Constants.stateof_iterationflag(funct_id) = -100 Or Constants.stateof_iterationflag(funct_id) = 0 Then
+                    REM proceed normally => either no function called, function doesn't exist in our dictionary, or the iteration flag is off
+                    resulting_team = IterateParalysis(f_pokemon, s_pokemon, poke_calc, movetouse, max_or_min, arena, Constants.ACCURACY_HIGH)
+                    If resulting_team IsNot Nothing Then
+                        If resulting_team = first_pokemon.Team Then
+                            REM IterateParalysis has helped us determine that we can beat the pokemon using this move
+                            REM ASSUMPTION: assume that paralysis is ALWAYS the better move to chooose
+                            return_package.Move = move_enum.Current
+                            return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's paralyzed
+                        End If
+                        REM if IterateParalysis determines that the opposite team beats first_pokemon...then no point in
+                        REM using this paralysis move
                     End If
-                    REM if IterateParalysis determines that the opposite team beats first_pokemon...then no point in
-                    REM using this paralysis move
+                Else
+                    REM someone is indicating that we need to avert an infinite loop.
+                    REM solution is to call an overloaded version of paralysis that does not keep on calling apply_battle()
+                    resulting_team = IterateParalysis(f_pokemon, s_pokemon, poke_calc, movetouse, movetouse_second, max_or_min, arena, Constants.ACCURACY_HIGH)
+                    If resulting_team IsNot Nothing Then
+                        If resulting_team = first_pokemon.Team Then
+                            return_package.Move = move_enum.Current
+                            return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's paralyzed
+                        End If
+                    End If
                 End If
+
 
             End If
 
             If s_pokemon.Status_Condition = Constants.StatusCondition.confused Then
-                Dim resulting_team As String = IterateConfusion(f_pokemon, s_pokemon, poke_calc, movetouse, max_or_min, arena, Constants.ACCURACY_HIGH)
-                If resulting_team IsNot Nothing Then
-                    If resulting_team = first_pokemon.Team Then
-                        return_package.Move = move_enum.Current
-                        return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's confused
+                Dim resulting_team As String
+                If funct_id = -1000 Or Constants.stateof_iterationflag(funct_id) = -100 Or Constants.stateof_iterationflag(funct_id) = 0 Then
+                    resulting_team = IterateConfusion(f_pokemon, s_pokemon, poke_calc, movetouse, max_or_min, arena, Constants.ACCURACY_HIGH)
+                    If resulting_team IsNot Nothing Then
+                        If resulting_team = first_pokemon.Team Then
+                            return_package.Move = move_enum.Current
+                            return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's confused
 
-                        REM TODO: in a future release, there should be a way to know how many moves it took for
-                        REM s_pokemon to kill f_pokemon. The algorithms are there but it's creating the right function
-                        REM that returns that information
+                            REM TODO: in a future release, there should be a way to know how many moves it took for
+                            REM s_pokemon to kill f_pokemon. The algorithms are there but it's creating the right function
+                            REM that returns that information
+                        End If
+                    End If
+                Else
+                    REM someone is indicating that we need to avert an infinite loop.
+                    REM solution is to call an overloaded version of confusion that does not keep on calling apply_battle()
+                    resulting_team = IterateConfusion(f_pokemon, s_pokemon, poke_calc, movetouse, movetouse_second, max_or_min, arena, Constants.ACCURACY_HIGH)
+                    If resulting_team IsNot Nothing Then
+                        If resulting_team = first_pokemon.Team Then
+                            return_package.Move = move_enum.Current
+                            return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's paralyzed
+                        End If
                     End If
                 End If
+                
             End If
 
 
@@ -1620,13 +1808,50 @@ Public Class Battle_Prediction : Implements Predict
     End Function
 
     Private Function Iterate(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
-                                     ByVal movetouse As Move_Info, ByVal max_or_min As Integer, ByVal arena As Pokemon_Arena, ByVal iterations As Integer) As String
+                                     ByVal movetouse As Move_Info, ByVal max_or_min As Integer, ByVal arena As Pokemon_Arena, ByVal iterations As Integer,
+                                     ByVal funct_id As Integer) As String
         Dim results As New Dictionary(Of String, Integer)
         results.Add("blue", 0)
         results.Add("red", 0)
 
         For i As Integer = 0 To iterations - 1 Step 1
-            Dim winning_party As String = predict_battle(first_pokemon.Clone(), movetouse, second_pokemon.Clone(), arena.Clone(), poke_calc, max_or_min)
+            REM we must pass in the ID of the function that called this one. This is to alert all the functions that predict_battle() calls
+            REM that they must avert any infinite loops
+            Dim winning_party As String = predict_battle(first_pokemon.Clone(), movetouse, second_pokemon.Clone(), arena.Clone(), poke_calc, max_or_min, funct_id)
+            Dim value As Integer = 0
+            If results.TryGetValue(winning_party, value) Then
+                results.Item(winning_party) = value + 1
+            Else
+                results.Add(winning_party, 1)
+            End If
+        Next
+
+        Dim blue_value As Integer
+        Dim red_value As Integer
+        If results.TryGetValue("blue", blue_value) Then
+            If results.TryGetValue("red", red_value) Then
+                If blue_value > red_value Then
+                    Return "blue"
+                Else
+                    Return "red"
+                End If
+            Else
+                Return "blue" REM assume that blue won...not the best decision though...
+            End If
+        Else
+            Return Nothing
+        End If
+    End Function
+
+    Private Function Iterate(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
+                                     ByVal movetouse_first As Move_Info, ByVal movetouse_second As Move_Info, ByVal max_or_min As Integer,
+                                     ByVal arena As Pokemon_Arena, ByVal iterations As Integer) As String
+        Dim results As New Dictionary(Of String, Integer)
+        results.Add("blue", 0)
+        results.Add("red", 0)
+
+        For i As Integer = 0 To iterations - 1 Step 1
+            Dim winning_party As String = predict_battle(first_pokemon.Clone(), movetouse_first, second_pokemon.Clone(), movetouse_second, arena.Clone(), poke_calc, max_or_min)
             Dim value As Integer = 0
             If results.TryGetValue(winning_party, value) Then
                 results.Item(winning_party) = value + 1
@@ -1654,6 +1879,7 @@ Public Class Battle_Prediction : Implements Predict
 
     ''' <summary>
     ''' Finds the winning party if second_pokemon is paralyzed.
+    ''' You may have to worry about a possible infinite loop. However, the function should handle this concern.
     ''' </summary>
     ''' <param name="first_pokemon">The pokemon currently evaluating the move.</param>
     ''' <param name="second_pokemon">It is advised that this pokemon is the paralyzed Pokemon.</param>
@@ -1666,15 +1892,58 @@ Public Class Battle_Prediction : Implements Predict
     ''' <remarks></remarks>
     Public Function IterateParalysis(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
                                      ByVal movetouse As Move_Info, ByVal max_or_min As Integer, ByVal arena As Pokemon_Arena, ByVal iterations As Integer) As String
-
-        Return Iterate(first_pokemon, second_pokemon, poke_calc, movetouse, max_or_min, arena, iterations)
+        REM to prevent any infinite loops, we will activate a signal
+        Constants.turnon_iterationflag(Constants.Funct_IDs.IterateParalysis)
+        Return Iterate(first_pokemon, second_pokemon, poke_calc, movetouse, max_or_min, arena, iterations, Constants.Funct_IDs.IterateParalysis)
+        Constants.turnoff_iterationflag(Constants.Funct_IDs.IterateParalysis)
     End Function
 
+    ''' <summary>
+    ''' Finds the winning party. First_ or second_pokemon can be paralyzed.
+    ''' Unlike its counterpart, you can safely call this function without worrying about infinite loops.
+    ''' </summary>
+    ''' <param name="first_pokemon">Generally, the pokemon that is trying to see if it can beat second_pokemon. Can be paralyzed.</param>
+    ''' <param name="second_pokemon">Can be paralyzed.</param>
+    ''' <param name="poke_calc"></param>
+    ''' <param name="movetouse_first">The best move first_pokemon can use.</param>
+    ''' <param name="movetouse_second">The best move second_pokemon can use.</param>
+    ''' <param name="max_or_min">Max(1) damage, Min(-1) damage, and Norm(0) damage</param>
+    ''' <param name="arena">Arena that contains these pokemon.</param>
+    ''' <param name="iterations">The number of iterations to perform (or the accuracy of the iteration).</param>
+    ''' <returns>A string containing "red" or "blue."</returns>
+    ''' <remarks>You don't necessarily need to pass in clones.</remarks>
+    Public Function IterateParalysis(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
+                                     ByVal movetouse_first As Move_Info, ByVal movetouse_second As Move_Info, ByVal max_or_min As Integer, ByVal arena As Pokemon_Arena, ByVal iterations As Integer) As String
+        Return Iterate(first_pokemon, second_pokemon, poke_calc, movetouse_first, movetouse_second, max_or_min, arena, iterations)
+    End Function
 
+    ''' <summary>
+    ''' Finds the winning party if second_pokemon is confused.
+    ''' You may have to worry about a possible infinite loop. However, the function should handle this concern.
+    ''' </summary>
+    ''' <param name="first_pokemon">Pokemon A</param>
+    ''' <param name="second_pokemon">The pokemon that is confused.</param>
+    ''' <param name="poke_calc"></param>
+    ''' <param name="movetouse">The best move for first_pokemon.</param>
+    ''' <param name="max_or_min">Max(1) damage, Min(-1) damage, or Norm(0) damage.</param>
+    ''' <param name="arena">The arena that contains the pokemon.</param>
+    ''' <param name="iterations">The number of iterations to perform (or the accuracy of the iteration).</param>
+    ''' <returns>A string "red" or "blue" indicating the winning team.</returns>
+    ''' <remarks>
+    ''' It is not necessary to pass in clones. It has the same functionality as IterateParalysis. This
+    ''' This is just a wrapper function to help users "feel" that they are calling a different function.
+    ''' </remarks>
     Public Function IterateConfusion(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
                                      ByVal movetouse As Move_Info, ByVal max_or_min As Integer, ByVal arena As Pokemon_Arena, ByVal iterations As Integer) As String
+        Constants.turnon_iterationflag(Constants.Funct_IDs.IterateConfusion)
+        Return Iterate(first_pokemon, second_pokemon, poke_calc, movetouse, max_or_min, arena, iterations, Constants.Funct_IDs.IterateConfusion)
+        Constants.turnon_iterationflag(Constants.Funct_IDs.IterateConfusion)
+    End Function
 
-        Return Iterate(first_pokemon, second_pokemon, poke_calc, movetouse, max_or_min, arena, iterations)
+    Public Function IterateConfusion(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
+                                     ByVal movetouse_first As Move_Info, ByVal movetouse_second As Move_Info, ByVal max_or_min As Integer, ByVal arena As Pokemon_Arena, ByVal iterations As Integer) As String
+
+        Return Iterate(first_pokemon, second_pokemon, poke_calc, movetouse_first, movetouse_second, max_or_min, arena, iterations)
     End Function
 
 End Class

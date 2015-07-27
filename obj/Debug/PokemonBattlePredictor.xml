@@ -26,7 +26,7 @@ PokemonBattlePredictor
 	<returns>The winning party</returns>
 	<remarks>Only handles the turn mechanics. This function does not know how to calculate damage or which
  Pokemon is better</remarks>
-</member><member name="M:PokemonBattlePredictor.Battle_Prediction.predict_battle(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon_Arena,PokemonBattlePredictor.Poke_Calculator,System.Int32)">
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.predict_battle(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon_Arena,PokemonBattlePredictor.Poke_Calculator,System.Int32,System.Int32)">
 	<summary>
  A lighter version of predict_battle. This function assumes that a best move has already been found and the user wants to 
  simulate the battle using movetouse. Possible uses for this function is: second_pokemon or first_pokemon is paralyzed and 
@@ -43,6 +43,31 @@ PokemonBattlePredictor
  This function assumes that both pokemon are from different teams. Pitting Pokemon that are
  from the same team results in unexpected behaviour.
  </remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.predict_battle(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info,PokemonBattlePredictor.Pokemon_Arena,PokemonBattlePredictor.Poke_Calculator,System.Int32)">
+	<summary>
+ An overloaded function. Predicts the winning Pokemon between first_ and second_pokemon. This function assumes that both Pokemon have
+ discovered their best move to use and will use that move throughout the battle.
+ </summary>
+	<param name="first_pokemon">Pokemon A</param>
+	<param name="movetouse_first">The move that first_pokemon believes is its best move.</param>
+	<param name="second_pokemon">Pokemon B</param>
+	<param name="movetouse_second">The move that second_pokemon believes is its best move.</param>
+	<param name="arena">The arena that contains first_ and second_pokemon.</param>
+	<param name="poke_calc"></param>
+	<param name="max_or_min">Max(1) damage, Min(-1) damage, and Norm(0) damage.</param>
+	<returns>A string "red" or "blue" of the winning team.</returns>
+	<remarks>
+ Unlike its counterpart, this function does not need to be alerted of a possible infinite loop
+ because it does not call any functions that could call apply_battle()
+ </remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.enqueue_Pokemon(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon)">
+	<summary>
+ Orders the Pokemon according to speed. Prepares for the turn-based system of Pokemon
+ </summary>
+	<param name="first_pokemon">Pokemon A (order doesn't matter)</param>
+	<param name="second_pokemon">Pokemon B (order doesn't matter)</param>
+	<returns>A queue of pokemon ordered by their speeds.</returns>
+	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Battle_Prediction.IsThereSuperEffectiveMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.EffectivenessTable)">
 	<summary>
  Finds all supereffective moves that attacking_pokemon can use
@@ -65,7 +90,7 @@ PokemonBattlePredictor
 	<param name="arena">The arena of pokemon. It is recommended to pass a clone.</param>
 	<returns>The number of turns until second_pokemon faints</returns>
 	<remarks>Non-damaging moves are not accepted. It is strongly encouraged to pass a clone into this function.</remarks>
-</member><member name="M:PokemonBattlePredictor.Battle_Prediction.apply_battle(PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Pokemon_Arena)">
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.apply_battle(PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Pokemon_Arena,System.Int32,PokemonBattlePredictor.Move_Info)">
 	<summary>
  Applys the battle logic for pokemon battles. Function chooses the best overall move for first_pokemon and applies it in battle.
  Function only applies one iteration of a battle, which means as soon as first_pokemon attacks second_pokemon, function will return.
@@ -75,6 +100,9 @@ PokemonBattlePredictor
 	<param name="second_pokemon">The defending Pokemon</param>
 	<param name="poke_calc"></param>
 	<param name="poke_arena">The arena with Pokemon</param>
+	<param name="funct_id">OPTIONAL. The id of the calling function. Used to mitigate infinite loops.</param>
+	<param name="movetouse_second">OPTIONAL. A pre-selected best move for second_pokemon. This may be known because a previous call to apply_battle 
+ discovered this is the best move for second_pokemon. </param>
 	<remarks>
  The pokemon will be damaged! Do not use this function for simulation purposes unless if you 
  pass in clones of first_pokemon and second_pokemon. The function also only applies one battle.
@@ -141,7 +169,7 @@ PokemonBattlePredictor
 	<returns>A package containing the best stat move for the first_pokemon to apply if the pokemon uses movetouse. Also
  returns the number of moves using that stat move will take to kill second_pokemon.</returns>
 	<remarks>Function should generally be called for offensive moves</remarks>
-</member><member name="M:PokemonBattlePredictor.Battle_Prediction.FindBestStatusMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Move_Info,System.Int32,PokemonBattlePredictor.Pokemon_Arena)">
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.FindBestStatusMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Move_Info,System.Int32,PokemonBattlePredictor.Pokemon_Arena,System.Int32,PokemonBattlePredictor.Move_Info)">
 	<summary>
  Finds the best status move to use for first_pokemon on second_pokemon. Status moves include: freezing, burning, sleep, poison, etc...
  The function finds the best status move according to movetouse.
@@ -151,6 +179,8 @@ PokemonBattlePredictor
 	<param name="poke_calc"></param>
 	<param name="movetouse">Move used by first_pokemon. This is a damaging move.</param>
 	<param name="max_or_min">Max(1) damage, Min(-1) damage, or Normal(0) damage</param>
+	<param name="arena">The arena that contains the pokemon.</param>
+	<param name="funct_id">OPTIONAL. The id of the function. Used to help mitigate any infinite loops.</param>
 	<returns>A Prediction_Move_Package containing the status move. Nothing if none found</returns>
 	<remarks>Confusion and paralysis algorithms are not yet refined. A future release should resolve this issue.</remarks>
 </member><member name="M:PokemonBattlePredictor.Battle_Prediction.FindBestStatusMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Pokemon_Arena)">
@@ -165,6 +195,7 @@ PokemonBattlePredictor
 </member><member name="M:PokemonBattlePredictor.Battle_Prediction.IterateParalysis(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Move_Info,System.Int32,PokemonBattlePredictor.Pokemon_Arena,System.Int32)">
 	<summary>
  Finds the winning party if second_pokemon is paralyzed.
+ You may have to worry about a possible infinite loop. However, the function should handle this concern.
  </summary>
 	<param name="first_pokemon">The pokemon currently evaluating the move.</param>
 	<param name="second_pokemon">It is advised that this pokemon is the paralyzed Pokemon.</param>
@@ -175,6 +206,38 @@ PokemonBattlePredictor
 	<param name="iterations">The number of iterations to test for paralysis.</param>
 	<returns>The winning team as a String.</returns>
 	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.IterateParalysis(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Move_Info,PokemonBattlePredictor.Move_Info,System.Int32,PokemonBattlePredictor.Pokemon_Arena,System.Int32)">
+	<summary>
+ Finds the winning party. First_ or second_pokemon can be paralyzed.
+ Unlike its counterpart, you can safely call this function without worrying about infinite loops.
+ </summary>
+	<param name="first_pokemon">Generally, the pokemon that is trying to see if it can beat second_pokemon. Can be paralyzed.</param>
+	<param name="second_pokemon">Can be paralyzed.</param>
+	<param name="poke_calc"></param>
+	<param name="movetouse_first">The best move first_pokemon can use.</param>
+	<param name="movetouse_second">The best move second_pokemon can use.</param>
+	<param name="max_or_min">Max(1) damage, Min(-1) damage, and Norm(0) damage</param>
+	<param name="arena">Arena that contains these pokemon.</param>
+	<param name="iterations">The number of iterations to perform (or the accuracy of the iteration).</param>
+	<returns>A string containing "red" or "blue."</returns>
+	<remarks>You don't necessarily need to pass in clones.</remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.IterateConfusion(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Move_Info,System.Int32,PokemonBattlePredictor.Pokemon_Arena,System.Int32)">
+	<summary>
+ Finds the winning party if second_pokemon is confused.
+ You may have to worry about a possible infinite loop. However, the function should handle this concern.
+ </summary>
+	<param name="first_pokemon">Pokemon A</param>
+	<param name="second_pokemon">The pokemon that is confused.</param>
+	<param name="poke_calc"></param>
+	<param name="movetouse">The best move for first_pokemon.</param>
+	<param name="max_or_min">Max(1) damage, Min(-1) damage, or Norm(0) damage.</param>
+	<param name="arena">The arena that contains the pokemon.</param>
+	<param name="iterations">The number of iterations to perform (or the accuracy of the iteration).</param>
+	<returns>A string "red" or "blue" indicating the winning team.</returns>
+	<remarks>
+ It is not necessary to pass in clones. It has the same functionality as IterateParalysis. This
+ This is just a wrapper function to help users "feel" that they are calling a different function.
+ </remarks>
 </member><member name="T:PokemonBattlePredictor.Prediction_Package">
 	<summary>
  A Package containing the winning team, the number of turns it took for the winner to win,
@@ -285,6 +348,15 @@ PokemonBattlePredictor
  </summary>
 	<param name="pokemon"></param>
 	<returns>The percentage value that the stage the pokemon is currently in.</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Constants.stateof_iterationflag(System.Int32)">
+	<summary>
+ Returns the state of the iteration flag for a function. -100 means that the function does not exist in the dictionary.
+ 1 -&gt; flag is on
+ 0 -&gt; flag is off
+ </summary>
+	<param name="funct_id"></param>
+	<returns>An integer specifying the state of the iteration flag.</returns>
 	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Constants.Get_FormattedString(System.String@)">
 	<summary>
