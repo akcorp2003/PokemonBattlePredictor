@@ -12,3 +12,5 @@ C:\Users\S06242\Documents\Visual Studio 2012\Projects\Visual Basic\PokemonBattle
 C:\Users\S06242\Documents\Visual Studio 2012\Projects\Visual Basic\PokemonBattlePredictor\PokemonBattlePredictor\obj\Debug\PokemonBattlePredictor.InsertPokemonFunct.resources
 C:\Users\S06242\Documents\Visual Studio 2012\Projects\Visual Basic\PokemonBattlePredictor\PokemonBattlePredictor\obj\Debug\PokemonBattlePredictor.Progress.resources
 C:\Users\S06242\Documents\Visual Studio 2012\Projects\Visual Basic\PokemonBattlePredictor\PokemonBattlePredictor\obj\Debug\PokemonBattlePredictor.test.resources
+C:\Users\S06242\Documents\Visual Studio 2012\Projects\Visual Basic\PokemonBattlePredictor\PokemonBattlePredictor\bin\Debug\DocX.dll
+C:\Users\S06242\Documents\Visual Studio 2012\Projects\Visual Basic\PokemonBattlePredictor\PokemonBattlePredictor\obj\Debug\PokemonBattlePredictor.vbprojResolveAssemblyReference.cache

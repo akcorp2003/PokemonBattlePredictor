@@ -47,8 +47,12 @@ Partial Class BattleSetup
         Me.ColumnHeader7 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ColumnHeader8 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.Worker_FetchMove = New System.ComponentModel.BackgroundWorker()
-        Me.Initiate_Build = New System.Windows.Forms.Button()
-        Me.Initiate_movebuild = New System.Windows.Forms.Button()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BuildPokemonDictionaryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BuildMoveDictionaryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BuildImageLibraryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Pokemon_Name
@@ -213,31 +217,45 @@ Partial Class BattleSetup
         '
         Me.ColumnHeader8.Text = "Ability"
         '
-        'Initiate_Build
+        'MenuStrip1
         '
-        Me.Initiate_Build.Location = New System.Drawing.Point(595, 27)
-        Me.Initiate_Build.Name = "Initiate_Build"
-        Me.Initiate_Build.Size = New System.Drawing.Size(155, 23)
-        Me.Initiate_Build.TabIndex = 14
-        Me.Initiate_Build.Text = "Build Pokemon Dictionary"
-        Me.Initiate_Build.UseVisualStyleBackColor = True
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolsToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(762, 24)
+        Me.MenuStrip1.TabIndex = 16
+        Me.MenuStrip1.Text = "MenuStrip1"
         '
-        'Initiate_movebuild
+        'ToolsToolStripMenuItem
         '
-        Me.Initiate_movebuild.Location = New System.Drawing.Point(595, 93)
-        Me.Initiate_movebuild.Name = "Initiate_movebuild"
-        Me.Initiate_movebuild.Size = New System.Drawing.Size(155, 23)
-        Me.Initiate_movebuild.TabIndex = 15
-        Me.Initiate_movebuild.Text = "Build Move Dictionary"
-        Me.Initiate_movebuild.UseVisualStyleBackColor = True
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.BuildPokemonDictionaryToolStripMenuItem, Me.BuildMoveDictionaryToolStripMenuItem, Me.BuildImageLibraryToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
+        Me.ToolsToolStripMenuItem.Text = "Tools"
+        '
+        'BuildPokemonDictionaryToolStripMenuItem
+        '
+        Me.BuildPokemonDictionaryToolStripMenuItem.Name = "BuildPokemonDictionaryToolStripMenuItem"
+        Me.BuildPokemonDictionaryToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.BuildPokemonDictionaryToolStripMenuItem.Text = "Build Pokemon Dictionary"
+        '
+        'BuildMoveDictionaryToolStripMenuItem
+        '
+        Me.BuildMoveDictionaryToolStripMenuItem.Name = "BuildMoveDictionaryToolStripMenuItem"
+        Me.BuildMoveDictionaryToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.BuildMoveDictionaryToolStripMenuItem.Text = "Build Move Dictionary"
+        '
+        'BuildImageLibraryToolStripMenuItem
+        '
+        Me.BuildImageLibraryToolStripMenuItem.Name = "BuildImageLibraryToolStripMenuItem"
+        Me.BuildImageLibraryToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
+        Me.BuildImageLibraryToolStripMenuItem.Text = "Build Image Library"
         '
         'BattleSetup
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(762, 626)
-        Me.Controls.Add(Me.Initiate_movebuild)
-        Me.Controls.Add(Me.Initiate_Build)
         Me.Controls.Add(Me.TeamRed_List)
         Me.Controls.Add(Me.TeamBlue_List)
         Me.Controls.Add(Me.Label3)
@@ -246,8 +264,12 @@ Partial Class BattleSetup
         Me.Controls.Add(Me.InsertPokemon)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Pokemon_Name)
+        Me.Controls.Add(Me.MenuStrip1)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "BattleSetup"
         Me.Text = "BattleSetup"
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -277,6 +299,9 @@ Partial Class BattleSetup
     Friend WithEvents ColumnHeader7 As System.Windows.Forms.ColumnHeader
     Friend WithEvents ColumnHeader8 As System.Windows.Forms.ColumnHeader
     Friend WithEvents Worker_FetchMove As System.ComponentModel.BackgroundWorker
-    Friend WithEvents Initiate_Build As System.Windows.Forms.Button
-    Friend WithEvents Initiate_movebuild As System.Windows.Forms.Button
+    Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
+    Friend WithEvents ToolsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents BuildPokemonDictionaryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents BuildMoveDictionaryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents BuildImageLibraryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class
