@@ -41,6 +41,7 @@
     Enum Funct_IDs
         IterateParalysis = 10
         IterateConfusion = 20
+        EvaluateGreenCase = 30
     End Enum
 
     Public Function Get_CriticalStageValue(ByVal stage As Integer) As Double
@@ -325,4 +326,5 @@
 
         Return ugly_string
     End Function
+
 End Module

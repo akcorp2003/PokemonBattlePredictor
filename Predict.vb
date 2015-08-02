@@ -31,8 +31,9 @@ Public Class Battle_Prediction : Implements Predict
 
         Dim winningparty As String = ""
 
+        Logger.Record("BEGIN BATTLE")
         winningparty = Me.predict_battle(my_pokemonarena)
-
+        Logger.Record("END BATTLE")
         Return winningparty
     End Function
 
@@ -122,6 +123,20 @@ Public Class Battle_Prediction : Implements Predict
                 If poke_calc.apply_turnparalysis(first_pokemon) = False Then
                     poke_calc.apply_statustopokemon_before(first_pokemon, battle_arena)
 
+                    If first_pokemon.Status_Condition = Constants.StatusCondition.freeze Then
+                        If Not Logger.isMute() Then
+                            Logger.Record("I")
+                            Logger.Record(first_pokemon.Name + " is frozen solid!")
+                        End If
+                    End If
+
+                    If first_pokemon.Status_Condition = Constants.StatusCondition.sleep Then
+                        If Not Logger.isMute() Then
+                            Logger.Record("I")
+                            Logger.Record(first_pokemon.Name + " is fast asleep...")
+                        End If
+                    End If
+
                     If Not first_pokemon.Status_Condition = Constants.StatusCondition.freeze And Not first_pokemon.Status_Condition = Constants.StatusCondition.sleep Then
                         'For the curious folks, confusion is applied in apply_battle()
                         Me.apply_battle(first_pokemon, turn_queue.Peek(), poke_calc, battle_arena) 'THE IMPORTANT FUNCTION!!!
@@ -129,17 +144,27 @@ Public Class Battle_Prediction : Implements Predict
 
                 End If
 
-
                 If battle_arena.Current_Attacker = "blue" Then
                     REM check if red has fainted
                     If battle_arena.CurrentBattlingRed.First.HP <= 0 Then
+                        If Not Logger.isMute() Then
+                            Logger.Record("B")
+                            Logger.Record(battle_arena.CurrentBattlingRed.First.Name + " faints!!")
+                            Logger.Record("FAINT")
+                        End If
                         battle_arena.CurrentBattlingRed.Clear() REM remove red
                         battle_arena.Last_Fainted = "red"
                         turn_queue.Clear() REM empty and start fresh again since a new pokemon will be coming in
+
                     End If
                     battle_arena.Current_Attacker = "red"
                 Else
                     If battle_arena.CurrentBattlingBlue.First.HP <= 0 Then
+                        If Not Logger.isMute() Then
+                            Logger.Record("B")
+                            Logger.Record(battle_arena.CurrentBattlingBlue.First.Name + " faints!!")
+                            Logger.Record("FAINT")
+                        End If
                         battle_arena.CurrentBattlingBlue.Clear()
                         battle_arena.Last_Fainted = "blue"
                         turn_queue.Clear()
@@ -152,6 +177,20 @@ Public Class Battle_Prediction : Implements Predict
                 If poke_calc.apply_turnparalysis(turn_queue.Peek()) = False Then
                     poke_calc.apply_statustopokemon_before(turn_queue.Peek(), battle_arena)
 
+                    If second_pokemon.Status_Condition = Constants.StatusCondition.freeze Then
+                        If Not Logger.isMute() Then
+                            Logger.Record("I")
+                            Logger.Record(second_pokemon.Name + " is frozen solid!")
+                        End If
+                    End If
+
+                    If second_pokemon.Status_Condition = Constants.StatusCondition.sleep Then
+                        If Not Logger.isMute() Then
+                            Logger.Record("I")
+                            Logger.Record(second_pokemon.Name + " is fast asleep...")
+                        End If
+                    End If
+
                     If Not turn_queue.Peek().Status_Condition = Constants.StatusCondition.freeze And Not turn_queue.Peek().Status_Condition = Constants.StatusCondition.sleep Then
                         Me.apply_battle(turn_queue.Peek(), first_pokemon, poke_calc, battle_arena) 'THE IMPORTANT FUNCTION!!
                     End If
@@ -163,12 +202,22 @@ Public Class Battle_Prediction : Implements Predict
                 If battle_arena.Current_Attacker = "blue" Then
                     REM check if red has fainted
                     If battle_arena.CurrentBattlingRed.First.HP <= 0 Then
+                        If Not Logger.isMute() Then
+                            Logger.Record("B")
+                            Logger.Record(battle_arena.CurrentBattlingRed.First.Name + " faints!!")
+                            Logger.Record("FAINT")
+                        End If
                         battle_arena.CurrentBattlingRed.Clear() REM remove red
                         battle_arena.Last_Fainted = "red"
                     End If
                     battle_arena.Current_Attacker = "red"
                 Else
                     If battle_arena.CurrentBattlingBlue.First.HP <= 0 Then
+                        If Not Logger.isMute() Then
+                            Logger.Record("B")
+                            Logger.Record(battle_arena.CurrentBattlingBlue.First.Name + " faints!!")
+                            Logger.Record("FAINT")
+                        End If
                         battle_arena.CurrentBattlingBlue.Clear()
                         battle_arena.Last_Fainted = "blue"
                     End If
@@ -179,6 +228,7 @@ Public Class Battle_Prediction : Implements Predict
                 REM now statuses are applied after all pokemon have gone
                 poke_calc.apply_statustopokemon_after(first_pokemon, battle_arena)
                 poke_calc.apply_statustopokemon_after(second_pokemon, battle_arena)
+                Logger.Record("END CYCLE")
 
             Else
                 MessageBox.Show("Something went wrong in predict_battle(), specifically with the queue. Returning...", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -228,23 +278,6 @@ Public Class Battle_Prediction : Implements Predict
 
             REM check if we are on a new cycle and need to populate the queue
             If turn_queue.Count = 0 Then
-                'If first_pokemon.SPD > second_pokemon.SPD Then
-                '    turn_queue.Enqueue(first_pokemon)
-                '    turn_queue.Enqueue(second_pokemon)
-                'ElseIf first_pokemon.SPD < second_pokemon.SPD Then
-                '    turn_queue.Enqueue(second_pokemon)
-                '    turn_queue.Enqueue(first_pokemon)
-                'Else
-                '    REM same speed
-                '    Dim value As Integer = Poke_Calculator.GenerateRandomNumber()
-                '    If value <= 50 Then
-                '        turn_queue.Enqueue(first_pokemon)
-                '        turn_queue.Enqueue(second_pokemon)
-                '    Else
-                '        turn_queue.Enqueue(second_pokemon)
-                '        turn_queue.Enqueue(first_pokemon)
-                '    End If
-                'End If
                 turn_queue = enqueue_Pokemon(first_pokemon, second_pokemon)
             End If
 
@@ -480,13 +513,15 @@ Public Class Battle_Prediction : Implements Predict
         For i As Integer = 0 To nummoves_attacking - 1 Step 1
 
             For j As Integer = 1 To defend_numtypes Step 1
-                Dim effect_value As ULong
+                Dim effect_value As Double
                 effect_value = effectiveness_table.Effective_Type(my_attackenum.Current.Type, listoftypes(j - 1))
 
                 If effect_value = 2 Then
                     REM we found a super effective move
-                    movename = my_attackenum.Current.Name REM set the name of the move
-                    SEmoves.Add(my_attackenum.Current.Clone()) REM get a copy of that move
+                    If my_attackenum.Current.Power > 0 Then
+                        movename = my_attackenum.Current.Name REM set the name of the move
+                        SEmoves.Add(my_attackenum.Current.Clone()) REM get a copy of that move
+                    End If                  
 
                 End If
             Next
@@ -510,11 +545,11 @@ Public Class Battle_Prediction : Implements Predict
         For i As Integer = 0 To nummoves_attacking - 1 Step 1
 
             For j As Integer = 1 To defend_numtypes Step 1
-                Dim effect_value As ULong
+                Dim effect_value As Double
                 effect_value = effectiveness_table.Effective_Type(my_attackenum.Current.Type, listoftypes(j - 1))
 
                 REM we don't want any status moves hopping on board
-                If effect_value = 1 And my_attackenum.Current.Power > 0 Then
+                If effect_value = 1 And my_attackenum.Current.Power > 0 And my_attackenum.Current.PP > 0 Then
                     REM we found a normal effective move
                     'movename = my_attackenum.Current.Name REM set the name of the move
                     normMoves.Add(my_attackenum.Current.Clone()) REM get a copy of that move
@@ -540,10 +575,10 @@ Public Class Battle_Prediction : Implements Predict
         For i As Integer = 0 To nummoves_attacking - 1 Step 1
 
             For j As Integer = 1 To defend_numtypes Step 1
-                Dim effect_value As ULong
+                Dim effect_value As Double
                 effect_value = effectiveness_table.Effective_Type(my_attackenum.Current.Type, listoftypes(j - 1))
 
-                If effect_value = 1 Then
+                If effect_value = 0.5 And my_attackenum.Current.Power > 0 And my_attackenum.Current.PP > 0 Then
                     REM we found a not very effective move
                     'movename = my_attackenum.Current.Name REM set the name of the move
                     noteffective_Moves.Add(my_attackenum.Current.Clone()) REM get a copy of that move
@@ -569,10 +604,10 @@ Public Class Battle_Prediction : Implements Predict
         For i As Integer = 0 To nummoves_attacking - 1 Step 1
 
             For j As Integer = 1 To defend_numtypes Step 1
-                Dim effect_value As ULong
+                Dim effect_value As Double
                 effect_value = effectiveness_table.Effective_Type(my_attackenum.Current.Type, listoftypes(j - 1))
 
-                If effect_value = 0 Then
+                If effect_value = 0 And my_attackenum.Current.Power > 0 And my_attackenum.Current.PP > 0 Then
                     REM we found a not effective move
                     'movename = my_attackenum.Current.Name REM set the name of the move
                     noteffective_Moves.Add(my_attackenum.Current.Clone()) REM get a copy of that move
@@ -593,7 +628,7 @@ Public Class Battle_Prediction : Implements Predict
 
         While Not move_enum.Current Is Nothing
 
-            If move_enum.Current.Power = 0 Then
+            If move_enum.Current.Power = 0 And move_enum.Current.PP > 0 Then
                 If move_enum.Current.Effect.Contains("ATK") Or move_enum.Current.Effect.Contains("DEF") Or move_enum.Current.Effect.Contains("SPD") Or move_enum.Current.Effect.Contains("EVA") _
                     Or move_enum.Current.Effect.Contains("ACCU") Then
                     statmoves.Add(move_enum.Current)
@@ -705,9 +740,15 @@ Public Class Battle_Prediction : Implements Predict
         If Not isthere_SEmove.Count = 0 Then
             REM there exists a supereffective move we can use!
 
+            Logger.Set_Mute()
             turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_SEmove, 1, poke_arena.Clone())
             REM check out an available offensive stat move
             turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, 1, poke_arena.Clone())
+            If funct_id = -1000 Then
+                REM only open it for recording if the function is not an iteration function
+                Logger.Set_Recording()
+            End If
+
 
             If turn_poke_move2_pack Is Nothing Then
                 poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
@@ -739,6 +780,7 @@ Public Class Battle_Prediction : Implements Predict
             If Not isthere_normmove.Count = 0 Then
                 REM we can apply a normal damaging move!
 
+                Logger.Set_Mute()
                 turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_normmove, 1, poke_arena.Clone())
                 If funct_id = -1000 Then
                     REM proceed normally
@@ -750,6 +792,9 @@ Public Class Battle_Prediction : Implements Predict
                 End If
 
                 turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, 1, poke_arena.Clone())
+                If funct_id = -1000 Then
+                    Logger.Set_Recording()
+                End If
 
                 If turn_poke_move2_pack Is Nothing Then
                     If turn_poke_move3_pack Is Nothing OrElse turn_poke_move3_pack.Move Is Nothing Then
@@ -799,7 +844,7 @@ Public Class Battle_Prediction : Implements Predict
 
                 If oppo_health = "green" Then
                     REM choose a status/lower stat move
-                    evaluate_greencase(first_pokemon, second_pokemon, poke_calc, poke_arena, 1)
+                    evaluate_greencase(first_pokemon, second_pokemon, poke_calc, poke_arena, 1, funct_id)
 
                 Else
                     REM choose the best damaging move
@@ -807,12 +852,17 @@ Public Class Battle_Prediction : Implements Predict
                     isthere_noneffectivemove = Me.IsThereNotVeryEffectiveMoves(first_pokemon, second_pokemon, effectiveness_table)
                     If Not isthere_noneffectivemove.Count = 0 Then
 
+                        Logger.Set_Mute()
                         turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_noneffectivemove, 1, poke_arena.Clone())
+                        If funct_id = -1000 Then
+                            Logger.Set_Recording()
+                        End If
+
                         poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
 
                     Else
                         REM just go back to evaluating the green case
-                        evaluate_greencase(first_pokemon, second_pokemon, poke_calc, poke_arena, 1)
+                        evaluate_greencase(first_pokemon, second_pokemon, poke_calc, poke_arena, 1, funct_id)
                     End If
                 End If
 
@@ -832,7 +882,8 @@ Public Class Battle_Prediction : Implements Predict
     ''' If this function is called anywhere else aside from the area it is supposed to be used, undefined behaviour will occur.
     ''' </remarks>
     Private Sub evaluate_greencase(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator, ByVal poke_arena As Pokemon_Arena,
-                                   ByVal max_or_min As Integer)
+                                   ByVal max_or_min As Integer,
+                                   Optional ByVal funct_id As Integer = -1000)
         REM TODO: there should be a more complex way of evaluating this, such as looking at what type of status was chosen. Finish this in a future release
         Dim turn_poke_move3_pack As New Prediction_Move_Package
         Dim turn_poke_move2_pack As New Prediction_Move_Package
@@ -841,7 +892,7 @@ Public Class Battle_Prediction : Implements Predict
         REM first check out a status move
         turn_poke_move3_pack = Me.FindBestStatusMove(first_pokemon, second_pokemon, poke_calc, poke_arena)
         If turn_poke_move3_pack.Move IsNot Nothing Then
-            poke_calc.apply_moveeffect(first_pokemon, second_pokemon, turn_poke_move3_pack.Move)
+            poke_calc.apply_moveeffect(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, Constants.Funct_IDs.EvaluateGreenCase, funct_id)
         Else
             REM check out a stat-changing move
             turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, 1, 1)
@@ -865,6 +916,19 @@ Public Class Battle_Prediction : Implements Predict
                     If last_list.Count > 0 Then REM since this function can't be called anywhere else, this condition MUST be true at this point
                         REM just pick the first one
                         poke_calc.apply_damage(first_pokemon, second_pokemon, last_list(0), poke_calc, max_or_min)
+                    Else REM in case it isn't true...
+                        REM just apply any move since at this point, we have determined that there is absolutely no good move to use
+                        Dim rand As Integer = Poke_Calculator.GenerateRandomNumber()
+                        If rand <= 25 Then
+                            rand = 0
+                        ElseIf rand <= 50 AndAlso rand > 25 Then
+                            rand = 1
+                        ElseIf rand <= 75 AndAlso rand > 50 Then
+                            rand = 2
+                        ElseIf rand <= 100 AndAlso rand > 75 Then
+                            rand = 3
+                        End If
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(rand), poke_calc, max_or_min)
                     End If
                 End If
             End If
@@ -904,13 +968,13 @@ Public Class Battle_Prediction : Implements Predict
             new_turnstofaint = Me.Project_Battle(first_pokemon.Clone(), second_pokemon.Clone(), move_enum.Current, poke_calc, 1, arena)
 
             REM check to make sure the move is not a status move
-            If new_turnstofaint < turnstofaint And Not new_turnstofaint = -1 Then
+            If new_turnstofaint < turnstofaint And Not new_turnstofaint = -1 And move_enum.Current.PP > 0 Then
                 REM we have a new move in town
                 turnstofaint = new_turnstofaint
                 turn_poke_move = move_enum.Current
             ElseIf new_turnstofaint = turnstofaint Then
                 REM choose the higher power
-                If move_enum.Current.Power > turn_poke_move.Power Then
+                If move_enum.Current.Power > turn_poke_move.Power And move_enum.Current.PP > 0 Then
                     turn_poke_move = move_enum.Current
                 End If
             End If
@@ -1053,6 +1117,7 @@ Public Class Battle_Prediction : Implements Predict
         Dim listofstatmoves As List(Of Move_Info) = Me.IsThereStatMoves(first_pokemon)
         Dim move_pack As New Prediction_Move_Package
         Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = listofstatmoves.GetEnumerator()
         move_enum.MoveNext()
 
         If off_or_def = 1 Then
@@ -1189,14 +1254,16 @@ Public Class Battle_Prediction : Implements Predict
         move_enum.Dispose()
 
         If listofstatmoves.Count = 1 Then
-            move_pack.Move = listofstatmoves.First
+            If Not listofstatmoves.First.PP = 0 Then
+                move_pack.Move = listofstatmoves.First
+            End If
         Else
             Dim move_enum2 As New List(Of Move_Info).Enumerator
             move_enum2 = listofstatmoves.GetEnumerator()
             REM just go with PP, not the best idea. TODO: find a better method of doing this
             move_enum2.MoveNext()
             While Not move_enum2.Current Is Nothing
-                If move_enum2.Current.PP > move_pack.Move.PP Then
+                If move_enum2.Current.PP > move_pack.Move.PP And move_enum2.Current.PP > 0 Then
                     move_pack.Move = move_enum2.Current
                 End If
                 move_enum2.MoveNext()
@@ -1240,7 +1307,6 @@ Public Class Battle_Prediction : Implements Predict
         move_enum = listof_statmoves.GetEnumerator()
         move_enum.MoveNext()
         While Not move_enum.Current Is Nothing
-            'Dim effects As String() = movetouse.Effect.Split(New Char() {","c})
             REM search for an effect that has ATKU+...
             Dim effects As String() = move_enum.Current.Effect.Split(",")
             Dim i As Integer = 0

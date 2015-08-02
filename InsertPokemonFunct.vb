@@ -1,4 +1,7 @@
-﻿Public Class InsertPokemonFunct
+﻿Imports System
+Imports System.Drawing
+
+Public Class InsertPokemonFunct
 
     Private m_lastadded_pokemon As String
     Private m_finishadding As Boolean = False
@@ -14,8 +17,11 @@
             Return m_finishadding
         End Get
     End Property
-    
+
     Private Sub InsertPokemonFunct_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        BattleSetup.Hide()
+        Form1.Hide()
 
         Dim pokemon_name As String = BattleSetup.Pokemon_Name.Text
         pokemon_name = pokemon_name.Trim()
@@ -39,6 +45,13 @@
         Me.Move2.Text = ""
         Me.Move3.Text = ""
         Me.Move4.Text = ""
+
+        REM load the image
+        Dim base_path As String = "sprites\"
+        Dim full_path As String = base_path + Constants.Get_FormattedString(addingpokemon.Name) + ".bmp"
+        Dim sprite As New Bitmap(full_path)
+        SpriteBox.Image = sprite
+        SpriteBox.SizeMode = PictureBoxSizeMode.AutoSize
 
     End Sub
 
@@ -111,6 +124,8 @@
         Form1.Get_PokemonArena.Get_TeamBlue.Addto_Team(bluepokemon.Clone(), "blue")
         m_lastadded_pokemon = "blue"
         Me.Close()
+
+        Form1.Show()
     End Sub
 
     ''' <summary>
@@ -222,6 +237,12 @@
         Form1.Get_PokemonArena.Get_TeamRed.Addto_Team(redpokemon.Clone(), "red")
         m_lastadded_pokemon = "red"
         Me.Close()
+
+        Form1.Show()
     End Sub
 
+    Private Sub InsertPokemonFunct_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        BattleSetup.UpdateListView()
+        BattleSetup.Show()
+    End Sub
 End Class

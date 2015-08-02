@@ -1,6 +1,8 @@
-﻿Imports System
+﻿Imports Novacode
+Imports System
 Imports System.Net
 Imports System.IO
+Imports System.Drawing
 
 Public Class Form1
 
@@ -247,6 +249,22 @@ Public Class Form1
 
     End Function
 
+    Public Function RequestImage(ByVal uri As String) As Bitmap
+        Dim my_client As New WebClient
+        Dim poke_sprite As Bitmap
+        Try
+            poke_sprite = Bitmap.FromStream(New MemoryStream(my_client.DownloadData(uri)))
+        Catch ex As Exception
+            If uri.Contains("x-y") And Not uri.Contains("mega") Then REM currently, there are no mega sprites available... :(
+                MessageBox.Show("Something went wrong when trying to download the image from this uri: !!" + uri, "Oh no!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+
+            Return Nothing
+        End Try
+
+        Return poke_sprite
+    End Function
+
     ''' <summary>
     ''' This function will properly remove all unnecessary characters according to the design of this program.
     ''' </summary>
@@ -396,8 +414,52 @@ Public Class Form1
 
 
     Private Sub BattleButton_Click(sender As Object, e As EventArgs) Handles BattleButton.Click
-        BattleSetup.ShowDialog()
+        BattleSetup.Show()
+    End Sub
 
+    Public Sub LoadImages()
+        Dim base_path As String = "sprites/"
+        Dim filetype As String = ".bmp"
+
+        REM load the Blue Team photos
+        For i As Integer = 0 To battle_arena.Get_TeamBlue.Get_Team("blue").Count - 1 Step 1
+            Dim name As String = battle_arena.Get_TeamBlue.Get_Team("blue").Item(i).Name
+            Dim full_path As String = base_path + Constants.Get_FormattedString(name) + filetype
+            Dim sprite As New Bitmap(full_path)
+            If sprite IsNot Nothing Then
+                REM only display the first three pokemon's sprites
+                If i = 0 Then
+                    TeamBlue_1.Image = sprite
+                    TeamBlue_1.SizeMode = PictureBoxSizeMode.AutoSize
+                ElseIf i = 1 Then
+                    TeamBlue_2.Image = sprite
+                    TeamBlue_2.SizeMode = PictureBoxSizeMode.AutoSize
+                ElseIf i = 2 Then
+                    TeamBlue_3.Image = sprite
+                    TeamBlue_3.SizeMode = PictureBoxSizeMode.AutoSize
+                End If
+            End If
+        Next
+
+        REM load the Red Team photos
+        For i As Integer = 0 To battle_arena.Get_TeamRed.Get_Team("red").Count - 1 Step 1
+            Dim name As String = battle_arena.Get_TeamRed.Get_Team("red").Item(i).Name
+            Dim full_path As String = base_path + Constants.Get_FormattedString(name) + filetype
+            Dim sprite As New Bitmap(full_path)
+            If sprite IsNot Nothing Then
+                REM only display the first three pokemon's sprites
+                If i = 0 Then
+                    TeamRed_1.Image = sprite
+                    TeamRed_1.SizeMode = PictureBoxSizeMode.AutoSize
+                ElseIf i = 1 Then
+                    TeamRed_2.Image = sprite
+                    TeamRed_2.SizeMode = PictureBoxSizeMode.AutoSize
+                ElseIf i = 2 Then
+                    TeamRed_3.Image = sprite
+                    TeamRed_3.SizeMode = PictureBoxSizeMode.AutoSize
+                End If
+            End If
+        Next
     End Sub
 
     'Prediction algorithm begins here
@@ -405,12 +467,21 @@ Public Class Form1
         'Pass the Pokemon to true algorithm
         Dim predictor As New Battle_Prediction
         Dim winner As String = ""
+        'Just testing code
         Dim temp_battlearena As New Pokemon_Arena
         temp_battlearena = battle_arena.Clone()
-        temp_battlearena.Team_Blue.Get_Team("blue").Clear()
+        'end testing code
+
+        Logger.InitializeRecord()
         winner = predictor.predict_outcome(battle_arena)
-        Dim josh As Integer = 9
         MessageBox.Show("The winning party is: " & winner & ". ", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Logger.Record(winner + " is the winning team of this match!")
+        Dim toprint As Integer = MessageBox.Show("Would you like to see the battle record?", "Print?", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        If toprint = DialogResult.Yes Then
+            Dim logprinter As New Dex_Writer
+            logprinter.PrintLogger(temp_battlearena)
+            MessageBox.Show("The log is finished writing!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        End If
         REM clear out the arena
         battle_arena.Clear()
     End Sub

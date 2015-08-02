@@ -107,7 +107,7 @@ PokemonBattlePredictor
  The pokemon will be damaged! Do not use this function for simulation purposes unless if you 
  pass in clones of first_pokemon and second_pokemon. The function also only applies one battle.
  </remarks>
-</member><member name="M:PokemonBattlePredictor.Battle_Prediction.evaluate_greencase(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Pokemon_Arena,System.Int32)">
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.evaluate_greencase(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Pokemon_Arena,System.Int32,System.Int32)">
 	<summary>
  Chooses a status/lower stat move. STRONGLY SUGGESTED to be used to evaluate the case when the opposing pokemon has a green health.
  </summary>
@@ -289,7 +289,7 @@ PokemonBattlePredictor
 	<param name="poke_calc"></param>
 	<returns>A boolean value indicating whether the confused_pokemon hit itself or not.</returns>
 	<remarks></remarks>
-</member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_moveeffect(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info)">
+</member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_moveeffect(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info,System.Int32,System.Int32)">
 	<summary>
  Applies the effect for all status moves. The move can be damaging or non-damaging.
  </summary>
@@ -396,6 +396,12 @@ PokemonBattlePredictor
  </summary>
 	<param name="tomodify_string"></param>
 	<returns>A string with a hyphen and all lowercase except for the first one.</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Logger.Prepare_NextRecord">
+	<summary>
+ Return the last recording list information and 
+ </summary>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="P:PokemonBattlePredictor.Pokemon.Stage">
 	<summary>
@@ -519,7 +525,7 @@ PokemonBattlePredictor
  </summary>
 	<param name="Attacking_Type">No need to format it. Function will format it accordingly.</param>
 	<param name="Defending_Type">No need to format it. Function will format it accordingly.</param>
-	<returns>An unsigned long. 0 is no effect, 0.5 is not very effective, 1 is normal, 
+	<returns>A double. 0 is no effect, 0.5 is not very effective, 1 is normal, 
  2 is super effective, 100 is couldn't locate</returns>
 	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.EffectivenessTable.Effective_Type(System.String,System.Collections.Generic.List{System.String})">
@@ -528,7 +534,7 @@ PokemonBattlePredictor
  </summary>
 	<param name="Attacking_Type"></param>
 	<param name="Defending_Types">List of Strings of the types of the pokemon</param>
-	<returns>An ULong that indicates the effective type of the battle</returns>
+	<returns>A Double that indicates the effective type of the battle</returns>
 	<remarks></remarks>
 </member>
 </members>

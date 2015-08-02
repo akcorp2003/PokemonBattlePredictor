@@ -43,7 +43,7 @@
     ''' </summary>
     ''' <param name="Attacking_Type">No need to format it. Function will format it accordingly.</param>
     ''' <param name="Defending_Type">No need to format it. Function will format it accordingly.</param>
-    ''' <returns>An unsigned long. 0 is no effect, 0.5 is not very effective, 1 is normal, 
+    ''' <returns>A double. 0 is no effect, 0.5 is not very effective, 1 is normal, 
     ''' 2 is super effective, 100 is couldn't locate</returns>
     ''' <remarks></remarks>
     Public Function Effective_Type(ByVal Attacking_Type As String, ByVal Defending_Type As String) As Double
@@ -67,7 +67,7 @@
     ''' </summary>
     ''' <param name="Attacking_Type"></param>
     ''' <param name="Defending_Types">List of Strings of the types of the pokemon</param>
-    ''' <returns>An ULong that indicates the effective type of the battle</returns>
+    ''' <returns>A Double that indicates the effective type of the battle</returns>
     ''' <remarks></remarks>
     Public Function Effective_Type(ByVal Attacking_Type As String, ByVal Defending_Types As List(Of String)) As Double
         Dim EFF As Double = 1.0

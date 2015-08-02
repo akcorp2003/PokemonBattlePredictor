@@ -1,6 +1,8 @@
-﻿Imports System
+﻿Imports Novacode
+Imports System
 Imports System.Net
 Imports System.IO
+Imports System.Drawing
 Imports Microsoft.VisualBasic.FileIO.TextFieldParser
 
 Public Class Dex_Writer
@@ -266,6 +268,162 @@ Public Class Dex_Writer
         filewriter.Close()
     End Sub
 
+    Public Sub PrintLogger(ByVal arena As Pokemon_Arena)
+        Dim filename As String = "battlelog.docx"
+        Dim newfile As DocX = DocX.Create(filename)
+
+        Dim title_format As New Formatting
+
+        title_format.Bold = True
+        title_format.UnderlineColor = Color.Black
+        title_format.FontColor = Color.Black
+        title_format.FontFamily = New FontFamily("Calibri")
+        title_format.Size = 16.0
+        Dim titlepara As Paragraph = newfile.InsertParagraph("Complete Battle Log", False, title_format)
+        titlepara.Alignment = Alignment.center
+
+        Dim bluetableformat As Formatting = Get_TableHeadingFormat()
+        newfile.InsertParagraph("Team Blue", False, bluetableformat)
+
+        REM first print Pokemon information
+        REM Team Blue:
+        Dim blue_table As Table = newfile.AddTable(7, 4)
+        blue_table.Rows(0).Cells(0).Paragraphs.First().Append("Name")
+        blue_table.Rows(1).Cells(0).Paragraphs.First().Append("HP")
+        blue_table.Rows(2).Cells(0).Paragraphs.First().Append("ATK")
+        blue_table.Rows(3).Cells(0).Paragraphs.First().Append("DEF")
+        blue_table.Rows(4).Cells(0).Paragraphs.First().Append("SP.ATK")
+        blue_table.Rows(5).Cells(0).Paragraphs.First().Append("SP.DEF")
+        blue_table.Rows(6).Cells(0).Paragraphs.First().Append("SPEED")
+
+        For i As Integer = 0 To arena.Get_TeamBlue.Get_Team("blue").Count - 1 Step 1
+            Dim pokemon As Pokemon = arena.Get_TeamBlue.Get_Team("blue").Item(i)
+            blue_table.Rows(0).Cells(i + 1).Paragraphs.First().Append(pokemon.Name)
+            blue_table.Rows(1).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.HP))
+            blue_table.Rows(2).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.ATK))
+            blue_table.Rows(3).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.DEF))
+            blue_table.Rows(4).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.Sp_ATK))
+            blue_table.Rows(5).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.Sp_DEF))
+            blue_table.Rows(6).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.SPD))
+        Next
+        newfile.InsertTable(blue_table)
+
+        Dim redtableformat As Formatting = Get_TableHeadingFormat()
+        newfile.InsertParagraph("Team Red", False, redtableformat)
+        REM Team Red:
+        Dim red_table As Table = newfile.AddTable(7, 4)
+        red_table.Rows(0).Cells(0).Paragraphs.First().Append("Name")
+        red_table.Rows(1).Cells(0).Paragraphs.First().Append("HP")
+        red_table.Rows(2).Cells(0).Paragraphs.First().Append("ATK")
+        red_table.Rows(3).Cells(0).Paragraphs.First().Append("DEF")
+        red_table.Rows(4).Cells(0).Paragraphs.First().Append("SP.ATK")
+        red_table.Rows(5).Cells(0).Paragraphs.First().Append("SP.DEF")
+        red_table.Rows(6).Cells(0).Paragraphs.First().Append("SPEED")
+
+        For i As Integer = 0 To arena.Get_TeamRed.Get_Team("red").Count - 1 Step 1
+            Dim pokemon As Pokemon = arena.Get_TeamRed.Get_Team("red").Item(i)
+            red_table.Rows(0).Cells(i + 1).Paragraphs.First().Append(pokemon.Name)
+            red_table.Rows(1).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.HP))
+            red_table.Rows(2).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.ATK))
+            red_table.Rows(3).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.DEF))
+            red_table.Rows(4).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.Sp_ATK))
+            red_table.Rows(5).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.Sp_DEF))
+            red_table.Rows(6).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.SPD))
+        Next
+        newfile.InsertTable(red_table)
+        Dim my_format As Formatting = Get_NormalTextFormat()
+
+        newfile.InsertParagraph(Environment.NewLine, False, my_format)
+        For i As Integer = 0 To Logger.get_Log1().Count - 1 Step 1
+            If Logger.get_Log1.Item(i) = "BEGIN BATTLE" Then
+                my_format.UnderlineColor = Color.Black
+                Dim para As Paragraph = newfile.InsertParagraph("The battle begins!!", False, my_format)
+                para.Alignment = Alignment.center
+                Reset_Formatting(my_format)
+                Continue For
+            End If
+
+            If Logger.get_Log1.Item(i) = "END BATTLE" Then
+                newfile.InsertParagraph(Environment.NewLine, False, my_format)
+                Continue For
+            End If
+
+            If Logger.get_Log1.Item(i) = "FAINT" Then
+                newfile.InsertParagraph(Environment.NewLine, False, my_format)
+                Continue For
+            End If
+
+            If Logger.get_Log1().Item(i).Contains(";") Or Logger.get_Log1().Item(i).Length = 1 Then
+                Get_Formatting(Logger.get_Log1().Item(i), my_format)
+                newfile.InsertParagraph(Logger.get_Log1().Item(i + 1), False, my_format)
+                i += 1
+                Reset_Formatting(my_format)
+                Continue For
+            End If
+
+            If Logger.get_Log1().Item(i).Contains("END CYCLE") Then
+                newfile.InsertParagraph(Environment.NewLine, False, my_format)
+                Continue For
+            End If
+
+            If Logger.get_Log1().Item(i).Contains("winning") Then
+                my_format.Position = 36
+                If Logger.get_Log1().Item(i).Contains("red") Then
+                    my_format.FontColor = Color.Red
+                ElseIf Logger.get_Log1().Item(i).Contains("blue") Then
+                    my_format.FontColor = Color.Blue
+                End If
+                newfile.InsertParagraph(Logger.get_Log1().Item(i), False, my_format)
+                REM this should be the last line
+                Reset_Formatting(my_format)
+                Continue For
+            End If
+
+            REM write the line normally
+            newfile.InsertParagraph(Logger.get_Log1().Item(i), False, my_format)
+
+            Reset_Formatting(my_format)
+
+        Next
+
+        newfile.Save()
+
+    End Sub
+
+    Private Sub Get_Formatting(ByVal properties As String, ByVal format As Formatting)
+        Dim formatting As String() = properties.Split(";")
+        For i As Integer = 0 To formatting.Length - 1 Step 1
+            If formatting(i) = "B" Then
+                format.Bold = True
+            End If
+            If formatting(i) = "I" Then
+                format.Italic = True
+            End If
+        Next
+    End Sub
+
+    Private Sub Reset_Formatting(ByVal format As Formatting)
+        format.Bold = False
+        format.Italic = False
+        format.UnderlineColor = Color.White
+    End Sub
+
+    Private Function Get_TableHeadingFormat() As Formatting
+        Dim table_headerformat As New Formatting
+        table_headerformat.UnderlineColor = Color.Black
+        table_headerformat.Size = 12.0
+        table_headerformat.FontFamily = New FontFamily("Times New Roman")
+        table_headerformat.Position = 12
+        Return table_headerformat
+    End Function
+
+    Private Function Get_NormalTextFormat() As Formatting
+        Dim normaltext As New Formatting
+        normaltext.FontFamily = New FontFamily("Times New Roman")
+        normaltext.Size = 12.0
+        Return normaltext
+    End Function
+
 
 End Class
 
@@ -283,7 +441,7 @@ Public Class Dex_formatter
             filename_to_format = value
         End Set
     End Property
-   
+
 
     Public Sub Format_Dex(ByVal filename As String)
 
@@ -699,6 +857,73 @@ Public Class Dex_reader
 
         End While
         move_csv.Close()
+    End Sub
+
+    Public Sub Build_Sprites()
+        'Dim base_url As String = "http://pokeapi.co/"
+        'Dim full_url As String = base_url + "media/img/1383395659.12.png"
+        If Not My.Computer.FileSystem.DirectoryExists("sprites") Then
+            Try
+                My.Computer.FileSystem.CreateDirectory("sprites")
+            Catch ex As Exception
+                MessageBox.Show("Could not create directory for sprites!", "Oh no!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End Try
+        End If
+
+        Dim base_url_bw As String = "http://img.pokemondb.net/sprites/black-white/normal/"
+        Dim base_url_xy As String = "http://img.pokemondb.net/sprites/x-y/normal/"
+        Dim base_url_bw2 As String = "http://img.pokemondb.net/sprites/black-white-2/normal/"
+
+        Dim sprite As Bitmap
+        Dim poke_dict As Dictionary(Of String, Pokemon) = Form1.Get_PokemonDictionary.Get_Dictionary()
+        Dim dict_enum As New Dictionary(Of String, Pokemon).Enumerator
+        dict_enum = poke_dict.GetEnumerator()
+        dict_enum.MoveNext()
+
+        Dim i As Integer = 0
+        While i < poke_dict.Count
+
+            Dim pokemonname As String = Constants.Get_FormattedString(dict_enum.Current.Key)
+
+            REM the weird case of meowstic
+            If pokemonname = "meowstic-male" Or pokemonname = "meowstic-female" Then
+                If pokemonname = "meowstic-male" Then
+                    pokemonname = "meowstic"
+                Else
+                    pokemonname = "meowstic-f"
+                End If
+            End If
+
+            Dim full_url As String = base_url_bw + pokemonname + ".png"
+            If Not My.Computer.FileSystem.FileExists("sprites\" + pokemonname + ".bmp") Then
+                sprite = Form1.RequestImage(full_url)
+                If Not sprite Is Nothing Then
+                    sprite.Save("sprites/" + pokemonname + ".bmp", Imaging.ImageFormat.Bmp)
+                Else
+                    REM try black-white2 database
+                    Dim full_url3 As String = base_url_bw2 + pokemonname + ".png"
+                    sprite = Form1.RequestImage(full_url3)
+                    If Not sprite Is Nothing Then
+                        sprite.Save("sprites/" + pokemonname + ".bmp", Imaging.ImageFormat.Bmp)
+                    Else
+                        REM try x-y database as last resort
+                        Dim full_url2 As String = base_url_xy + pokemonname + ".png"
+                        sprite = Form1.RequestImage(full_url2)
+                        If Not sprite Is Nothing Then
+                            sprite.Save("sprites/" + pokemonname + ".bmp", Imaging.ImageFormat.Bmp)
+                        End If
+                    End If
+
+                End If
+            End If
+
+
+            i += 1
+            dict_enum.MoveNext()
+        End While
+
+
     End Sub
 
     Private Function Capitalizefirstletter(ByVal ugly_string As String) As String

@@ -77,10 +77,6 @@
     ''' <remarks></remarks>
     Public Sub apply_damage(ByRef attacker As Pokemon, ByRef defender As Pokemon, ByVal attack_move As Move_Info,
                             ByVal poke_calc As Poke_Calculator, ByVal max_or_min As Integer)
-        'REM first check if attacking_move is a damaging move. If not, this function cannot accept it.
-        'If attack_move.Power = 0 Then
-        '    Return
-        'End If
 
         Dim eff_table As New EffectivenessTable
         Dim damagevalue As Integer = 0
@@ -88,7 +84,37 @@
 
         EFF = eff_table.Effective_Type(attack_move.Type, defender.Types)
 
+        If Not Logger.isMute() Then
+            Logger.Record(attacker.Name + " uses " + attack_move.Name + " on " + defender.Name)           
+        End If
+
+        If Not attack_move.Accuracy = 0 OrElse Not attack_move.Accuracy = 100 Then
+            Dim chance As Integer = Poke_Calculator.GenerateRandomNumber()
+            If Not chance <= attack_move.Accuracy Then
+                REM the pokemon missed!!
+                If Not Logger.isMute() Then
+                    Logger.Record("I")
+                    Logger.Record(attacker.Name + " misses!")
+                End If
+                Return
+            End If
+        End If
+
+        If Not Logger.isMute() Then
+            If EFF = 2 Then
+                Logger.Record("I")
+                Logger.Record("It's super effective!")
+            ElseIf EFF = 0.5 Then
+                Logger.Record("I")
+                Logger.Record("It's not very effective...")
+            ElseIf EFF = 0 Then
+                Logger.Record("I")
+                Logger.Record("It has no effect...")
+            End If
+        End If
+
         Me.apply_moveeffect(attacker, defender, attack_move)
+
         damagevalue = Me.CalculateDamage(attacker, defender, attack_move, EFF, max_or_min)
 
         REM damage value differs depending on the status condition of the attacker
@@ -102,6 +128,23 @@
         REM apply the damage to the defending pokemon
         REM in the future we will apply the special damages such as burn, poison type
         defender.HP = defender.HP - damagevalue
+
+        Dim is_pressure As Boolean = False
+        For i As Integer = 0 To defender.Ability.Count - 1 Step 1
+            If Constants.Get_FormattedString(defender.Ability.Item(i).Name) = "pressure" Then
+                attack_move.PP -= 2
+                is_pressure = True
+                Exit For
+            End If
+        Next
+        If Not is_pressure Then
+            attack_move.PP -= 1
+        End If
+
+        If Not Logger.isMute() Then
+            Logger.Record("B")
+            Logger.Record(defender.Name + " loses " + Convert.ToString(damagevalue) + " in HP!")
+        End If
 
     End Sub
 
@@ -125,6 +168,9 @@
                 confusemove.Name = "confused"
                 Dim damage As Integer = poke_calc.CalculateDamage(confused_pokemon, confused_pokemon, confusemove, 1, 1)
                 confused_pokemon.HP -= damage
+                If Logger.isMute() = False Then
+                    Logger.Record(confused_pokemon.Name + " hit itself in confusion!!")
+                End If
             End If
         End If
         Return confuse_success
@@ -137,11 +183,32 @@
     ''' <param name="opponent_pokemon">The target pokemon (if the status applies to the opponent)</param>
     ''' <param name="move">The move used. Can be damaging or non-damaging.</param>
     ''' <remarks></remarks>
-    Public Sub apply_moveeffect(ByVal my_pokemon As Pokemon, ByVal opponent_pokemon As Pokemon, ByVal move As Move_Info)
+    Public Sub apply_moveeffect(ByVal my_pokemon As Pokemon, ByVal opponent_pokemon As Pokemon, ByVal move As Move_Info,
+                                Optional ByVal funct_id As Integer = -1000,
+                                Optional ByVal it_funct_id As Integer = -1000)
         Dim effectlist As String() = move.Effect.Split(",")
         If effectlist.Length = 0 Then
             Return
         End If
+
+        If funct_id = Constants.Funct_IDs.EvaluateGreenCase Then
+            If it_funct_id = -1000 Then
+                If Not Logger.isMute() Then
+                    Logger.Record(my_pokemon.Name + " uses " + move.Name + " on " + opponent_pokemon.Name + "!")
+                End If
+
+                REM if this function is calling it, we would need to check for the accuracy hit
+                If Not move.Accuracy = 0 OrElse Not move.Accuracy = 100 Then
+                    Dim chancehit As Integer = Poke_Calculator.GenerateRandomNumber()
+                    If Not chancehit <= move.Accuracy Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + " misses!")
+                        Return
+                    End If
+                End If
+            End If        
+        End If
+
 
         Dim chance As Integer
         Dim chance_success As Boolean = False
@@ -166,6 +233,10 @@
                 If effectlist(i).Contains("O") Then
                     If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
                         opponent_pokemon.Status_Condition = Constants.StatusCondition.sleep
+                        If Logger.isMute() = False Then
+                            Logger.Record("I")
+                            Logger.Record(opponent_pokemon.Name + " falls asleep!")
+                        End If
                     End If
                     REM else we do nothing since every pokemon can only have one status condition at a time
                 End If
@@ -173,35 +244,59 @@
                 If effectlist(i).Contains("O") Then
                     If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
                         opponent_pokemon.Status_Condition = Constants.StatusCondition.badly_poisoned
+                        If Logger.isMute() = False Then
+                            Logger.Record("I")
+                            Logger.Record(opponent_pokemon.Name + " becomes badly poisoned!")
+                        End If
                     End If
                 End If
             ElseIf effectlist(i).Contains("PSN") And chance_success = True Then
                 If effectlist(i).Contains("O") Then
                     If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
                         opponent_pokemon.Status_Condition = Constants.StatusCondition.poison
+                        If Logger.isMute() = False Then
+                            Logger.Record("I")
+                            Logger.Record(opponent_pokemon.Name + " becomes poisoned!")
+                        End If
                     End If
                 End If
             ElseIf effectlist(i).Contains("BRN") And chance_success = True Then
                 If effectlist(i).Contains("O") Then
                     If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
                         opponent_pokemon.Status_Condition = Constants.StatusCondition.burn
+                        If Logger.isMute() = False Then
+                            Logger.Record("I")
+                            Logger.Record(opponent_pokemon.Name + " becomes burned!")
+                        End If
                     End If
                 End If
             ElseIf effectlist(i).Contains("FRZ") And chance_success = True Then
                 If effectlist(i).Contains("O") Then
                     If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
                         opponent_pokemon.Status_Condition = Constants.StatusCondition.freeze
+                        If Logger.isMute() = False Then
+                            Logger.Record("I")
+                            Logger.Record(opponent_pokemon.Name + " becomes frozen!")
+                        End If
                     End If
                 End If
             ElseIf effectlist(i).Contains("PRLYZ") And chance_success = True Then
                 If effectlist(i).Contains("O") Then
                     If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
                         opponent_pokemon.Status_Condition = Constants.StatusCondition.paralyzed
+                        If Logger.isMute() = False Then
+                            Logger.Record("I")
+                            Logger.Record(opponent_pokemon.Name + " becomes paralyzed!")
+                        End If
                     End If
                 End If
             ElseIf effectlist(i).Contains("CONF") And chance_success = True Then
                 If effectlist(i).Contains("CONFO") Or effectlist(i).Contains("CONFchanceO") Then
                     opponent_pokemon.Other_Status_Condition = Constants.StatusCondition.confused
+                    If Logger.isMute() = False Then
+                        Logger.Record("I")
+                        Logger.Record(opponent_pokemon.Name + " becomes confused!")
+                    End If
                 End If
             End If
         Next
@@ -216,17 +311,36 @@
     ''' <remarks>This function does not know who the damage_move belongs to.</remarks>
     Public Sub apply_stattopokemon(ByVal my_pokemon As Pokemon, ByVal statchanging_move As Move_Info)
         Dim effects As String() = statchanging_move.Effect.Split(",")
+        If Not Logger.isMute() Then
+            Logger.Record(my_pokemon.Name + " uses " + statchanging_move.Name + "!")
+        End If
         Dim i As Integer = 0
         While i < effects.Length
             If effects(i).Contains("SPATK") Then
                 If effects(i).Contains("SPATKU+1") Or effects(i).Contains("SPATKO+1") Then
                     my_pokemon.SP_ATK_Boost += 1
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Special Attack rose!")
+                    End If
                 ElseIf effects(i).Contains("SPATKU+2") Or effects(i).Contains("SPATKO+2") Then
                     my_pokemon.SP_ATK_Boost += 2
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Special Attack sharply rose!")
+                    End If
                 ElseIf effects(i).Contains("SPATKU-1") Or effects(i).Contains("SPATKO-1") Then
                     my_pokemon.SP_ATK_Boost -= 1
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Special Attack fell!")
+                    End If
                 ElseIf effects(i).Contains("SPATKU-2") Or effects(i).Contains("SPATKO-2") Then
                     my_pokemon.SP_ATK_Boost -= 2
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Special Attack harshly fell!")
+                    End If
                 Else
                     Return REM don't do anything
 
@@ -236,12 +350,28 @@
             ElseIf effects(i).Contains("SPDEF") Then
                 If effects(i).Contains("SPDEFU+1") Or effects(i).Contains("SPDEFO+1") Then
                     my_pokemon.SP_DEF_Boost += 1
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Special Defense rose!")
+                    End If
                 ElseIf effects(i).Contains("SPDEFU+2") Or effects(i).Contains("SPDEFO+2") Then
                     my_pokemon.SP_DEF_Boost += 2
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Special Defense sharply rose!")
+                    End If
                 ElseIf effects(i).Contains("SPDEFU-1") Or effects(i).Contains("SPDEFO-1") Then
                     my_pokemon.SP_DEF_Boost -= 1
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Special Defense fell!")
+                    End If
                 ElseIf effects(i).Contains("SPDEFU-2") Or effects(i).Contains("SPDEFO-2") Then
                     my_pokemon.SP_DEF_Boost -= 2
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Special Defense harshly fell!")
+                    End If
                 Else
                     Return REM don't do anything
 
@@ -251,12 +381,28 @@
             ElseIf effects(i).Contains("ATK") Then
                 If effects(i).Contains("ATKU+1") Or effects(i).Contains("ATKO+1") Then
                     my_pokemon.ATK_Boost += 1
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Attack rose!")
+                    End If
                 ElseIf effects(i).Contains("ATKU+2") Or effects(i).Contains("ATKO+2") Then
                     my_pokemon.ATK_Boost += 2
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Attack rose!")
+                    End If
                 ElseIf effects(i).Contains("ATKU-1") Or effects(i).Contains("ATKO-1") Then
                     my_pokemon.ATK_Boost -= 1
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Attack fell!")
+                    End If
                 ElseIf effects(i).Contains("ATKU-2") Or effects(i).Contains("ATKO-2") Then
                     my_pokemon.ATK_Boost -= 2
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Attack harshly fell!")
+                    End If
                 Else
                     Return REM don't do anything
 
@@ -266,12 +412,28 @@
             ElseIf effects(i).Contains("DEF") Then
                 If effects(i).Contains("DEFU+1") Or effects(i).Contains("DEFO+1") Then
                     my_pokemon.DEF_Boost += 1
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Defense rose!")
+                    End If
                 ElseIf effects(i).Contains("DEFU+2") Or effects(i).Contains("DEFO+2") Then
                     my_pokemon.DEF_Boost += 2
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Defense sharply rose!")
+                    End If
                 ElseIf effects(i).Contains("DEFU-1") Or effects(i).Contains("DEFO-1") Then
                     my_pokemon.DEF_Boost -= 1
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Defense fell!")
+                    End If
                 ElseIf effects(i).Contains("DEFU-2") Or effects(i).Contains("DEFO-2") Then
                     my_pokemon.DEF_Boost -= 2
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Defense harshly fell!")
+                    End If
                 Else
                     Return REM don't do anything
                 End If
@@ -281,12 +443,28 @@
             ElseIf effects(i).Contains("SPD") Then
                 If effects(i).Contains("SPDU+1") Or effects(i).Contains("SPDO+1") Then
                     my_pokemon.SPEED_Boost += 1
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Speed rose!")
+                    End If
                 ElseIf effects(i).Contains("SPDU+2") Or effects(i).Contains("SPDO+2") Then
                     my_pokemon.SPEED_Boost += 2
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Speed sharply rose!")
+                    End If
                 ElseIf effects(i).Contains("SPDU-1") Or effects(i).Contains("SPDO-1") Then
                     my_pokemon.SPEED_Boost -= 1
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Speed fell!")
+                    End If
                 ElseIf effects(i).Contains("SPDU-2") Or effects(i).Contains("SPDO-2") Then
                     my_pokemon.SPEED_Boost -= 2
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Speed harshly fell!")
+                    End If
                 Else
                     Return REM don't do anything
 
@@ -335,12 +513,20 @@
         End If
 
         If the_pokemon.Status_Condition = Constants.StatusCondition.burn Then
-            the_pokemon.HP = the_pokemon.HP * (1 / 8)
+            the_pokemon.HP -= (the_pokemon.HP * (1 / 8))
+            If Not Logger.isMute() Then
+                Logger.Record("I")
+                Logger.Record(the_pokemon.Name + " loses health due to burn!")
+            End If
         ElseIf the_pokemon.Status_Condition = Constants.StatusCondition.poison Then
             REM query the database for the original HP of the pokemon
             Dim original_hp As Integer = Form1.Get_PokemonDictionary.Get_Pokemon(Constants.Get_FormattedString(the_pokemon.Name)).HP
             Dim damage As Integer = original_hp * 1 / 8
             the_pokemon.HP = the_pokemon.HP - damage
+            If Not Logger.isMute() Then
+                Logger.Record("I")
+                Logger.Record(the_pokemon.Name + " loses health due to its poisoning!")
+            End If
         ElseIf the_pokemon.Status_Condition = Constants.StatusCondition.badly_poisoned Then
             Dim total_damage As Double = 1 / 16
             If the_pokemon.Team = "blue" Then
@@ -354,7 +540,10 @@
                 Next
                 the_pokemon.HP -= total_damage
             End If
-
+            If Not Logger.isMute() Then
+                Logger.Record("I")
+                Logger.Record(the_pokemon.Name + " is losing more health due to its poisoning!!")
+            End If
         Else
             Return
         End If
@@ -374,11 +563,17 @@
             If the_pokemon.Team = "red" Then
                 If arena.Red_NumSleep > 3 Then
                     the_pokemon.Status_Condition = Constants.StatusCondition.none
+                    If Not Logger.isMute() Then
+                        Logger.Record(the_pokemon.Name + " woke up!")
+                    End If
                     Return
                 End If
             ElseIf the_pokemon.Team = "blue" Then
                 If arena.Blue_NumSleep > 3 Then
                     the_pokemon.Status_Condition = Constants.StatusCondition.none
+                    If Not Logger.isMute() Then
+                        Logger.Record(the_pokemon.Name + " woke up!")
+                    End If
                     Return
                 End If
             End If
@@ -387,12 +582,18 @@
             If random <= 33 AndAlso random >= 0 Then
                 REM pokemon has a 33% chance of waking up each turn
                 the_pokemon.Status_Condition = Constants.StatusCondition.none
+                If Not Logger.isMute() Then
+                    Logger.Record(the_pokemon.Name + " woke up!")
+                End If
             End If
         ElseIf the_pokemon.Status_Condition = Constants.StatusCondition.freeze Then
             Dim random As Integer = Poke_Calculator.GenerateRandomNumber()
             If random <= 20 AndAlso random >= 0 Then
                 REM the pokemon has a 20% chance of thawing
                 the_pokemon.Status_Condition = Constants.StatusCondition.none
+                If Not Logger.isMute() Then
+                    Logger.Record(the_pokemon.Name + " defrosted! It's no longer frozen!")
+                End If
             End If
         End If
     End Sub
@@ -410,6 +611,10 @@
         Dim random As Integer
         random = Poke_Calculator.GenerateRandomNumber()
         If random <= 25 AndAlso random >= 0 Then
+            If Logger.isMute() = False Then
+                Logger.Record("I")
+                Logger.Record(pokemon.Name + " is paralyzed! It can't move!")
+            End If          
             Return True
         Else
             Return False

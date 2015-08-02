@@ -281,19 +281,23 @@ Public Class Pokemon_Arena
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub ManageTurns()
-        If Me.CurrentBattlingBlue.First.Status_Condition = Constants.StatusCondition.badly_poisoned Then
-            Me.IncreaseNumBadPoison_Blue()
+        If Not Me.CurrentBattlingBlue.Count = 0 Then
+            If Me.CurrentBattlingBlue.First.Status_Condition = Constants.StatusCondition.badly_poisoned Then
+                Me.IncreaseNumBadPoison_Blue()
+            End If
+            If Me.CurrentBattlingBlue.First.Status_Condition = Constants.StatusCondition.sleep Then
+                Me.IncreaseNumSleep_Blue()
+            End If
         End If
-        If Me.CurrentBattlingRed.First.Status_Condition = Constants.StatusCondition.badly_poisoned Then
-            Me.IncreaseNumBadPoison_Red()
+        If Not Me.CurrentBattlingRed.Count = 0 Then
+            If Me.CurrentBattlingRed.First.Status_Condition = Constants.StatusCondition.badly_poisoned Then
+                Me.IncreaseNumBadPoison_Red()
+            End If
+            If Me.CurrentBattlingRed.First.Status_Condition = Constants.StatusCondition.sleep Then
+                Me.IncreaseNumSleep_Red()
+            End If
         End If
-
-        If Me.CurrentBattlingBlue.First.Status_Condition = Constants.StatusCondition.sleep Then
-            Me.IncreaseNumSleep_Blue()
-        End If
-        If Me.CurrentBattlingRed.First.Status_Condition = Constants.StatusCondition.sleep Then
-            Me.IncreaseNumSleep_Red()
-        End If
+        
     End Sub
 
     Public Sub Clear()
