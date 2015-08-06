@@ -64,6 +64,9 @@ Public Class InsertPokemonFunct
         Dim move3 As New Move_Info
         Dim move4 As New Move_Info
 
+        Dim continue_flag As Boolean = True
+        Dim empty_flag As Boolean = False
+
         bluepokemon = Form1.Get_PokemonDictionary().Get_Pokemon(Me.Pokemon_Name.Text).Clone()
 
         REM Update the values with the user's values
@@ -100,32 +103,78 @@ Public Class InsertPokemonFunct
 
         If move1 Is Nothing Then
             MessageBox.Show("Couldn't find the move " & Me.Move1.Text & ".", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            continue_flag = False
         Else
-            bluepokemon.Moves_For_Battle.Add(move1)
+            If Not move1.Name = "" Then
+                bluepokemon.Moves_For_Battle.Add(move1)
+            End If
         End If
         If move2 Is Nothing Then
             MessageBox.Show("Couldn't find the move " & Me.Move2.Text & ".", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            continue_flag = False
         Else
-            bluepokemon.Moves_For_Battle.Add(move2)
+            If Not move2.Name = "" Then
+                bluepokemon.Moves_For_Battle.Add(move2)
+            End If
         End If
 
         If move3 Is Nothing Then
             MessageBox.Show("Couldn't find the move " & Me.Move3.Text & ".", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            continue_flag = False
         Else
-            bluepokemon.Moves_For_Battle.Add(move3)
+            If Not move3.Name = "" Then
+                bluepokemon.Moves_For_Battle.Add(move3)
+            End If
         End If
 
         If move4 Is Nothing Then
             MessageBox.Show("Couldn't find the move " & Me.Move4.Text & ".", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            continue_flag = False
         Else
-            bluepokemon.Moves_For_Battle.Add(move4)
+            If Not move4.Name = "" Then
+                bluepokemon.Moves_For_Battle.Add(move4)
+            End If
         End If
 
-        Form1.Get_PokemonArena.Get_TeamBlue.Addto_Team(bluepokemon.Clone(), "blue")
-        m_lastadded_pokemon = "blue"
-        Me.Close()
+        If ((Not move1 Is Nothing) AndAlso move1.Name = "") OrElse ((Not move2 Is Nothing) AndAlso move2.Name = "") _
+            OrElse ((Not move3 Is Nothing) AndAlso move3.Name = "") OrElse ((Not move4 Is Nothing) AndAlso move4.Name = "") Then
 
-        Form1.Show()
+            empty_flag = True
+            Dim response As DialogResult = MessageBox.Show("You have an empty move. Do you wish to add the pokemon to the team or go back and add some moves?",
+                                                           "Missing", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If response = Windows.Forms.DialogResult.No Then
+                Form1.Get_PokemonArena.Get_TeamBlue.Addto_Team(bluepokemon.Clone(), "blue")
+                m_lastadded_pokemon = "blue"
+                Me.Close()
+
+                Form1.Show()
+                Return
+            End If
+        End If
+
+        If Not empty_flag Then
+            If Not continue_flag Then
+                Dim response As DialogResult = MessageBox.Show("There were some errors in your Pokemon's moves. Would you like to go back and edit them? If not, we will not include those moves in the prediction.",
+                                                               "Could not find moves", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                If response = Windows.Forms.DialogResult.No Then
+                    Form1.Get_PokemonArena.Get_TeamBlue.Addto_Team(bluepokemon.Clone(), "blue")
+                    m_lastadded_pokemon = "blue"
+                    Me.Close()
+
+                    Form1.Show()
+                    Return
+                End If
+            Else
+                Form1.Get_PokemonArena.Get_TeamBlue.Addto_Team(bluepokemon.Clone(), "blue")
+                m_lastadded_pokemon = "blue"
+                Me.Close()
+
+                Form1.Show()
+                Return
+            End If
+        End If
+        
+        
     End Sub
 
     ''' <summary>
@@ -177,6 +226,9 @@ Public Class InsertPokemonFunct
         Dim move3 As New Move_Info
         Dim move4 As New Move_Info
 
+        Dim continue_flag As Boolean = True
+        Dim empty_flag As Boolean = False
+
         redpokemon = Form1.Get_PokemonDictionary().Get_Pokemon(Me.Pokemon_Name.Text)
 
         REM Update the values with the user's values
@@ -213,36 +265,83 @@ Public Class InsertPokemonFunct
 
         If move1 Is Nothing Then
             MessageBox.Show("Couldn't find the move " & Me.Move1.Text & ".", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            continue_flag = False
         Else
-            redpokemon.Moves_For_Battle.Add(move1)
+            If Not move1.Name = "" Then
+                redpokemon.Moves_For_Battle.Add(move1)
+            End If
         End If
         If move2 Is Nothing Then
             MessageBox.Show("Couldn't find the move " & Me.Move2.Text & ".", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            continue_flag = False
         Else
-            redpokemon.Moves_For_Battle.Add(move2)
+            If Not move2.Name = "" Then
+                redpokemon.Moves_For_Battle.Add(move2)
+            End If
         End If
 
         If move3 Is Nothing Then
             MessageBox.Show("Couldn't find the move " & Me.Move3.Text & ".", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            continue_flag = False
         Else
-            redpokemon.Moves_For_Battle.Add(move3)
+            If Not move3.Name = "" Then
+                redpokemon.Moves_For_Battle.Add(move3)
+            End If
         End If
 
         If move4 Is Nothing Then
             MessageBox.Show("Couldn't find the move " & Me.Move4.Text & ".", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            continue_flag = False
         Else
-            redpokemon.Moves_For_Battle.Add(move4)
+            If Not move4.Name = "" Then
+                redpokemon.Moves_For_Battle.Add(move4)
+            End If
         End If
 
-        Form1.Get_PokemonArena.Get_TeamRed.Addto_Team(redpokemon.Clone(), "red")
-        m_lastadded_pokemon = "red"
-        Me.Close()
+        If ((Not move1 Is Nothing) AndAlso move1.Name = "") OrElse ((Not move2 Is Nothing) AndAlso move2.Name = "") _
+            OrElse ((Not move3 Is Nothing) AndAlso move3.Name = "") OrElse ((Not move4 Is Nothing) AndAlso move4.Name = "") Then
 
-        Form1.Show()
+            empty_flag = False
+            Dim response As DialogResult = MessageBox.Show("You have an empty move. Do you wish to add the pokemon to the team or go back and add some moves?",
+                                                           "Missing", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If response = Windows.Forms.DialogResult.No Then
+                Form1.Get_PokemonArena.Get_TeamRed.Addto_Team(redpokemon.Clone(), "red")
+                m_lastadded_pokemon = "red"
+                Me.Close()
+
+                Form1.Show()
+                Return
+            End If
+        End If
+
+        If Not empty_flag Then
+            If Not continue_flag Then
+                Dim response As DialogResult = MessageBox.Show("There were some errors in your Pokemon's moves. Would you like to go back and edit them? If not, we will not include those moves in the prediction.",
+                                                               "Could not find moves", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                If response = Windows.Forms.DialogResult.No Then
+                    Form1.Get_PokemonArena.Get_TeamRed.Addto_Team(redpokemon.Clone(), "red")
+                    m_lastadded_pokemon = "red"
+                    Me.Close()
+
+                    Form1.Show()
+                    Return
+                End If
+            Else
+                Form1.Get_PokemonArena.Get_TeamRed.Addto_Team(redpokemon.Clone(), "red")
+                m_lastadded_pokemon = "red"
+                Me.Close()
+
+                Form1.Show()
+            End If
+        End If
+
+
+
     End Sub
 
-    Private Sub InsertPokemonFunct_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+    Private Sub InsertPokemonFunct_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
         BattleSetup.UpdateListView()
         BattleSetup.Show()
+        BattleSetup.BringToFront()
     End Sub
 End Class

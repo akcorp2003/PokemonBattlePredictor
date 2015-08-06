@@ -88,7 +88,7 @@
             Logger.Record(attacker.Name + " uses " + attack_move.Name + " on " + defender.Name)           
         End If
 
-        If Not attack_move.Accuracy = 0 OrElse Not attack_move.Accuracy = 100 Then
+        If attack_move.Accuracy > 0 And attack_move.Accuracy < 100 Then
             Dim chance As Integer = Poke_Calculator.GenerateRandomNumber()
             If Not chance <= attack_move.Accuracy Then
                 REM the pokemon missed!!
@@ -139,6 +139,17 @@
         Next
         If Not is_pressure Then
             attack_move.PP -= 1
+        End If
+
+        REM reason to place this check here is that we need to update the PP
+        If attack_move.Effect = "KO" Then
+            REM if we get here, it means that the KO move hits!
+            defender.HP = 0
+            If Not Logger.isMute() Then
+                Logger.Record("I")
+                Logger.Record("It's a one-hit KO!!")
+            End If
+            Return
         End If
 
         If Not Logger.isMute() Then
@@ -198,13 +209,15 @@
                 End If
 
                 REM if this function is calling it, we would need to check for the accuracy hit
-                If Not move.Accuracy = 0 OrElse Not move.Accuracy = 100 Then
+                If move.Accuracy > 0 AndAlso move.Accuracy < 100 Then
                     Dim chancehit As Integer = Poke_Calculator.GenerateRandomNumber()
                     If Not chancehit <= move.Accuracy Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + " misses!")
                         Return
                     End If
+                Else
+                    move.PP -= 1
                 End If
             End If        
         End If
@@ -231,6 +244,7 @@
             If effectlist(i).Contains("SLP") And chance_success = True Then
                 REM confirm it is targeting opponent
                 If effectlist(i).Contains("O") Then
+                    REM else we do nothing since every pokemon can only have one status condition at a time
                     If opponent_pokemon.Status_Condition = Constants.StatusCondition.none Then
                         opponent_pokemon.Status_Condition = Constants.StatusCondition.sleep
                         If Logger.isMute() = False Then
@@ -238,7 +252,22 @@
                             Logger.Record(opponent_pokemon.Name + " falls asleep!")
                         End If
                     End If
-                    REM else we do nothing since every pokemon can only have one status condition at a time
+
+                ElseIf effectlist(i).Contains("U") Then
+                    REM if we arrive here, then the move is probably "rest." Check for it
+                    If Constants.Get_FormattedString(move.Name) = "rest" Then
+                        my_pokemon.Status_Condition = Constants.StatusCondition.sleep
+                        my_pokemon.Other_Status_Condition = Constants.StatusCondition.none
+                    Else
+                        If my_pokemon.Status_Condition = Constants.StatusCondition.none Then
+                            my_pokemon.Status_Condition = Constants.StatusCondition.sleep
+                        End If
+                    End If
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + " falls asleep!")
+                    End If
+
                 End If
             ElseIf effectlist(i).Contains("PSNB") And chance_success = True Then
                 If effectlist(i).Contains("O") Then
@@ -296,6 +325,26 @@
                     If Logger.isMute() = False Then
                         Logger.Record("I")
                         Logger.Record(opponent_pokemon.Name + " becomes confused!")
+                    End If
+                End If
+            ElseIf effectlist(i).Contains("HPfull") And chance_success = True Then
+                If effectlist(i).Contains("HPfullU") Then
+                    REM restore health completely!
+                    Dim t_pokemon As Pokemon = Form1.Get_PokemonDictionary().Get_Dictionary().Item(my_pokemon.Name)
+                    my_pokemon.HP = t_pokemon.HP
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + " restores its health!")
+                    End If
+                End If
+            ElseIf effectlist(i).Contains("HPhalf") And chance_success = True Then
+                If effectlist(i).Contains("HPhalfU") Then
+                    REM restore half of its max hp!
+                    Dim t_pokemon As Pokemon = Form1.Get_PokemonDictionary().Get_Dictionary().Item(my_pokemon.Name)
+                    my_pokemon.HP = my_pokemon.HP + (t_pokemon.HP / 2)
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + " restores some health!")
                     End If
                 End If
             End If

@@ -919,11 +919,11 @@ Public Class Battle_Prediction : Implements Predict
                     Else REM in case it isn't true...
                         REM just apply any move since at this point, we have determined that there is absolutely no good move to use
                         Dim rand As Integer = Poke_Calculator.GenerateRandomNumber()
-                        If rand <= 25 Then
+                        If rand <= (100 / first_pokemon.Moves_For_Battle.Count) Then
                             rand = 0
-                        ElseIf rand <= 50 AndAlso rand > 25 Then
+                        ElseIf rand <= ((100 / first_pokemon.Moves_For_Battle.Count) * 2) AndAlso rand > (100 / first_pokemon.Moves_For_Battle.Count) Then
                             rand = 1
-                        ElseIf rand <= 75 AndAlso rand > 50 Then
+                        ElseIf rand <= (Math.Round((100.0 / Convert.ToDouble(first_pokemon.Moves_For_Battle.Count)) * 3.0)) AndAlso rand > ((100 / first_pokemon.Moves_For_Battle.Count) * 2) Then
                             rand = 2
                         ElseIf rand <= 100 AndAlso rand > 75 Then
                             rand = 3
@@ -1801,6 +1801,42 @@ Public Class Battle_Prediction : Implements Predict
                 
             End If
 
+            REM check for effects inflicted on f_pokemon
+            REM generally, it's not possible for both pokemon to be affected unless by a Pokemon ability
+            If f_pokemon.Status_Condition = Constants.StatusCondition.sleep Then
+                Dim my_status As String
+                If f_pokemon.Team = "blue" Then
+                    my_status = arena.Get_HealthStatusofBlue()
+                Else
+                    my_status = arena.Get_HealthStatusofRed()
+                End If
+                If movetouse.Name = "Rest" Then
+                    If my_status = "red" Then
+                        return_package.Move = move_enum.Current
+                        REM we add 2 because that's how long until f_pokemon will wake up
+                        return_package.My_Turns = original_mefaint + 2
+                        return_package.Opponent_Turns = original_oppfaint
+                    ElseIf my_status = "yellow" Then
+                        If original_mefaint + 2 < original_oppfaint Then
+                            return_package.Move = move_enum.Current
+                            return_package.My_Turns = original_mefaint + 2
+                            return_package.Opponent_Turns = original_oppfaint
+                        End If
+                    End If
+                ElseIf movetouse.Name = "Roost" Then
+                    If my_status = "red" And original_mefaint + 1 < original_oppfaint Then
+                        return_package.Move = move_enum.Current
+                        return_package.My_Turns = original_mefaint + 1
+                        return_package.Opponent_Turns = original_oppfaint
+                    ElseIf my_status = "yellow" And original_mefaint < original_oppfaint Then
+                        return_package.Move = move_enum.Current
+                        return_package.My_Turns = original_mefaint + 1
+                        return_package.Opponent_Turns = original_oppfaint
+                    End If
+                End If
+                REM we won't be annoying and constantly use roost
+            End If
+
 
             move_enum.MoveNext()
         Next
@@ -1815,7 +1851,7 @@ Public Class Battle_Prediction : Implements Predict
     ''' <param name="second_pokemon"></param>
     ''' <param name="poke_calc"></param>
     ''' <returns>A Prediction_Move_Package that contains the status move.</returns>
-    ''' <remarks></remarks>
+    ''' <remarks>This function is not extremely intelligent as it has not much information to base its decision off of.</remarks>
     Public Function FindBestStatusMove(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
                                       ByVal arena As Pokemon_Arena) As Prediction_Move_Package
         Dim the_move As New Prediction_Move_Package

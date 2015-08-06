@@ -121,9 +121,15 @@
             Return "ACCUO-1"
         ElseIf effect_id = 25 Then
             Return "EVAO-1"
+        ElseIf effect_id = 33 Then
+            Return "HPhalfU"
         ElseIf effect_id = 34 Then
             Return "PSNBO"
-            REM explore 37, *38
+            REM explore 37
+        ElseIf effect_id = 38 Then
+            Return "SLPU,HPfullU"
+        ElseIf effect_id = 39 Then
+            Return "HITKO" REM one-hit KO
         ElseIf effect_id = 50 Then
             Return "CONFO"
         ElseIf effect_id = 51 Then
@@ -158,7 +164,9 @@
         ElseIf effect_id = 119 Then
             Return "ATKO+2,CONFO"
         ElseIf effect_id = 126 Then
-            Return "BRNchanceO," + CSV_line(11) REM thaw opponent 
+            Return "BRNchanceO," + CSV_line(11) REM thaw opponent
+        ElseIf effect_id = 133 Then
+            Return "HPhalfU"
         ElseIf effect_id = 146 Then
             Return "DEFU+1" REM also user charges for one turn before attacking
         ElseIf effect_id = 153 Then
@@ -200,6 +208,8 @@
             Return "SPATKU+1,SPDEFU+1"
         ElseIf effect_id = 213 Then
             Return "ATKU+1,SPDU+1"
+        ElseIf effect_id = 215 Then
+            Return "HPhalfU" REM restore by half of its max hp
         ElseIf effect_id = 219 Then
             Return "SPDU-1"
         ElseIf effect_id = 230 Then
@@ -320,6 +330,9 @@
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function Get_FormattedString(ByRef ugly_string As String) As String
+        If ugly_string Is Nothing Then
+            Return ""
+        End If
         ugly_string = ugly_string.Trim()
         ugly_string = ugly_string.Trim("""")
         ugly_string = ugly_string.ToLower()

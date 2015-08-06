@@ -248,6 +248,14 @@ Public Class Pokemon_Arena
         Me.CurrentBattlingRed.Add(battle_pokemon)
     End Sub
 
+    ''' <summary>
+    ''' Gets the health status in colour of the current battling Pokemon of Blue.
+    ''' red -> less than 20%
+    ''' yellow -> between 20 and 50%
+    ''' green -> greater than 50%
+    ''' </summary>
+    ''' <returns>A string stating, "red," "yellow," and "green"</returns>
+    ''' <remarks></remarks>
     Public Function Get_HealthStatusofBlue() As String
         Dim currentbattling_hp As Integer = Me.CurrentBattlingBlue.First.HP
         Dim original_hp As Integer = Form1.Get_PokemonDictionary.Get_Pokemon(Me.CurrentBattlingBlue.First.Name).HP
@@ -262,6 +270,14 @@ Public Class Pokemon_Arena
         End If
     End Function
 
+    ''' <summary>
+    ''' Gets the health status in colour of the current battling Pokemon of Red.
+    ''' Red -> less than 20%
+    ''' Yellow -> between 20 and 50%
+    ''' Green -> greater than 50%
+    ''' </summary>
+    ''' <returns>A string stating, "red," "yellow," and "green"</returns>
+    ''' <remarks></remarks>
     Public Function Get_HealthStatusofRed() As String
         Dim currentbattling_hp As Integer = Me.CurrentBattlingRed.First.HP
         Dim original_hp As Integer = Form1.Get_PokemonDictionary.Get_Pokemon(Me.CurrentBattlingRed.First.Name).HP

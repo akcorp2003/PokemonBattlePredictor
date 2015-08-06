@@ -13,6 +13,24 @@ PokemonBattlePredictor
 	<value>An Integer starting at 0</value>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_Arena.Get_HealthStatusofBlue">
+	<summary>
+ Gets the health status in colour of the current battling Pokemon of Blue.
+ red -&gt; less than 20%
+ yellow -&gt; between 20 and 50%
+ green -&gt; greater than 50%
+ </summary>
+	<returns>A string stating, "red," "yellow," and "green"</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_Arena.Get_HealthStatusofRed">
+	<summary>
+ Gets the health status in colour of the current battling Pokemon of Red.
+ Red -&gt; less than 20%
+ Yellow -&gt; between 20 and 50%
+ Green -&gt; greater than 50%
+ </summary>
+	<returns>A string stating, "red," "yellow," and "green"</returns>
+	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Pokemon_Arena.ManageTurns">
 	<summary>
  Increases the count for toxic and sleep counters
@@ -191,7 +209,7 @@ PokemonBattlePredictor
 	<param name="second_pokemon"></param>
 	<param name="poke_calc"></param>
 	<returns>A Prediction_Move_Package that contains the status move.</returns>
-	<remarks></remarks>
+	<remarks>This function is not extremely intelligent as it has not much information to base its decision off of.</remarks>
 </member><member name="M:PokemonBattlePredictor.Battle_Prediction.IterateParalysis(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Move_Info,System.Int32,PokemonBattlePredictor.Pokemon_Arena,System.Int32)">
 	<summary>
  Finds the winning party if second_pokemon is paralyzed.

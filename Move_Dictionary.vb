@@ -19,7 +19,11 @@ Public Class Move_Dictionary
     End Function
 
     Public Function Get_Move(ByVal move As String) As Move_Info
-        Dim toreturn_move As Move_Info = Nothing
+        Dim toreturn_move As New Move_Info
+        If move = "" Then
+            toreturn_move.Name = ""
+            Return toreturn_move
+        End If
         If m_move_dictionary.TryGetValue(move, toreturn_move) = True Then
             Return toreturn_move
         Else

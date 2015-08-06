@@ -287,48 +287,62 @@ Public Class Dex_Writer
 
         REM first print Pokemon information
         REM Team Blue:
-        Dim blue_table As Table = newfile.AddTable(7, 4)
+        Dim blue_table As Table = newfile.AddTable(8, 4)
         blue_table.Rows(0).Cells(0).Paragraphs.First().Append("Name")
-        blue_table.Rows(1).Cells(0).Paragraphs.First().Append("HP")
-        blue_table.Rows(2).Cells(0).Paragraphs.First().Append("ATK")
-        blue_table.Rows(3).Cells(0).Paragraphs.First().Append("DEF")
-        blue_table.Rows(4).Cells(0).Paragraphs.First().Append("SP.ATK")
-        blue_table.Rows(5).Cells(0).Paragraphs.First().Append("SP.DEF")
-        blue_table.Rows(6).Cells(0).Paragraphs.First().Append("SPEED")
+        blue_table.Rows(1).Cells(0).Paragraphs.First().Append("Type(s)")
+        blue_table.Rows(2).Cells(0).Paragraphs.First().Append("HP")
+        blue_table.Rows(3).Cells(0).Paragraphs.First().Append("ATK")
+        blue_table.Rows(4).Cells(0).Paragraphs.First().Append("DEF")
+        blue_table.Rows(5).Cells(0).Paragraphs.First().Append("SP.ATK")
+        blue_table.Rows(6).Cells(0).Paragraphs.First().Append("SP.DEF")
+        blue_table.Rows(7).Cells(0).Paragraphs.First().Append("SPEED")
 
         For i As Integer = 0 To arena.Get_TeamBlue.Get_Team("blue").Count - 1 Step 1
             Dim pokemon As Pokemon = arena.Get_TeamBlue.Get_Team("blue").Item(i)
             blue_table.Rows(0).Cells(i + 1).Paragraphs.First().Append(pokemon.Name)
-            blue_table.Rows(1).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.HP))
-            blue_table.Rows(2).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.ATK))
-            blue_table.Rows(3).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.DEF))
-            blue_table.Rows(4).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.Sp_ATK))
-            blue_table.Rows(5).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.Sp_DEF))
-            blue_table.Rows(6).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.SPD))
+            For j As Integer = 0 To pokemon.Types.Count - 1 Step 1
+                blue_table.Rows(1).Cells(i + 1).Paragraphs.First().Append(pokemon.Types(j))
+                If j < pokemon.Types.Count - 1 Then
+                    blue_table.Rows(1).Cells(i + 1).Paragraphs.First().Append(",")
+                End If
+            Next
+            blue_table.Rows(2).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.HP))
+            blue_table.Rows(3).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.ATK))
+            blue_table.Rows(4).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.DEF))
+            blue_table.Rows(5).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.Sp_ATK))
+            blue_table.Rows(6).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.Sp_DEF))
+            blue_table.Rows(7).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.SPD))
         Next
         newfile.InsertTable(blue_table)
 
         Dim redtableformat As Formatting = Get_TableHeadingFormat()
         newfile.InsertParagraph("Team Red", False, redtableformat)
         REM Team Red:
-        Dim red_table As Table = newfile.AddTable(7, 4)
+        Dim red_table As Table = newfile.AddTable(8, 4)
         red_table.Rows(0).Cells(0).Paragraphs.First().Append("Name")
-        red_table.Rows(1).Cells(0).Paragraphs.First().Append("HP")
-        red_table.Rows(2).Cells(0).Paragraphs.First().Append("ATK")
-        red_table.Rows(3).Cells(0).Paragraphs.First().Append("DEF")
-        red_table.Rows(4).Cells(0).Paragraphs.First().Append("SP.ATK")
-        red_table.Rows(5).Cells(0).Paragraphs.First().Append("SP.DEF")
-        red_table.Rows(6).Cells(0).Paragraphs.First().Append("SPEED")
+        red_table.Rows(1).Cells(0).Paragraphs.First().Append("Type(s)")
+        red_table.Rows(2).Cells(0).Paragraphs.First().Append("HP")
+        red_table.Rows(3).Cells(0).Paragraphs.First().Append("ATK")
+        red_table.Rows(4).Cells(0).Paragraphs.First().Append("DEF")
+        red_table.Rows(5).Cells(0).Paragraphs.First().Append("SP.ATK")
+        red_table.Rows(6).Cells(0).Paragraphs.First().Append("SP.DEF")
+        red_table.Rows(7).Cells(0).Paragraphs.First().Append("SPEED")
 
         For i As Integer = 0 To arena.Get_TeamRed.Get_Team("red").Count - 1 Step 1
             Dim pokemon As Pokemon = arena.Get_TeamRed.Get_Team("red").Item(i)
             red_table.Rows(0).Cells(i + 1).Paragraphs.First().Append(pokemon.Name)
-            red_table.Rows(1).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.HP))
-            red_table.Rows(2).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.ATK))
-            red_table.Rows(3).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.DEF))
-            red_table.Rows(4).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.Sp_ATK))
-            red_table.Rows(5).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.Sp_DEF))
-            red_table.Rows(6).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.SPD))
+            For j As Integer = 0 To pokemon.Types.Count - 1 Step 1
+                red_table.Rows(1).Cells(i + 1).Paragraphs.First.Append(pokemon.Types(j))
+                If j < pokemon.Types.Count - 1 Then
+                    red_table.Rows(1).Cells(i + 1).Paragraphs.First.Append(",")
+                End If
+            Next
+            red_table.Rows(2).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.HP))
+            red_table.Rows(3).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.ATK))
+            red_table.Rows(4).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.DEF))
+            red_table.Rows(5).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.Sp_ATK))
+            red_table.Rows(6).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.Sp_DEF))
+            red_table.Rows(7).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.SPD))
         Next
         newfile.InsertTable(red_table)
         Dim my_format As Formatting = Get_NormalTextFormat()

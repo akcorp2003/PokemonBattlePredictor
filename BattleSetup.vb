@@ -23,7 +23,6 @@ Public Class BattleSetup
             End If
         End If
 
-        REM to freeze the progress of this form
         InsertPokemonFunct.Show()
         Me.Hide()
         Form1.Hide()
@@ -37,12 +36,12 @@ Public Class BattleSetup
         Dim poke_enum1 As List(Of Pokemon).Enumerator
         poke_enum1 = Form1.Get_PokemonArena.Get_TeamBlue().Get_Team("blue").GetEnumerator
         poke_enum1.MoveNext()
-        For i = Form1.Get_PokemonArena.Get_TeamBlue().Get_Team("blue").Count - 1 To 0 Step -1
-            If i = 2 Then
+        For i = 0 To Form1.Get_PokemonArena.Get_TeamBlue().Get_Team("blue").Count - 1 Step 1
+            If i = 0 Then
                 Form1.BluePoke_One.Text = poke_enum1.Current.Name
-            ElseIf i = 1 Then
+            ElseIf i = 2 Then
                 Form1.BluePoke_Two.Text = poke_enum1.Current.Name
-            ElseIf i = 0 Then
+            ElseIf i = 3 Then
                 Form1.BluePoke_Three.Text = poke_enum1.Current.Name
             Else
                 Continue For
@@ -53,12 +52,12 @@ Public Class BattleSetup
         Dim poke_enum2 As List(Of Pokemon).Enumerator
         poke_enum2 = Form1.Get_PokemonArena.Get_TeamRed().Get_Team("red").GetEnumerator
         poke_enum2.MoveNext()
-        For i = Form1.Get_PokemonArena.Get_TeamRed().Get_Team("red").Count - 1 To 0 Step -1
-            If i = 2 Then
+        For i = 0 To Form1.Get_PokemonArena.Get_TeamRed().Get_Team("red").Count - 1 Step 1
+            If i = 0 Then
                 Form1.RedPoke_One.Text = poke_enum2.Current.Name
             ElseIf i = 1 Then
                 Form1.RedPoke_Two.Text = poke_enum2.Current.Name
-            ElseIf i = 0 Then
+            ElseIf i = 2 Then
                 Form1.RedPoke_Three.Text = poke_enum2.Current.Name
             Else
                 Continue For
