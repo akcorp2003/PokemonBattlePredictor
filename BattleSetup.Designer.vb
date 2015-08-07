@@ -25,7 +25,7 @@ Partial Class BattleSetup
         Me.Pokemon_Name = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.InsertPokemon = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.LoadPokemon = New System.Windows.Forms.Button()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TeamBlue_List = New System.Windows.Forms.ListView()
@@ -85,17 +85,17 @@ Partial Class BattleSetup
         Me.InsertPokemon.Text = "ADD"
         Me.InsertPokemon.UseVisualStyleBackColor = True
         '
-        'Button1
+        'LoadPokemon
         '
-        Me.Button1.BackColor = System.Drawing.Color.Red
-        Me.Button1.Font = New System.Drawing.Font("Comic Sans MS", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button1.ForeColor = System.Drawing.Color.Lime
-        Me.Button1.Location = New System.Drawing.Point(269, 562)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(231, 52)
-        Me.Button1.TabIndex = 9
-        Me.Button1.Text = "LOAD MY POKEMON!"
-        Me.Button1.UseVisualStyleBackColor = False
+        Me.LoadPokemon.BackColor = System.Drawing.Color.Red
+        Me.LoadPokemon.Font = New System.Drawing.Font("Comic Sans MS", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LoadPokemon.ForeColor = System.Drawing.Color.Lime
+        Me.LoadPokemon.Location = New System.Drawing.Point(269, 562)
+        Me.LoadPokemon.Name = "LoadPokemon"
+        Me.LoadPokemon.Size = New System.Drawing.Size(231, 52)
+        Me.LoadPokemon.TabIndex = 9
+        Me.LoadPokemon.Text = "LOAD MY POKEMON!"
+        Me.LoadPokemon.UseVisualStyleBackColor = False
         '
         'Label3
         '
@@ -260,7 +260,7 @@ Partial Class BattleSetup
         Me.Controls.Add(Me.TeamBlue_List)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.LoadPokemon)
         Me.Controls.Add(Me.InsertPokemon)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.Pokemon_Name)
@@ -277,7 +277,7 @@ Partial Class BattleSetup
     Friend WithEvents Pokemon_Name As System.Windows.Forms.TextBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents InsertPokemon As System.Windows.Forms.Button
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents LoadPokemon As System.Windows.Forms.Button
     Friend WithEvents Label3 As System.Windows.Forms.Label
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents TeamBlue_List As System.Windows.Forms.ListView

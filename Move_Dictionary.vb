@@ -183,6 +183,20 @@ Public Class Move_Info
         End If
     End Function
 
+    Public Shared Function get_StruggleMove() As Move_Info
+        Dim struggle As New Move_Info
+
+        struggle.Name = "Struggle"
+        struggle.Accuracy = 100
+        struggle.Effect = "RECL,1/4"
+        struggle.Is_Special = False
+        struggle.Power = 50
+        struggle.PP = Integer.MaxValue
+        struggle.Type = "normal"
+
+        Return struggle
+    End Function
+
     Public Function Clone() As Object Implements ICloneable.Clone
         Dim freshmoveinfo As New Move_Info
         freshmoveinfo.Accuracy = Me.Accuracy
@@ -204,7 +218,7 @@ Public Class Move_Package
 
     Private m_name As String
     Private m_uri As String
-
+    
     Public Property Name As String
         Get
             Return m_name

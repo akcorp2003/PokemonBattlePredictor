@@ -1,6 +1,29 @@
 ﻿Imports System
 Imports System.Collections
 Imports System.Collections.Generic
+'Arena_Constants is not thread-safe!
+Module Arena_Constants
+    Dim m_blueflinch As Boolean = False
+    Dim m_redflinch As Boolean = False
+
+    Public Property Blue_Flinch As Boolean
+        Get
+            Return m_blueflinch
+        End Get
+        Set(value As Boolean)
+            m_blueflinch = value
+        End Set
+    End Property
+
+    Public Property Red_Flinch As Boolean
+        Get
+            Return m_redflinch
+        End Get
+        Set(value As Boolean)
+            m_redflinch = value
+        End Set
+    End Property
+End Module
 
 Public Class Arena
     Implements ICloneable
@@ -304,6 +327,15 @@ Public Class Pokemon_Arena
             If Me.CurrentBattlingBlue.First.Status_Condition = Constants.StatusCondition.sleep Then
                 Me.IncreaseNumSleep_Blue()
             End If
+            If Me.CurrentBattlingBlue.First.Status_Condition = Constants.StatusCondition.none Then
+                REM reset some counters
+                If Me.Blue_NumSleep > 0 Then
+                    Me.Blue_NumSleep = 0
+                End If
+                If Me.Blue_NumBadPoison > 0 Then
+                    Me.Blue_NumBadPoison = 0
+                End If
+            End If
         End If
         If Not Me.CurrentBattlingRed.Count = 0 Then
             If Me.CurrentBattlingRed.First.Status_Condition = Constants.StatusCondition.badly_poisoned Then
@@ -311,6 +343,15 @@ Public Class Pokemon_Arena
             End If
             If Me.CurrentBattlingRed.First.Status_Condition = Constants.StatusCondition.sleep Then
                 Me.IncreaseNumSleep_Red()
+            End If
+            If Me.CurrentBattlingRed.First.Status_Condition = Constants.StatusCondition.none Then
+                REM reset some counters
+                If Me.Red_NumSleep > 0 Then
+                    Me.Red_NumSleep = 0
+                End If
+                If Me.Red_NumBadPoison > 0 Then
+                    Me.Red_NumBadPoison = 0
+                End If
             End If
         End If
         

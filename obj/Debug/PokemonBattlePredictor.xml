@@ -299,6 +299,16 @@ PokemonBattlePredictor
 	<param name="poke_calc"></param>
 	<param name="max_or_min">Max(1) damage, Min(-1) damage, or Norm(0) damage.</param>
 	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_recoil(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info,System.Int32)">
+	<summary>
+ Applies the recoil effect of recoiling_move. You don't need to worry if the recoil move is recoil or not. 
+ The function will handle that for you.
+ </summary>
+	<param name="first_pokemon"></param>
+	<param name="second_pokemon"></param>
+	<param name="recoiling_move"></param>
+	<param name="damage"></param>
+	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_confusion(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator)">
 	<summary>
  Applies the damage when the confused_pokemon is confused.
@@ -315,7 +325,7 @@ PokemonBattlePredictor
 	<param name="opponent_pokemon">The target pokemon (if the status applies to the opponent)</param>
 	<param name="move">The move used. Can be damaging or non-damaging.</param>
 	<remarks></remarks>
-</member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_stattopokemon(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info)">
+</member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_stattopokemon(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Move_Info,System.String)">
 	<summary>
  Apples statchanging_move to my_pokemon. This could be raising damage_move by 1 stage, 2 stages, or lower 1 stage, etc...
  This function cannot distinguish between an opponent or user move.
@@ -415,6 +425,12 @@ PokemonBattlePredictor
 	<param name="tomodify_string"></param>
 	<returns>A string with a hyphen and all lowercase except for the first one.</returns>
 	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Logger.Record_CurrentArenaInfo(PokemonBattlePredictor.Pokemon_Arena)">
+	<summary>
+ Records a basic description of the current battling pokemon and their HP's
+ </summary>
+	<param name="arena"></param>
+	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Logger.Prepare_NextRecord">
 	<summary>
  Return the last recording list information and 
@@ -434,6 +450,15 @@ PokemonBattlePredictor
  </summary>
 	<value></value>
 	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:PokemonBattlePredictor.Pokemon.Moves_For_Battle(System.String)">
+	<summary>
+ Locates the move of the pokemon and returns a reference to it. Nothing if none found.
+ This function searches the move by name.
+ </summary>
+	<param name="name">The name of the move to look for.</param>
+	<value></value>
+	<returns>A reference to the move or nothing.</returns>
 	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Pokemon.num_Special">
 	<summary>

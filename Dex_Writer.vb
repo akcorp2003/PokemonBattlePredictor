@@ -315,6 +315,8 @@ Public Class Dex_Writer
         Next
         newfile.InsertTable(blue_table)
 
+        Me.PrintMoveInformation(newfile, arena, "blue")
+
         Dim redtableformat As Formatting = Get_TableHeadingFormat()
         newfile.InsertParagraph("Team Red", False, redtableformat)
         REM Team Red:
@@ -345,6 +347,10 @@ Public Class Dex_Writer
             red_table.Rows(7).Cells(i + 1).Paragraphs.First().Append(Convert.ToString(pokemon.SPD))
         Next
         newfile.InsertTable(red_table)
+
+        Me.PrintMoveInformation(newfile, arena, "red")
+
+
         Dim my_format As Formatting = Get_NormalTextFormat()
 
         newfile.InsertParagraph(Environment.NewLine, False, my_format)
@@ -402,6 +408,98 @@ Public Class Dex_Writer
 
         newfile.Save()
 
+    End Sub
+
+    Private Sub PrintMoveInformation(ByRef newfile As DocX, ByVal arena As Pokemon_Arena, ByVal team As String)
+        If team = "blue" Then
+            Dim bluemoves As Formatting = Get_TableHeadingFormat()
+            newfile.InsertParagraph("Blue Team Move Information", False, bluemoves)
+
+            For i As Integer = 0 To arena.Team_Blue.Get_Team("blue").Count - 1 Step 1
+                Dim bluetable As Table = newfile.AddTable(7, 5)
+                Dim blueteam As List(Of Pokemon) = arena.Team_Blue.Get_Team("blue")
+                bluetable.Rows(0).Cells(0).Paragraphs.First().Append(blueteam(i).Name)
+                Dim namerow As Row = bluetable.Rows(0)
+                namerow.MergeCells(0, 4)
+                Dim paragraphs As List(Of Paragraph) = bluetable.Rows(0).Paragraphs
+                For p As Integer = 1 To paragraphs.Count - 1 Step 1
+                    paragraphs(p).Remove(False)
+                Next
+                bluetable.Rows(1).Cells(0).Paragraphs.First().Append("Name:")
+                bluetable.Rows(2).Cells(0).Paragraphs.First().Append("Power:")
+                bluetable.Rows(3).Cells(0).Paragraphs.First().Append("PP:")
+                bluetable.Rows(4).Cells(0).Paragraphs.First().Append("Accuracy:")
+                bluetable.Rows(5).Cells(0).Paragraphs.First().Append("Type:")
+                bluetable.Rows(6).Cells(0).Paragraphs.First().Append("Category:")
+
+                REM now fill in move information
+                Dim move_enum As New List(Of Move_Info).Enumerator
+                move_enum = blueteam(i).Moves_For_Battle.GetEnumerator()
+                move_enum.MoveNext()
+                For j As Integer = 0 To blueteam(i).Moves_For_Battle.Count - 1 Step 1
+                    bluetable.Rows(1).Cells(j + 1).Paragraphs.First.Append(move_enum.Current.Name)
+                    bluetable.Rows(2).Cells(j + 1).Paragraphs.First.Append(Convert.ToString(move_enum.Current.Power))
+                    bluetable.Rows(3).Cells(j + 1).Paragraphs.First.Append(Convert.ToString(move_enum.Current.PP))
+                    bluetable.Rows(4).Cells(j + 1).Paragraphs.First.Append(Convert.ToString(move_enum.Current.Accuracy))
+                    bluetable.Rows(5).Cells(j + 1).Paragraphs.First.Append(move_enum.Current.Type)
+                    If move_enum.Current.Is_Special() Then
+                        bluetable.Rows(6).Cells(j + 1).Paragraphs.First.Append("Special")
+                    ElseIf move_enum.Current.Power = 0 Then
+                        bluetable.Rows(6).Cells(j + 1).Paragraphs.First.Append("Status")
+                    Else
+                        bluetable.Rows(6).Cells(j + 1).Paragraphs.First.Append("Physical")
+                    End If
+                    move_enum.MoveNext()
+                Next
+                newfile.InsertTable(bluetable)
+            Next
+
+
+
+        Else
+            Dim redtableformat As Formatting = Get_TableHeadingFormat()
+            newfile.InsertParagraph("Red Team Move Information", False, redtableformat)
+
+            For i As Integer = 0 To arena.Team_Red.Get_Team("red").Count - 1 Step 1
+                Dim redtable As Table = newfile.AddTable(7, 5)
+                Dim redteam As List(Of Pokemon) = arena.Team_Red.Get_Team("red")
+                redtable.Rows(0).Cells(0).Paragraphs.First().Append(redteam(i).Name)
+                Dim namerow As Row = redtable.Rows(0)
+                namerow.MergeCells(0, 4)
+                REM mergecells creates extraneous paragraphs that we don't need
+                Dim paragraphs As List(Of Paragraph) = redtable.Rows(0).Paragraphs
+                For p As Integer = 1 To paragraphs.Count - 1 Step 1
+                    paragraphs(p).Remove(False)
+                Next
+                redtable.Rows(1).Cells(0).Paragraphs.First().Append("Name:")
+                redtable.Rows(2).Cells(0).Paragraphs.First().Append("Power:")
+                redtable.Rows(3).Cells(0).Paragraphs.First().Append("PP:")
+                redtable.Rows(4).Cells(0).Paragraphs.First().Append("Accuracy:")
+                redtable.Rows(5).Cells(0).Paragraphs.First().Append("Type:")
+                redtable.Rows(6).Cells(0).Paragraphs.First().Append("Category:")
+
+                REM now fill in move information
+                Dim move_enum As New List(Of Move_Info).Enumerator
+                move_enum = redteam(i).Moves_For_Battle.GetEnumerator()
+                move_enum.MoveNext()
+                For j As Integer = 0 To redteam(i).Moves_For_Battle.Count - 1 Step 1
+                    redtable.Rows(1).Cells(j + 1).Paragraphs.First.Append(move_enum.Current.Name)
+                    redtable.Rows(2).Cells(j + 1).Paragraphs.First.Append(Convert.ToString(move_enum.Current.Power))
+                    redtable.Rows(3).Cells(j + 1).Paragraphs.First.Append(Convert.ToString(move_enum.Current.PP))
+                    redtable.Rows(4).Cells(j + 1).Paragraphs.First.Append(Convert.ToString(move_enum.Current.Accuracy))
+                    redtable.Rows(5).Cells(j + 1).Paragraphs.First.Append(move_enum.Current.Type)
+                    If move_enum.Current.Is_Special() Then
+                        redtable.Rows(6).Cells(j + 1).Paragraphs.First.Append("Special")
+                    ElseIf move_enum.Current.Power = 0 Then
+                        redtable.Rows(6).Cells(j + 1).Paragraphs.First.Append("Status")
+                    Else
+                        redtable.Rows(6).Cells(j + 1).Paragraphs.First.Append("Physical")
+                    End If
+                    move_enum.MoveNext()
+                Next
+                newfile.InsertTable(redtable)
+            Next
+        End If
     End Sub
 
     Private Sub Get_Formatting(ByVal properties As String, ByVal format As Formatting)

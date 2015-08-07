@@ -3,23 +3,41 @@ Module Logger
     Dim m_battlelist1 As New List(Of String)
     Dim m_battlelist2 As New List(Of String)
     Dim m_mute As Boolean
-    Dim curr_recording As String
+    Dim curr_recording As String = "first"
 
 
     Public Sub InitializeRecord()
+
         curr_recording = "1"
         m_mute = False
 
         If m_battlelist1.Count > 0 Then
             m_battlelist1.Clear()
         End If
-        If m_battlelist2.Count > 0 Then
-            m_battlelist2.Clear()
+
+        If curr_recording = "first" Then
+            If m_battlelist2.Count > 0 Then
+                m_battlelist2.Clear()
+            End If
+        Else
+            REM for those folks who are lazy to call Prepare_NextRecord()
+            Prepare_NextRecord()
         End If
+
+
     End Sub
 
     Public Sub Record(ByVal data As String)
         m_battlelist1.Add(data)
+    End Sub
+
+    ''' <summary>
+    ''' Records a basic description of the current battling pokemon and their HP's
+    ''' </summary>
+    ''' <param name="arena"></param>
+    ''' <remarks></remarks>
+    Public Sub Record_CurrentArenaInfo(ByVal arena As Pokemon_Arena)
+
     End Sub
 
     ''' <summary>

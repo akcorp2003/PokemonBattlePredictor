@@ -858,7 +858,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,30
 TYPE
 normal
 END MOVE
@@ -2208,7 +2208,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,30
 TYPE
 steel
 END MOVE
@@ -2244,7 +2244,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,20
 TYPE
 psychic
 END MOVE
@@ -2532,7 +2532,7 @@ URI
 SPECIAL
 True
 EFFECT
-
+FLNCHchanceO,20
 TYPE
 dragon
 END MOVE
@@ -2838,7 +2838,7 @@ URI
 SPECIAL
 True
 EFFECT
-
+FLNCHchanceO,20
 TYPE
 dark
 END MOVE
@@ -3720,7 +3720,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,20
 TYPE
 water
 END MOVE
@@ -3810,7 +3810,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,30
 TYPE
 rock
 END MOVE
@@ -4458,7 +4458,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,30
 TYPE
 dark
 END MOVE
@@ -4872,7 +4872,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,20
 TYPE
 dragon
 END MOVE
@@ -5124,7 +5124,7 @@ URI
 SPECIAL
 True
 EFFECT
-
+FLNCHchanceO,30
 TYPE
 flying
 END MOVE
@@ -5700,7 +5700,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,10
 TYPE
 normal
 END MOVE
@@ -5754,7 +5754,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,30
 TYPE
 ghost
 END MOVE
@@ -6690,7 +6690,7 @@ URI
 SPECIAL
 True
 EFFECT
-
+FLNCHchanceO,10
 TYPE
 psychic
 END MOVE
@@ -7500,7 +7500,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,30
 TYPE
 fighting
 END MOVE
@@ -7662,7 +7662,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,30
 TYPE
 bug
 END MOVE
@@ -7680,7 +7680,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,30
 TYPE
 normal
 END MOVE
@@ -8130,7 +8130,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,30
 TYPE
 ice
 END MOVE
@@ -8418,7 +8418,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,10
 TYPE
 ground
 END MOVE
@@ -8688,7 +8688,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,30
 TYPE
 psychic
 END MOVE
@@ -9282,7 +9282,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+FLNCHchanceO,30
 TYPE
 grass
 END MOVE

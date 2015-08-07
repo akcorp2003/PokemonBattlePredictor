@@ -44,6 +44,11 @@
         EvaluateGreenCase = 30
     End Enum
 
+    Enum Stat_Type
+        Affect_Opponent = 1
+        Affect_Self = 2
+    End Enum
+
     Public Function Get_CriticalStageValue(ByVal stage As Integer) As Double
         If stage = 0 Then
             Return 1 / 16
@@ -121,6 +126,8 @@
             Return "ACCUO-1"
         ElseIf effect_id = 25 Then
             Return "EVAO-1"
+        ElseIf effect_id = 32 Then
+            Return "FLNCHchanceO," + CSV_line(11)
         ElseIf effect_id = 33 Then
             Return "HPhalfU"
         ElseIf effect_id = 34 Then
@@ -154,10 +161,12 @@
             Return "PSNO"
         ElseIf effect_id = 68 Then
             Return "PRLYZO"
+            REM explore 76 - charge and flnch
         ElseIf effect_id = 77 Then
             Return "CONFchanceO," + CSV_line(11)
         ElseIf effect_id = 78 Then
             Return "DAM2," + "PSNchanceO," + CSV_line(11)
+            REM explore 93 - flnch and double turn
             REM explore 101
         ElseIf effect_id = 109 Then
             Return "EVAU+2"
@@ -169,10 +178,15 @@
             Return "HPhalfU"
         ElseIf effect_id = 146 Then
             Return "DEFU+1" REM also user charges for one turn before attacking
+        ElseIf effect_id = 147 Then
+            Return "FLNCHchanceO," + CSV_line(11)
+        ElseIf effect_id = 151 Then
+            Return "FLNCHchanceO," + CSV_line(11)
         ElseIf effect_id = 153 Then
             Return "PRLYZchanceO," + CSV_line(11)
         ElseIf effect_id = 157 Then
             Return "DEFU+1"
+            REM explore 159 Fake Out
         ElseIf effect_id = 167 Then
             Return "SPATKO+1,CONFO"
         ElseIf effect_id = 168 Then

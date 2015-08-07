@@ -239,6 +239,42 @@ Public Class Pokemon
     End Property
 
     ''' <summary>
+    ''' Locates the move of the pokemon and returns a reference to it. Nothing if none found.
+    ''' This function searches the move by name.
+    ''' </summary>
+    ''' <param name="name">The name of the move to look for.</param>
+    ''' <value></value>
+    ''' <returns>A reference to the move or nothing.</returns>
+    ''' <remarks></remarks>
+    Public ReadOnly Property Moves_For_Battle(ByVal name As String) As Move_Info
+        Get
+            For i As Integer = 0 To m_Moves_for_Battle.Count - 1 Step 1
+                If Constants.Get_FormattedString(m_Moves_for_Battle(i).Name) = Constants.Get_FormattedString(name) Then
+                    Return m_Moves_for_Battle(i)
+                End If
+            Next
+            Return Nothing
+        End Get
+    End Property
+
+    Public Function is_nomovesleft() As Boolean
+        Dim no_moves As Boolean = False
+
+        Dim nomoves_counter As Integer = 0
+        For i As Integer = 0 To Me.Moves_For_Battle.Count - 1 Step 1
+            If Me.Moves_For_Battle(i).PP = 0 Then
+                nomoves_counter += 1
+            End If
+        Next
+
+        If nomoves_counter = Me.Moves_For_Battle.Count Then
+            no_moves = True
+        End If
+
+        Return no_moves
+    End Function
+
+    ''' <summary>
     ''' Returns the number of special moves that the Pokemon has in Moves_For_Battle
     ''' </summary>
     ''' <returns>The number of special battling moves</returns>

@@ -129,6 +129,8 @@
         REM in the future we will apply the special damages such as burn, poison type
         defender.HP = defender.HP - damagevalue
 
+        Me.apply_recoil(attacker, defender, attack_move, damagevalue)
+
         Dim is_pressure As Boolean = False
         For i As Integer = 0 To defender.Ability.Count - 1 Step 1
             If Constants.Get_FormattedString(defender.Ability.Item(i).Name) = "pressure" Then
@@ -157,6 +159,41 @@
             Logger.Record(defender.Name + " loses " + Convert.ToString(damagevalue) + " in HP!")
         End If
 
+    End Sub
+
+    ''' <summary>
+    ''' Applies the recoil effect of recoiling_move. You don't need to worry if the recoil move is recoil or not. 
+    ''' The function will handle that for you.
+    ''' </summary>
+    ''' <param name="first_pokemon"></param>
+    ''' <param name="second_pokemon"></param>
+    ''' <param name="recoiling_move"></param>
+    ''' <param name="damage"></param>
+    ''' <remarks></remarks>
+    Public Sub apply_recoil(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal recoiling_move As Move_Info, ByVal damage As Integer)
+        If Constants.Get_FormattedString(recoiling_move.Name) = "struggle" Then
+            Dim original_hp As Integer = Form1.Get_PokemonDictionary().Get_Dictionary().Item(first_pokemon.Name).HP
+            Dim totaldamage As Integer = Convert.ToInt32(Math.Round((1 / 4) * Convert.ToDouble(original_hp)))
+            first_pokemon.HP -= totaldamage
+            If Not Logger.isMute() Then
+                Logger.Record("I")
+                Logger.Record(first_pokemon.Name + " suffers damage from recoil!")
+            End If
+            Return
+        End If
+
+        Dim effect_list As String() = recoiling_move.Effect.Split(",")
+        For i As Integer = 0 To effect_list.Length - 1 Step 1
+            If effect_list(i).Contains("RECL") Then
+                Dim recoil_amount As Double = Convert.ToDouble(effect_list(i + 1))
+                Dim totaldamage As Integer = Convert.ToInt32(Math.Round(Convert.ToDouble(damage) * recoil_amount))
+                first_pokemon.HP -= totaldamage
+                If Not Logger.isMute() Then
+                    Logger.Record("I")
+                    Logger.Record(first_pokemon.Name + " suffers damage from recoil!")
+                End If
+            End If
+        Next
     End Sub
 
     ''' <summary>
@@ -347,6 +384,14 @@
                         Logger.Record(my_pokemon.Name + " restores some health!")
                     End If
                 End If
+            ElseIf effectlist(i).Contains("FLNCH") And chance_success = True Then
+                If effectlist(i).Contains("O") Then
+                    If opponent_pokemon.Team = "blue" Then
+                        Arena_Constants.Blue_Flinch = True
+                    Else
+                        Arena_Constants.Red_Flinch = True
+                    End If
+                End If
             End If
         Next
     End Sub
@@ -358,10 +403,10 @@
     ''' <param name="my_pokemon">The move that applies damage</param>
     ''' <param name="statchanging_move">The non-damaging move</param>
     ''' <remarks>This function does not know who the damage_move belongs to.</remarks>
-    Public Sub apply_stattopokemon(ByVal my_pokemon As Pokemon, ByVal statchanging_move As Move_Info)
+    Public Sub apply_stattopokemon(ByVal my_pokemon As Pokemon, ByVal statchanging_move As Move_Info, ByVal calling_pokename As String)
         Dim effects As String() = statchanging_move.Effect.Split(",")
         If Not Logger.isMute() Then
-            Logger.Record(my_pokemon.Name + " uses " + statchanging_move.Name + "!")
+            Logger.Record(calling_pokename + " uses " + statchanging_move.Name + "!")
         End If
         Dim i As Integer = 0
         While i < effects.Length
@@ -615,6 +660,7 @@
                     If Not Logger.isMute() Then
                         Logger.Record(the_pokemon.Name + " woke up!")
                     End If
+                    arena.Red_NumSleep = 0
                     Return
                 End If
             ElseIf the_pokemon.Team = "blue" Then
@@ -623,6 +669,7 @@
                     If Not Logger.isMute() Then
                         Logger.Record(the_pokemon.Name + " woke up!")
                     End If
+                    arena.Blue_NumSleep = 0
                     Return
                 End If
             End If

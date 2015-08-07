@@ -137,10 +137,25 @@ Public Class Battle_Prediction : Implements Predict
                         End If
                     End If
 
-                    If Not first_pokemon.Status_Condition = Constants.StatusCondition.freeze And Not first_pokemon.Status_Condition = Constants.StatusCondition.sleep Then
+                    Dim flinch_flag As Boolean = False
+                    If (first_pokemon.Team = "red" And Arena_Constants.Red_Flinch = True) Or (first_pokemon.Team = "blue" And Arena_Constants.Blue_Flinch = True) Then
+                        flinch_flag = True
+                        If Not Logger.isMute() Then
+                            Logger.Record("I")
+                            Logger.Record(first_pokemon.Name + " flinched!")
+                        End If
+                    End If
+
+                    If Not first_pokemon.Status_Condition = Constants.StatusCondition.freeze And Not first_pokemon.Status_Condition = Constants.StatusCondition.sleep And Not flinch_flag Then
                         'For the curious folks, confusion is applied in apply_battle()
                         Me.apply_battle(first_pokemon, turn_queue.Peek(), poke_calc, battle_arena) 'THE IMPORTANT FUNCTION!!!
                     End If
+
+                    If flinch_flag Then
+                        Arena_Constants.Blue_Flinch = False
+                        Arena_Constants.Red_Flinch = False
+                    End If
+                    
 
                 End If
 
@@ -191,13 +206,28 @@ Public Class Battle_Prediction : Implements Predict
                         End If
                     End If
 
-                    If Not turn_queue.Peek().Status_Condition = Constants.StatusCondition.freeze And Not turn_queue.Peek().Status_Condition = Constants.StatusCondition.sleep Then
+                    Dim flinch_flag As Boolean = False
+                    If (turn_queue.Peek().Team = "red" And Arena_Constants.Red_Flinch = True) Or (turn_queue.Peek().Team = "blue" And Arena_Constants.Blue_Flinch = True) Then
+                        flinch_flag = True
+                        If Not Logger.isMute() Then
+                            Logger.Record("I")
+                            Logger.Record(first_pokemon.Name + " flinched!")
+                        End If
+                    End If
+
+                    If Not turn_queue.Peek().Status_Condition = Constants.StatusCondition.freeze And Not turn_queue.Peek().Status_Condition = Constants.StatusCondition.sleep And Not flinch_flag Then
                         Me.apply_battle(turn_queue.Peek(), first_pokemon, poke_calc, battle_arena) 'THE IMPORTANT FUNCTION!!
+                    End If
+
+                    If flinch_flag Then
+                        Arena_Constants.Blue_Flinch = False
+                        Arena_Constants.Red_Flinch = False
                     End If
 
                 End If
 
                 second_pokemon = turn_queue.Dequeue()
+
 
                 If battle_arena.Current_Attacker = "blue" Then
                     REM check if red has fainted
@@ -521,7 +551,7 @@ Public Class Battle_Prediction : Implements Predict
                     If my_attackenum.Current.Power > 0 Then
                         movename = my_attackenum.Current.Name REM set the name of the move
                         SEmoves.Add(my_attackenum.Current.Clone()) REM get a copy of that move
-                    End If                  
+                    End If
 
                 End If
             Next
@@ -751,22 +781,27 @@ Public Class Battle_Prediction : Implements Predict
 
 
             If turn_poke_move2_pack Is Nothing Then
-                poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
             Else
                 If turn_poke_move2_pack.Opponent_Turns < turn_poke_move2_pack.My_Turns Then
                     REM then the opponenet kills us faster than we can kill it... No good. Just apply damage man...
                     'TODO: in a future edition, analyze these numbers carefully, as in look at the difference
                     'between these 2 values and if it is too great, then go for offensive but if it is not too great
                     'go into greater detail
-                    poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
                 ElseIf turn_poke_move2_pack.Opponent_Turns > turn_poke_move2_pack.My_Turns Then
                     REM we can apply the stat move
-                    poke_calc.apply_stattopokemon(first_pokemon, turn_poke_move2_pack.Move)
-                    'poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                    If turn_poke_move2_pack.Affect_Type = Constants.Stat_Type.Affect_Self Then
+                        poke_calc.apply_stattopokemon(first_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
+                    Else
+                        poke_calc.apply_stattopokemon(second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
+                    End If
+
+
                 Else
                     REM we have a tie...just apply damage
                     REM I like to always inflict damage, so even if it's equal
-                    poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
                 End If
             End If
 
@@ -798,19 +833,19 @@ Public Class Battle_Prediction : Implements Predict
 
                 If turn_poke_move2_pack Is Nothing Then
                     If turn_poke_move3_pack Is Nothing OrElse turn_poke_move3_pack.Move Is Nothing Then
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
                     Else
                         REM we will apply the status move if the pokemon doesn't have a status already
                         REM (if FindBestStatusMove chose a confusion move, it's acceptable if the pokemon is not confused already)
                         If Not turn_poke_move3_pack.Move.get_StatusType() = Constants.StatusCondition.none And second_pokemon.Status_Condition = Constants.StatusCondition.none Then
-                            poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, poke_calc, 1)
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move3_pack.Move.Name), poke_calc, 1)
 
                             REM give the move one more chance: evaluate if it is a confusion type of move. If pokemon is already confused though...
                         ElseIf turn_poke_move3_pack.Move.isConfusion() = True And Not second_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
-                            poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, poke_calc, 1)
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move3_pack.Move.Name), poke_calc, 1)
                         Else
                             'TODO: possibly consider more advanced analytics to analyze whether to go with the normal or status effect move
-                            poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
                         End If
 
                     End If
@@ -821,15 +856,20 @@ Public Class Battle_Prediction : Implements Predict
                         'TODO: in a future edition, analyze these numbers carefully, as in look at the difference
                         'between these 2 values and if it is too great, then go for offensive but if it is not too great
                         'go into greater detail
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
                     ElseIf turn_poke_move2_pack.Opponent_Turns > turn_poke_move2_pack.My_Turns Then
                         REM we can apply the stat move
-                        poke_calc.apply_stattopokemon(first_pokemon, turn_poke_move2_pack.Move)
+                        If turn_poke_move2_pack.Affect_Type = Constants.Stat_Type.Affect_Self Then
+                            poke_calc.apply_stattopokemon(first_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
+                        Else
+                            poke_calc.apply_stattopokemon(second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
+                        End If
+
                         'poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
                     Else
                         REM we have a tie...just apply damage
                         REM For normal moves, it is better to go and rip apart the second_pokemon
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
                     End If
                 End If
 
@@ -858,7 +898,7 @@ Public Class Battle_Prediction : Implements Predict
                             Logger.Set_Recording()
                         End If
 
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
 
                     Else
                         REM just go back to evaluating the green case
@@ -892,12 +932,20 @@ Public Class Battle_Prediction : Implements Predict
         REM first check out a status move
         turn_poke_move3_pack = Me.FindBestStatusMove(first_pokemon, second_pokemon, poke_calc, poke_arena)
         If turn_poke_move3_pack.Move IsNot Nothing Then
-            poke_calc.apply_moveeffect(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, Constants.Funct_IDs.EvaluateGreenCase, funct_id)
+            poke_calc.apply_moveeffect(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move3_pack.Move.Name), Constants.Funct_IDs.EvaluateGreenCase, funct_id)
         Else
             REM check out a stat-changing move
             turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, 1, 1)
             If turn_poke_move2_pack.Move IsNot Nothing Then
-                poke_calc.apply_stattopokemon(first_pokemon, turn_poke_move2_pack.Move)
+                If turn_poke_move2_pack.Affect_Type = Constants.Stat_Type.Affect_Opponent Then
+                    poke_calc.apply_stattopokemon(second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
+                ElseIf turn_poke_move2_pack.Affect_Type = Constants.Stat_Type.Affect_Self Then
+                    poke_calc.apply_stattopokemon(first_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
+                Else
+                    REM generally wouldn't happen but...
+                    poke_calc.apply_stattopokemon(first_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
+                End If
+
             Else
                 REM there are only noneffective moves left...
                 Dim isthere_noneffectivemove As New List(Of Move_Info)
@@ -915,20 +963,29 @@ Public Class Battle_Prediction : Implements Predict
                     last_list = IsThereNotEffectiveMoves(first_pokemon, second_pokemon, eff_table)
                     If last_list.Count > 0 Then REM since this function can't be called anywhere else, this condition MUST be true at this point
                         REM just pick the first one
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, last_list(0), poke_calc, max_or_min)
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(last_list(0).Name), poke_calc, max_or_min)
                     Else REM in case it isn't true...
                         REM just apply any move since at this point, we have determined that there is absolutely no good move to use
-                        Dim rand As Integer = Poke_Calculator.GenerateRandomNumber()
-                        If rand <= (100 / first_pokemon.Moves_For_Battle.Count) Then
-                            rand = 0
-                        ElseIf rand <= ((100 / first_pokemon.Moves_For_Battle.Count) * 2) AndAlso rand > (100 / first_pokemon.Moves_For_Battle.Count) Then
-                            rand = 1
-                        ElseIf rand <= (Math.Round((100.0 / Convert.ToDouble(first_pokemon.Moves_For_Battle.Count)) * 3.0)) AndAlso rand > ((100 / first_pokemon.Moves_For_Battle.Count) * 2) Then
-                            rand = 2
-                        ElseIf rand <= 100 AndAlso rand > 75 Then
-                            rand = 3
+                        REM first make sure that there are still moves left that we can use
+                        If Not first_pokemon.is_nomovesleft() Then
+                            Dim rand As Integer = Poke_Calculator.GenerateRandomNumber()
+                            If rand <= (100 / first_pokemon.Moves_For_Battle.Count) Then
+                                rand = 0
+                            ElseIf rand <= ((100 / first_pokemon.Moves_For_Battle.Count) * 2) AndAlso rand > (100 / first_pokemon.Moves_For_Battle.Count) Then
+                                rand = 1
+                            ElseIf rand <= (Math.Round((100.0 / Convert.ToDouble(first_pokemon.Moves_For_Battle.Count)) * 3.0)) AndAlso rand > ((100 / first_pokemon.Moves_For_Battle.Count) * 2) Then
+                                rand = 2
+                            ElseIf rand <= 100 AndAlso rand > 75 Then
+                                rand = 3
+                            End If
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(rand), poke_calc, max_or_min)
+                        Else
+                            REM apply struggle move
+                            Dim struggle As Move_Info = Move_Info.get_StruggleMove()
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, struggle, poke_calc, max_or_min)
                         End If
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(rand), poke_calc, max_or_min)
+
+
                     End If
                 End If
             End If
@@ -983,8 +1040,12 @@ Public Class Battle_Prediction : Implements Predict
             i += 1
         End While
 
-        move_pack.Move = turn_poke_move
-        move_pack.My_Turns = turnstofaint
+        If turn_poke_move.Name = "" Or turn_poke_move.PP <= 0 Then
+            move_pack.Move = Nothing
+        Else
+            move_pack.Move = turn_poke_move
+            move_pack.My_Turns = turnstofaint
+        End If        
 
         Return move_pack
     End Function
@@ -1017,10 +1078,12 @@ Public Class Battle_Prediction : Implements Predict
                     statmove_touse_pack.Move = defense_move.Move
                     statmove_touse_pack.My_Turns = defense_move.My_Turns
                     statmove_touse_pack.Opponent_Turns = defense_move.Opponent_Turns
+                    statmove_touse_pack.Affect_Type = Stat_Type.Affect_Opponent
                 ElseIf defense_move Is Nothing And Not attack_move Is Nothing Then
                     statmove_touse_pack.Move = attack_move.Move
                     statmove_touse_pack.My_Turns = attack_move.My_Turns
                     statmove_touse_pack.Opponent_Turns = attack_move.Opponent_Turns
+                    statmove_touse_pack.Affect_Type = Constants.Stat_Type.Affect_Self
                 Else
                     Return Nothing REM we absolutely got nothing out of it
                 End If
@@ -1032,17 +1095,20 @@ Public Class Battle_Prediction : Implements Predict
                     statmove_touse_pack.Move = attack_move.Move
                     statmove_touse_pack.My_Turns = attack_move.My_Turns
                     statmove_touse_pack.Opponent_Turns = attack_move.Opponent_Turns
+                    statmove_touse_pack.Affect_Type = Constants.Stat_Type.Affect_Self
                 ElseIf attack_move.My_Turns > defense_move.My_Turns Then
                     REM defense move is better
                     statmove_touse_pack.Move = defense_move.Move
                     statmove_touse_pack.My_Turns = defense_move.My_Turns
                     statmove_touse_pack.Opponent_Turns = defense_move.Opponent_Turns
+                    statmove_touse_pack.Affect_Type = Constants.Stat_Type.Affect_Opponent
                 Else
                     REM just choose one, I prefer increasing my attack
                     REM TODO: for a future release, we can project it to the next few pokemon that the other team has
                     statmove_touse_pack.Move = attack_move.Move
                     statmove_touse_pack.My_Turns = attack_move.My_Turns
                     statmove_touse_pack.Opponent_Turns = attack_move.Opponent_Turns
+                    statmove_touse_pack.Affect_Type = Constants.Stat_Type.Affect_Self
                 End If
 
 
@@ -1056,10 +1122,12 @@ Public Class Battle_Prediction : Implements Predict
                     statmove_touse_pack.Move = defense_move.Move
                     statmove_touse_pack.My_Turns = defense_move.My_Turns
                     statmove_touse_pack.Opponent_Turns = defense_move.Opponent_Turns
+                    statmove_touse_pack.Affect_Type = Constants.Stat_Type.Affect_Self
                 ElseIf defense_move Is Nothing And Not attack_move Is Nothing Then
                     statmove_touse_pack.Move = attack_move.Move
                     statmove_touse_pack.My_Turns = attack_move.My_Turns
                     statmove_touse_pack.Opponent_Turns = attack_move.Opponent_Turns
+                    statmove_touse_pack.Affect_Type = Stat_Type.Affect_Opponent
                 Else
                     Return Nothing REM we absolutely got nothing out of it
                 End If
@@ -1072,17 +1140,20 @@ Public Class Battle_Prediction : Implements Predict
                     statmove_touse_pack.Move = attack_move.Move
                     statmove_touse_pack.My_Turns = attack_move.My_Turns
                     statmove_touse_pack.Opponent_Turns = attack_move.Opponent_Turns
+                    statmove_touse_pack.Affect_Type = Constants.Stat_Type.Affect_Opponent
                 ElseIf attack_move.My_Turns < defense_move.My_Turns Then
                     REM defense move is better
                     statmove_touse_pack.Move = defense_move.Move
                     statmove_touse_pack.My_Turns = defense_move.My_Turns
                     statmove_touse_pack.Opponent_Turns = defense_move.Opponent_Turns
+                    statmove_touse_pack.Affect_Type = Constants.Stat_Type.Affect_Self
                 Else
                     REM just choose one, I prefer increasing my defense
                     REM TODO: for a future release, we can project it to the next few pokemon that the other team has
                     statmove_touse_pack.Move = defense_move.Move
                     statmove_touse_pack.My_Turns = defense_move.My_Turns
                     statmove_touse_pack.Opponent_Turns = defense_move.Opponent_Turns
+                    statmove_touse_pack.Affect_Type = Stat_Type.Affect_Self
                 End If
 
 
@@ -1092,9 +1163,12 @@ Public Class Battle_Prediction : Implements Predict
 
         End If
 
+        If statmove_touse_pack.Move.Name = "" Or statmove_touse_pack.Move.PP <= 0 Then
+            Return Nothing
+        Else
+            Return statmove_touse_pack
+        End If
 
-
-        Return statmove_touse_pack
 
     End Function
 
@@ -1265,9 +1339,20 @@ Public Class Battle_Prediction : Implements Predict
             While Not move_enum2.Current Is Nothing
                 If move_enum2.Current.PP > move_pack.Move.PP And move_enum2.Current.PP > 0 Then
                     move_pack.Move = move_enum2.Current
+                    If move_enum2.Current.Effect.Contains("U") Then
+                        move_pack.Affect_Type = Constants.Stat_Type.Affect_Self
+                    ElseIf move_enum2.Current.Effect.Contains("O") Then
+                        move_pack.Affect_Type = Constants.Stat_Type.Affect_Opponent
+                    End If
                 End If
                 move_enum2.MoveNext()
             End While
+        End If
+
+        If Not move_pack.Move Is Nothing Then
+            If move_pack.Move.Name = "" Then
+                move_pack.Move = Nothing
+            End If
         End If
 
         Return move_pack
@@ -1351,7 +1436,12 @@ Public Class Battle_Prediction : Implements Predict
         Dim newmovestofaint As Integer = Integer.MaxValue
         While Not finalmove_enum.Current Is Nothing
 
-            poke_calc.apply_stattopokemon(attacker, finalmove_enum.Current)
+            If finalmove_enum.Current.PP <= 0 Then
+                finalmove_enum.MoveNext()
+                Continue While
+            End If
+
+            poke_calc.apply_stattopokemon(attacker, finalmove_enum.Current, attacker.Name)
             Dim turnstofaint As Integer = Me.Project_Battle(attacker.Clone(), defender.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
             REM first check to make sure that the stat move doesn't take longer to kill the opponent than
             REM the opponent to kill me. Otherwise, don't think about using this move
@@ -1367,7 +1457,7 @@ Public Class Battle_Prediction : Implements Predict
             j += 1
         End While
 
-        If newmovestofaint = Integer.MaxValue Then
+        If newmovestofaint = Integer.MaxValue Or statmove_touse.Name = "" Then
             REM no suitable move was found 
             Return Nothing
         Else
@@ -1443,7 +1533,12 @@ Public Class Battle_Prediction : Implements Predict
         Dim newmovestofaint As Integer = Integer.MaxValue
         While Not finalmove_enum.Current Is Nothing
 
-            poke_calc.apply_stattopokemon(defender, finalmove_enum.Current)
+            If finalmove_enum.Current.PP <= 0 Then
+                finalmove_enum.MoveNext()
+                Continue While
+            End If
+
+            poke_calc.apply_stattopokemon(defender, finalmove_enum.Current, defender.Name)
             Dim turnstofaint As Integer = Me.Project_Battle(attacker.Clone(), defender.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
             REM first check to make sure that the stat move doesn't take longer to kill the opponent than
             REM the opponent to kill me. Otherwise, don't think about using this move
@@ -1458,7 +1553,7 @@ Public Class Battle_Prediction : Implements Predict
             finalmove_enum.MoveNext()
         End While
 
-        If newmovestofaint = Integer.MaxValue Then
+        If newmovestofaint = Integer.MaxValue Or statmove_touse.Name = "" Then
             Return Nothing
         Else
             move_package.Move = statmove_touse
@@ -1507,9 +1602,9 @@ Public Class Battle_Prediction : Implements Predict
                         Exit While
                     End If
                 End If
+                i += 1
             End While
             move_enum.MoveNext()
-            i += 1
         End While
 
         If final_statmoves.Count = 0 Then
@@ -1532,7 +1627,12 @@ Public Class Battle_Prediction : Implements Predict
         Dim newmovestofaint As Integer = Integer.MinValue
         While Not finalmove_enum.Current Is Nothing
 
-            poke_calc.apply_stattopokemon(defender, finalmove_enum.Current)
+            If finalmove_enum.Current.PP <= 0 Then
+                finalmove_enum.MoveNext()
+                Continue While
+            End If
+
+            poke_calc.apply_stattopokemon(defender, finalmove_enum.Current, first_pokemon.Name)
             REM see how long it takes for opponent to kill us with the boost!
             Dim turnstofaint As Integer = Me.Project_Battle(defender.Clone(), first_pokemon.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
             REM see if the 
@@ -1549,7 +1649,7 @@ Public Class Battle_Prediction : Implements Predict
             finalmove_enum.MoveNext()
         End While
 
-        If newmovestofaint = Integer.MinValue Then
+        If newmovestofaint = Integer.MinValue Or statmove_touse.Name = "" Then
             Return Nothing
         Else
             move_package.Move = statmove_touse
@@ -1622,7 +1722,12 @@ Public Class Battle_Prediction : Implements Predict
         Dim newmovestofaint As Integer = Integer.MinValue
         While Not finalmove_enum.Current Is Nothing
 
-            poke_calc.apply_stattopokemon(attacker, finalmove_enum.Current)
+            If finalmove_enum.Current.PP <= 0 Then
+                finalmove_enum.MoveNext()
+                Continue While
+            End If
+
+            poke_calc.apply_stattopokemon(attacker, finalmove_enum.Current, attacker.Name)
             REM see how long it takes for opponent to kill us with the boost!
             Dim turnstofaint As Integer = Me.Project_Battle(defender.Clone(), attacker.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
             REM see if the 
@@ -1639,7 +1744,7 @@ Public Class Battle_Prediction : Implements Predict
             finalmove_enum.MoveNext()
         End While
 
-        If newmovestofaint = Integer.MinValue Then
+        If newmovestofaint = Integer.MinValue Or statmove_touse.Name = "" Then
             Return Nothing
         Else
             move_package.Move = statmove_touse
@@ -1685,6 +1790,12 @@ Public Class Battle_Prediction : Implements Predict
         move_enum = listofstatus.GetEnumerator()
         move_enum.MoveNext()
         For i As Integer = 0 To listofstatus.Count - 1 Step 1
+
+            If move_enum.Current.PP <= 0 Then
+                move_enum.MoveNext()
+                Continue For
+            End If
+
             Dim f_pokemon As Pokemon = first_pokemon.Clone()
             Dim s_pokemon As Pokemon = second_pokemon.Clone()
             If move_enum.Current.Power = 0 Then
@@ -1706,11 +1817,13 @@ Public Class Battle_Prediction : Implements Predict
                 If temp_faintturns < original_mefaint Then
                     REM sounds pretty good! We can kill the opponent faster than they can kill us
                     If return_package.Move Is Nothing Then
-                        return_package.Move = move_enum.Current
-                        return_package.My_Turns = temp_faintturns
-                        return_package.Opponent_Turns = original_mefaint
+                        If move_enum.Current.PP > 0 Then
+                            return_package.Move = move_enum.Current
+                            return_package.My_Turns = temp_faintturns
+                            return_package.Opponent_Turns = original_mefaint
+                        End If
                     Else
-                        If return_package.My_Turns > temp_faintturns Then
+                        If return_package.My_Turns > temp_faintturns And move_enum.Current.PP > 0 Then
                             REM we have found a better move!
                             return_package.Move = move_enum.Current
                             return_package.My_Turns = temp_faintturns
@@ -1728,11 +1841,13 @@ Public Class Battle_Prediction : Implements Predict
                 'if I can kill the opponent faster, then it's good to use a sleeping move
                 If original_mefaint < original_oppfaint And original_mefaint + 3 > original_oppfaint Then
                     If return_package.Move Is Nothing Then
-                        return_package.Move = move_enum.Current
-                        return_package.My_Turns = original_oppfaint
-                        return_package.Opponent_Turns = original_mefaint + 3
+                        If move_enum.Current.PP > 0 Then
+                            return_package.Move = move_enum.Current
+                            return_package.My_Turns = original_oppfaint
+                            return_package.Opponent_Turns = original_mefaint + 3
+                        End If
                     Else
-                        If return_package.My_Turns > original_oppfaint Then
+                        If return_package.My_Turns > original_oppfaint And move_enum.Current.PP > 0 Then
                             return_package.Move = move_enum.Current
                             return_package.My_Turns = original_oppfaint
                             return_package.Opponent_Turns = original_mefaint + 3
@@ -1752,8 +1867,10 @@ Public Class Battle_Prediction : Implements Predict
                         If resulting_team = first_pokemon.Team Then
                             REM IterateParalysis has helped us determine that we can beat the pokemon using this move
                             REM ASSUMPTION: assume that paralysis is ALWAYS the better move to chooose
-                            return_package.Move = move_enum.Current
-                            return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's paralyzed
+                            If move_enum.Current.PP > 0 Then
+                                return_package.Move = move_enum.Current
+                                return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's paralyzed
+                            End If
                         End If
                         REM if IterateParalysis determines that the opposite team beats first_pokemon...then no point in
                         REM using this paralysis move
@@ -1764,8 +1881,10 @@ Public Class Battle_Prediction : Implements Predict
                     resulting_team = IterateParalysis(f_pokemon, s_pokemon, poke_calc, movetouse, movetouse_second, max_or_min, arena, Constants.ACCURACY_HIGH)
                     If resulting_team IsNot Nothing Then
                         If resulting_team = first_pokemon.Team Then
-                            return_package.Move = move_enum.Current
-                            return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's paralyzed
+                            If move_enum.Current.PP > 0 Then
+                                return_package.Move = move_enum.Current
+                                return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's paralyzed
+                            End If
                         End If
                     End If
                 End If
@@ -1779,8 +1898,11 @@ Public Class Battle_Prediction : Implements Predict
                     resulting_team = IterateConfusion(f_pokemon, s_pokemon, poke_calc, movetouse, max_or_min, arena, Constants.ACCURACY_HIGH)
                     If resulting_team IsNot Nothing Then
                         If resulting_team = first_pokemon.Team Then
-                            return_package.Move = move_enum.Current
-                            return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's confused
+                            If move_enum.Current.PP > 0 Then
+                                return_package.Move = move_enum.Current
+                                return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's confused
+                            End If
+
 
                             REM TODO: in a future release, there should be a way to know how many moves it took for
                             REM s_pokemon to kill f_pokemon. The algorithms are there but it's creating the right function
@@ -1793,12 +1915,14 @@ Public Class Battle_Prediction : Implements Predict
                     resulting_team = IterateConfusion(f_pokemon, s_pokemon, poke_calc, movetouse, movetouse_second, max_or_min, arena, Constants.ACCURACY_HIGH)
                     If resulting_team IsNot Nothing Then
                         If resulting_team = first_pokemon.Team Then
-                            return_package.Move = move_enum.Current
-                            return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's paralyzed
+                            If move_enum.Current.PP > 0 Then
+                                return_package.Move = move_enum.Current
+                                return_package.My_Turns = original_oppfaint REM no difference as to how fast we kill the opponent because it's paralyzed
+                            End If
                         End If
                     End If
                 End If
-                
+
             End If
 
             REM check for effects inflicted on f_pokemon
@@ -1812,26 +1936,34 @@ Public Class Battle_Prediction : Implements Predict
                 End If
                 If movetouse.Name = "Rest" Then
                     If my_status = "red" Then
-                        return_package.Move = move_enum.Current
-                        REM we add 2 because that's how long until f_pokemon will wake up
-                        return_package.My_Turns = original_mefaint + 2
-                        return_package.Opponent_Turns = original_oppfaint
-                    ElseIf my_status = "yellow" Then
-                        If original_mefaint + 2 < original_oppfaint Then
+                        If move_enum.Current.PP > 0 Then
                             return_package.Move = move_enum.Current
+                            REM we add 2 because that's how long until f_pokemon will wake up
                             return_package.My_Turns = original_mefaint + 2
                             return_package.Opponent_Turns = original_oppfaint
+                        End If
+                    ElseIf my_status = "yellow" Then
+                        If original_mefaint + 2 < original_oppfaint Then
+                            If move_enum.Current.PP > 0 Then
+                                return_package.Move = move_enum.Current
+                                return_package.My_Turns = original_mefaint + 2
+                                return_package.Opponent_Turns = original_oppfaint
+                            End If
                         End If
                     End If
                 ElseIf movetouse.Name = "Roost" Then
                     If my_status = "red" And original_mefaint + 1 < original_oppfaint Then
-                        return_package.Move = move_enum.Current
-                        return_package.My_Turns = original_mefaint + 1
-                        return_package.Opponent_Turns = original_oppfaint
+                        If move_enum.Current.PP > 0 Then
+                            return_package.Move = move_enum.Current
+                            return_package.My_Turns = original_mefaint + 1
+                            return_package.Opponent_Turns = original_oppfaint
+                        End If
                     ElseIf my_status = "yellow" And original_mefaint < original_oppfaint Then
-                        return_package.Move = move_enum.Current
-                        return_package.My_Turns = original_mefaint + 1
-                        return_package.Opponent_Turns = original_oppfaint
+                        If move_enum.Current.PP > 0 Then
+                            return_package.Move = move_enum.Current
+                            return_package.My_Turns = original_mefaint + 1
+                            return_package.Opponent_Turns = original_oppfaint
+                        End If
                     End If
                 End If
                 REM we won't be annoying and constantly use roost
@@ -1841,7 +1973,12 @@ Public Class Battle_Prediction : Implements Predict
             move_enum.MoveNext()
         Next
 
-        Return return_package
+        If return_package.Move.Name = "" OrElse return_package.Move.PP <= 0 Then
+            Return Nothing
+        Else
+            Return return_package
+        End If
+
     End Function
 
     ''' <summary>
@@ -1861,8 +1998,13 @@ Public Class Battle_Prediction : Implements Predict
             If second_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
                 the_list = first_pokemon.get_CONFMoves()
                 If the_list.Count > 0 And Not second_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
-                    the_move.Move = the_list(0)
-                    Return the_move
+                    Dim i As Integer = 0
+                    While i < the_list.Count - 1
+                        If the_list(i).PP > 0 Then
+                            the_move.Move = the_list(i)
+                            Return the_move
+                        End If
+                    End While
                 End If
             Else
                 Return the_move REM have the caller check the_move.Move is Nothing
@@ -1872,38 +2014,69 @@ Public Class Battle_Prediction : Implements Predict
 
         the_list = first_pokemon.get_PRLYZMoves()
         If the_list.Count > 0 Then
-            the_move.Move = the_list(0) REM just get the first move TODO: check for PP
-            Return the_move
+            Dim i As Integer = 0
+            While i < the_list.Count - 1
+                If the_list(i).PP > 0 Then
+                    the_move.Move = the_list(i)
+                    Return the_move
+                End If
+            End While            
         End If
 
         the_list = first_pokemon.get_SLPMoves()
         If the_list.Count > 0 Then
-            the_move.Move = the_list(0)
-            Return the_move
+            Dim i As Integer = 0
+            While i < the_list.Count - 1
+                If the_list(i).PP > 0 Then
+                    the_move.Move = the_list(i)
+                    Return the_move
+                End If
+            End While
+            
         End If
 
         the_list = first_pokemon.get_CONFMoves()
         If the_list.Count > 0 Then
-            the_move.Move = the_list(0)
-            Return the_move
+            Dim i As Integer = 0
+            While i < the_list.Count - 1
+                If the_list(i).PP > 0 Then
+                    the_move.Move = the_list(i)
+                    Return the_move
+                End If               
+            End While
         End If
 
         the_list = first_pokemon.get_FRZMoves()
         If the_list.Count > 0 Then
-            the_move.Move = the_list(0)
-            Return the_move
+            Dim i As Integer = 0
+            While i < the_list.Count - 1
+                If the_list(i).PP > 0 Then
+                    the_move.Move = the_list(i)
+                    Return the_move
+                End If
+            End While
         End If
 
         the_list = first_pokemon.get_BRNMoves()
         If the_list.Count > 0 Then
-            the_move.Move = the_list(0)
-            Return the_move
+            Dim i As Integer = 0
+            While i < the_list.Count - 1
+                If the_list(i).PP > 0 Then
+                    the_move.Move = the_list(i)
+                    Return the_move
+                End If
+            End While
         End If
 
         the_list = first_pokemon.get_PSNMoves()
         If the_list.Count > 0 Then
-            the_move.Move = the_list(0)
-            Return the_move
+            Dim i As Integer = 0
+            While i < the_list.Count - 1
+                If the_list(i).PP > 0 Then
+                    the_move.Move = the_list(i)
+                    Return the_move
+                End If
+            End While
         End If
 
         Return the_move
@@ -2083,6 +2256,7 @@ Public Class Prediction_Move_Package
     Dim m_move As Move_Info
     Dim m_myturns As Integer
     Dim m_oppturns As Integer
+    Dim m_stat_affect As Integer
 
     Public Property Move() As Move_Info
         Get
@@ -2120,6 +2294,15 @@ Public Class Prediction_Move_Package
         End Get
         Set(value As Integer)
             m_oppturns = value
+        End Set
+    End Property
+
+    Public Property Affect_Type As Integer
+        Get
+            Return m_stat_affect
+        End Get
+        Set(value As Integer)
+            m_stat_affect = value
         End Set
     End Property
 End Class

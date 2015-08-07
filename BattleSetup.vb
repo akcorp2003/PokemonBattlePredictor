@@ -31,7 +31,7 @@ Public Class BattleSetup
 
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub LoadPokemon_Click(sender As Object, e As EventArgs) Handles LoadPokemon.Click
         REM update labels on Form1
         Dim poke_enum1 As List(Of Pokemon).Enumerator
         poke_enum1 = Form1.Get_PokemonArena.Get_TeamBlue().Get_Team("blue").GetEnumerator
