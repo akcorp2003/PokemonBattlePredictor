@@ -39,9 +39,9 @@ Public Class BattleSetup
         For i = 0 To Form1.Get_PokemonArena.Get_TeamBlue().Get_Team("blue").Count - 1 Step 1
             If i = 0 Then
                 Form1.BluePoke_One.Text = poke_enum1.Current.Name
-            ElseIf i = 2 Then
+            ElseIf i = 1 Then
                 Form1.BluePoke_Two.Text = poke_enum1.Current.Name
-            ElseIf i = 3 Then
+            ElseIf i = 2 Then
                 Form1.BluePoke_Three.Text = poke_enum1.Current.Name
             Else
                 Continue For

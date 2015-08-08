@@ -85,7 +85,7 @@
         EFF = eff_table.Effective_Type(attack_move.Type, defender.Types)
 
         If Not Logger.isMute() Then
-            Logger.Record(attacker.Name + " uses " + attack_move.Name + " on " + defender.Name)           
+            Logger.Record(attacker.Name + " uses " + attack_move.Name + " on " + defender.Name)
         End If
 
         If attack_move.Accuracy > 0 And attack_move.Accuracy < 100 Then
@@ -256,7 +256,7 @@
                 Else
                     move.PP -= 1
                 End If
-            End If        
+            End If
         End If
 
 
@@ -399,11 +399,14 @@
     ''' <summary>
     ''' Apples statchanging_move to my_pokemon. This could be raising damage_move by 1 stage, 2 stages, or lower 1 stage, etc...
     ''' This function cannot distinguish between an opponent or user move.
+    ''' The function returns a boolean indicating if the application was successful or not.
     ''' </summary>
     ''' <param name="my_pokemon">The move that applies damage</param>
     ''' <param name="statchanging_move">The non-damaging move</param>
+    ''' <returns>A Boolean saying if the application was successful.</returns>
     ''' <remarks>This function does not know who the damage_move belongs to.</remarks>
-    Public Sub apply_stattopokemon(ByVal my_pokemon As Pokemon, ByVal statchanging_move As Move_Info, ByVal calling_pokename As String)
+    Public Function apply_stattopokemon(ByVal my_pokemon As Pokemon, ByVal statchanging_move As Move_Info, ByVal calling_pokename As String) As Boolean
+        Dim success As Boolean = True
         Dim effects As String() = statchanging_move.Effect.Split(",")
         If Not Logger.isMute() Then
             Logger.Record(calling_pokename + " uses " + statchanging_move.Name + "!")
@@ -413,165 +416,251 @@
             If effects(i).Contains("SPATK") Then
                 If effects(i).Contains("SPATKU+1") Or effects(i).Contains("SPATKO+1") Then
                     my_pokemon.SP_ATK_Boost += 1
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.SP_ATK_Boost <= 6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Special Attack rose!")
                     End If
                 ElseIf effects(i).Contains("SPATKU+2") Or effects(i).Contains("SPATKO+2") Then
                     my_pokemon.SP_ATK_Boost += 2
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.SP_ATK_Boost <= 6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Special Attack sharply rose!")
                     End If
                 ElseIf effects(i).Contains("SPATKU-1") Or effects(i).Contains("SPATKO-1") Then
                     my_pokemon.SP_ATK_Boost -= 1
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.SP_ATK_Boost >= -6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Special Attack fell!")
                     End If
                 ElseIf effects(i).Contains("SPATKU-2") Or effects(i).Contains("SPATKO-2") Then
                     my_pokemon.SP_ATK_Boost -= 2
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.SP_ATK_Boost >= -6 Then
                         Logger.Record("I")
-                        Logger.Record(my_pokemon.Name + "'s Special Attack harshly fell!")
+                        Logger.Record(my_pokemon.Name + "'s Special Attack fell!")
                     End If
                 Else
-                    Return REM don't do anything
+                    Return False REM don't do anything
 
                 End If
-                Dim boostvalue As Double = Constants.Get_StageBoostValue(my_pokemon.SP_ATK_Boost)
-                my_pokemon.Sp_ATK = my_pokemon.Sp_ATK * boostvalue
+                If my_pokemon.SP_ATK_Boost <= 6 And my_pokemon.SP_ATK_Boost >= -6 Then
+                    Dim boostvalue As Double = Constants.Get_StageBoostValue(my_pokemon.SP_ATK_Boost)
+                    my_pokemon.Sp_ATK = my_pokemon.Sp_ATK * boostvalue
+                ElseIf my_pokemon.SP_ATK_Boost > 6 Then
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Special Attack won't go any higher!")
+                    End If
+                    my_pokemon.SP_ATK_Boost = 6
+                    success = False
+                ElseIf my_pokemon.SP_ATK_Boost < -6 Then
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Special Attack won't go any lower!")
+                    End If
+                    my_pokemon.SP_ATK_Boost = -6
+                    success = False
+                End If
             ElseIf effects(i).Contains("SPDEF") Then
                 If effects(i).Contains("SPDEFU+1") Or effects(i).Contains("SPDEFO+1") Then
                     my_pokemon.SP_DEF_Boost += 1
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.SP_DEF_Boost <= 6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Special Defense rose!")
                     End If
                 ElseIf effects(i).Contains("SPDEFU+2") Or effects(i).Contains("SPDEFO+2") Then
                     my_pokemon.SP_DEF_Boost += 2
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.SP_DEF_Boost <= 6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Special Defense sharply rose!")
                     End If
                 ElseIf effects(i).Contains("SPDEFU-1") Or effects(i).Contains("SPDEFO-1") Then
                     my_pokemon.SP_DEF_Boost -= 1
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.SP_DEF_Boost >= -6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Special Defense fell!")
                     End If
                 ElseIf effects(i).Contains("SPDEFU-2") Or effects(i).Contains("SPDEFO-2") Then
                     my_pokemon.SP_DEF_Boost -= 2
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.SP_DEF_Boost >= -6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Special Defense harshly fell!")
                     End If
                 Else
-                    Return REM don't do anything
+                    Return False REM don't do anything
 
                 End If
-                Dim boostvalue As Double = Constants.Get_StageBoostValue(my_pokemon.SP_DEF_Boost)
-                my_pokemon.Sp_DEF = my_pokemon.Sp_DEF * boostvalue
+                If my_pokemon.SP_DEF_Boost <= 6 And my_pokemon.SP_DEF_Boost >= -6 Then
+                    Dim boostvalue As Double = Constants.Get_StageBoostValue(my_pokemon.SP_DEF_Boost)
+                    my_pokemon.Sp_DEF = my_pokemon.Sp_DEF * boostvalue
+                ElseIf my_pokemon.SP_DEF_Boost > 6 Then
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Special Defense won't go any higher!")
+                    End If
+                    my_pokemon.SP_DEF_Boost = 6
+                    success = False
+                ElseIf my_pokemon.SP_DEF_Boost < -6 Then
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Special Defense won't go any lower!")
+                    End If
+                    my_pokemon.SP_DEF_Boost = -6
+                    success = False
+                End If
+
             ElseIf effects(i).Contains("ATK") Then
                 If effects(i).Contains("ATKU+1") Or effects(i).Contains("ATKO+1") Then
                     my_pokemon.ATK_Boost += 1
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.ATK_Boost <= 6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Attack rose!")
                     End If
                 ElseIf effects(i).Contains("ATKU+2") Or effects(i).Contains("ATKO+2") Then
                     my_pokemon.ATK_Boost += 2
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.ATK_Boost <= 6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Attack rose!")
                     End If
                 ElseIf effects(i).Contains("ATKU-1") Or effects(i).Contains("ATKO-1") Then
                     my_pokemon.ATK_Boost -= 1
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.ATK_Boost >= -6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Attack fell!")
                     End If
                 ElseIf effects(i).Contains("ATKU-2") Or effects(i).Contains("ATKO-2") Then
                     my_pokemon.ATK_Boost -= 2
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.Name >= -6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Attack harshly fell!")
                     End If
                 Else
-                    Return REM don't do anything
+                    Return False REM don't do anything
 
                 End If
-                Dim boostvalue As Double = Constants.Get_StageBoostValue(my_pokemon.ATK_Boost)
-                my_pokemon.ATK = my_pokemon.ATK * boostvalue
+                If my_pokemon.ATK_Boost <= 6 And my_pokemon.ATK_Boost >= -6 Then
+                    Dim boostvalue As Double = Constants.Get_StageBoostValue(my_pokemon.ATK_Boost)
+                    my_pokemon.ATK = my_pokemon.ATK * boostvalue
+                ElseIf my_pokemon.ATK_Boost > 6 Then
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Attack won't go any higher!")
+                    End If
+                    my_pokemon.ATK_Boost = 6
+                    success = False
+                ElseIf my_pokemon.ATK_Boost <= -6 Then
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Attack won't go any lower!")
+                    End If
+                    my_pokemon.ATK_Boost = -6
+                    success = False
+                End If
             ElseIf effects(i).Contains("DEF") Then
                 If effects(i).Contains("DEFU+1") Or effects(i).Contains("DEFO+1") Then
                     my_pokemon.DEF_Boost += 1
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.DEF_Boost <= 6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Defense rose!")
                     End If
                 ElseIf effects(i).Contains("DEFU+2") Or effects(i).Contains("DEFO+2") Then
                     my_pokemon.DEF_Boost += 2
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.DEF_Boost <= 6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Defense sharply rose!")
                     End If
                 ElseIf effects(i).Contains("DEFU-1") Or effects(i).Contains("DEFO-1") Then
                     my_pokemon.DEF_Boost -= 1
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.DEF_Boost >= -6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Defense fell!")
                     End If
                 ElseIf effects(i).Contains("DEFU-2") Or effects(i).Contains("DEFO-2") Then
                     my_pokemon.DEF_Boost -= 2
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.DEF_Boost >= -6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Defense harshly fell!")
                     End If
                 Else
-                    Return REM don't do anything
+                    Return False REM don't do anything
                 End If
-                Dim boostvalue As Double = Constants.Get_StageBoostValue(my_pokemon.DEF_Boost)
-                my_pokemon.DEF = my_pokemon.DEF * boostvalue
+                If my_pokemon.DEF_Boost <= 6 And my_pokemon.DEF_Boost >= -6 Then
+                    Dim boostvalue As Double = Constants.Get_StageBoostValue(my_pokemon.DEF_Boost)
+                    my_pokemon.DEF = my_pokemon.DEF * boostvalue
+                ElseIf my_pokemon.DEF_Boost > 6 Then
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Defense won't go any higher!")
+                    End If
+                    my_pokemon.DEF_Boost = 6
+                    success = False
+                ElseIf my_pokemon.DEF_Boost < -6 Then
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Defense won't go any lower!")
+                    End If
+                    my_pokemon.SP_DEF_Boost = -6
+                    success = False
+                End If
+
 
             ElseIf effects(i).Contains("SPD") Then
                 If effects(i).Contains("SPDU+1") Or effects(i).Contains("SPDO+1") Then
                     my_pokemon.SPEED_Boost += 1
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.SPEED_Boost <= 6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Speed rose!")
                     End If
                 ElseIf effects(i).Contains("SPDU+2") Or effects(i).Contains("SPDO+2") Then
                     my_pokemon.SPEED_Boost += 2
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.SPEED_Boost <= 6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Speed sharply rose!")
                     End If
                 ElseIf effects(i).Contains("SPDU-1") Or effects(i).Contains("SPDO-1") Then
                     my_pokemon.SPEED_Boost -= 1
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.SPEED_Boost >= -6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Speed fell!")
                     End If
                 ElseIf effects(i).Contains("SPDU-2") Or effects(i).Contains("SPDO-2") Then
                     my_pokemon.SPEED_Boost -= 2
-                    If Not Logger.isMute() Then
+                    If Not Logger.isMute() And my_pokemon.SPEED_Boost >= -6 Then
                         Logger.Record("I")
                         Logger.Record(my_pokemon.Name + "'s Speed harshly fell!")
                     End If
                 Else
-                    Return REM don't do anything
+                    Return False REM don't do anything
 
                 End If
-                Dim boostvalue As Double = Constants.Get_StageBoostValue(my_pokemon.SPEED_Boost)
-                my_pokemon.SPD = my_pokemon.SPD * boostvalue
+                If my_pokemon.SPEED_Boost <= 6 And my_pokemon.SPEED_Boost >= -6 Then
+                    Dim boostvalue As Double = Constants.Get_StageBoostValue(my_pokemon.SPEED_Boost)
+                    my_pokemon.SPD = my_pokemon.SPD * boostvalue
+                ElseIf my_pokemon.SPEED_Boost > 6 Then
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Speed won't go any higher!")
+                    End If
+                    my_pokemon.SPEED_Boost = 6
+                    success = False
+                ElseIf my_pokemon.SPEED_Boost < -6 Then
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(my_pokemon.Name + "'s Speed won't go any lower!")
+                    End If
+                    my_pokemon.SPEED_Boost = -6
+                    success = False
+                End If
+
             Else
-                Return
+                Return False
             End If
 
             i += 1
         End While
-    End Sub
+
+        statchanging_move.PP -= 1 REM TODO: consider the ability Pressure
+        Return success
+    End Function
 
     ''' <summary>
     ''' A wrapper that applies the functions apply_statustopokemon_before or apply_statustopokemon_after depending on the flag "before_or_after."
@@ -710,7 +799,7 @@
             If Logger.isMute() = False Then
                 Logger.Record("I")
                 Logger.Record(pokemon.Name + " is paralyzed! It can't move!")
-            End If          
+            End If
             Return True
         Else
             Return False

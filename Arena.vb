@@ -295,9 +295,9 @@ Public Class Pokemon_Arena
 
     ''' <summary>
     ''' Gets the health status in colour of the current battling Pokemon of Red.
-    ''' Red -> less than 20%
-    ''' Yellow -> between 20 and 50%
-    ''' Green -> greater than 50%
+    ''' red -> less than 20%
+    ''' yellow -> between 20 and 50%
+    ''' green -> greater than 50%
     ''' </summary>
     ''' <returns>A string stating, "red," "yellow," and "green"</returns>
     ''' <remarks></remarks>
@@ -306,6 +306,29 @@ Public Class Pokemon_Arena
         Dim original_hp As Integer = Form1.Get_PokemonDictionary.Get_Pokemon(Me.CurrentBattlingRed.First.Name).HP
 
         Dim percent As Double = currentbattling_hp / original_hp
+        If percent <= 0.5 And percent >= 0.2 Then
+            Return "yellow"
+        ElseIf percent < 0.2 Then
+            Return "red"
+        Else
+            Return "green"
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Returns the health status, in colour, of the pokemon
+    ''' red -> less than 20%
+    ''' yellow -> between 20 and 50%
+    ''' green -> greater than 50%
+    ''' </summary>
+    ''' <param name="pokemon">The pokemon to evaluate</param>
+    ''' <returns>A string stating, "red," "yellow," and "green"</returns>
+    ''' <remarks></remarks>
+    Public Function Get_HealthStatusofPokemon(ByVal pokemon As Pokemon) As String
+        Dim pokemon_HP As Integer = pokemon.HP
+        Dim original_HP As Integer = Form1.Get_PokemonDictionary.Get_Pokemon(pokemon.Name).HP
+
+        Dim percent As Double = pokemon_HP / original_HP
         If percent <= 0.5 And percent >= 0.2 Then
             Return "yellow"
         ElseIf percent < 0.2 Then

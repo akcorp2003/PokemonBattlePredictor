@@ -114,6 +114,16 @@ Public Class Battle_Prediction : Implements Predict
 
                 Else
                     REM same speed, in this case, it will be random
+                    Dim rand As Integer = Poke_Calculator.GenerateRandomNumber()
+                    If rand <= 50 Then
+                        turn_queue.Enqueue(battle_arena.CurrentBattlingBlue.First)
+                        turn_queue.Enqueue(battle_arena.CurrentBattlingRed.First)
+                        battle_arena.Current_Attacker = "blue"
+                    Else
+                        turn_queue.Enqueue(battle_arena.CurrentBattlingRed.First)
+                        turn_queue.Enqueue(battle_arena.CurrentBattlingBlue.First)
+                        battle_arena.Current_Attacker = "red"
+                    End If
                 End If
             End If
 
@@ -157,6 +167,12 @@ Public Class Battle_Prediction : Implements Predict
                     End If
                     
 
+                End If
+
+                If Not Logger.isMute() Then
+                    Logger.Record("BEGIN TEMP INFO")
+                    Logger.Record_CurrentArenaInfo(battle_arena)
+                    Logger.Record("END TEMP INFO")
                 End If
 
                 If battle_arena.Current_Attacker = "blue" Then
@@ -228,6 +244,16 @@ Public Class Battle_Prediction : Implements Predict
 
                 second_pokemon = turn_queue.Dequeue()
 
+                battle_arena.ManageTurns()
+                REM now statuses are applied after all pokemon have gone
+                poke_calc.apply_statustopokemon_after(first_pokemon, battle_arena)
+                poke_calc.apply_statustopokemon_after(second_pokemon, battle_arena)
+
+                If Not Logger.isMute() Then
+                    Logger.Record("BEGIN TEMP INFO")
+                    Logger.Record_CurrentArenaInfo(battle_arena)
+                    Logger.Record("END TEMP INFO")
+                End If               
 
                 If battle_arena.Current_Attacker = "blue" Then
                     REM check if red has fainted
@@ -254,10 +280,6 @@ Public Class Battle_Prediction : Implements Predict
                     battle_arena.Current_Attacker = "blue"
                 End If
 
-                battle_arena.ManageTurns()
-                REM now statuses are applied after all pokemon have gone
-                poke_calc.apply_statustopokemon_after(first_pokemon, battle_arena)
-                poke_calc.apply_statustopokemon_after(second_pokemon, battle_arena)
                 Logger.Record("END CYCLE")
 
             Else
@@ -685,6 +707,10 @@ Public Class Battle_Prediction : Implements Predict
     Public Function Project_Battle(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal attacking_move As Move_Info,
                                    ByVal poke_calculator As Poke_Calculator, ByVal max_or_min As Integer, ByVal arena As Pokemon_Arena) As Integer
 
+        If attacking_move Is Nothing Then
+            Return Integer.MaxValue
+        End If
+
         REM first check if attacking_move is a damaging move. If not, this function cannot accept it.
         If attacking_move.Power = 0 Then
             Return -1
@@ -696,6 +722,10 @@ Public Class Battle_Prediction : Implements Predict
         Dim EFF As Double
 
         EFF = eff_table.Effective_Type(attacking_move.Type, second_pokemon.Types)
+
+        If EFF = 0 Then
+            Return Integer.MaxValue
+        End If
 
         While Not second_pokemon.HP <= 0
             REM check any status that needs to be updated
@@ -978,7 +1008,7 @@ Public Class Battle_Prediction : Implements Predict
                             ElseIf rand <= 100 AndAlso rand > 75 Then
                                 rand = 3
                             End If
-                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(rand), poke_calc, max_or_min)
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle.Item(rand), poke_calc, max_or_min)
                         Else
                             REM apply struggle move
                             Dim struggle As Move_Info = Move_Info.get_StruggleMove()
@@ -1328,7 +1358,7 @@ Public Class Battle_Prediction : Implements Predict
         move_enum.Dispose()
 
         If listofstatmoves.Count = 1 Then
-            If Not listofstatmoves.First.PP = 0 Then
+            If listofstatmoves.First.PP > 0 Then
                 move_pack.Move = listofstatmoves.First
             End If
         Else
@@ -1397,12 +1427,12 @@ Public Class Battle_Prediction : Implements Predict
             Dim i As Integer = 0
             While i < effects.Length
                 If is_special = True Then
-                    If effects(i).Contains("SPATKU+") Then
+                    If effects(i).Contains("SPATKU+") And first_pokemon.SP_ATK_Boost < 6 Then
                         final_statmoves.Add(move_enum.Current)
                         Exit While
                     End If
                 Else
-                    If effects(i).Contains("ATKU+") Then
+                    If effects(i).Contains("ATKU+") And first_pokemon.ATK_Boost < 6 Then
                         REM we can add this move to the final list!
                         final_statmoves.Add(move_enum.Current)
                         Exit While
@@ -1423,6 +1453,9 @@ Public Class Battle_Prediction : Implements Predict
 
         REM first test to see how many turns it takes for first_pokemon to kill second_pokemon normally
         Dim turnstofaint_before As Integer = Me.Project_Battle(attacker.Clone(), defender.Clone(), movetouse, poke_calc, max_or_min, arena)
+        If turnstofaint_before = 1 Then
+            Return Nothing REM immediately tell the function calling this that it should go for an attacking move right now!!
+        End If
 
         REM test how long it takes for the second_pokemon to kill first_pokemon
         Dim oppo_move As Prediction_Move_Package = Me.FindBestMove(second_pokemon, first_pokemon, poke_calc, second_pokemon.Moves_For_Battle, max_or_min, arena)
@@ -1441,16 +1474,19 @@ Public Class Battle_Prediction : Implements Predict
                 Continue While
             End If
 
-            poke_calc.apply_stattopokemon(attacker, finalmove_enum.Current, attacker.Name)
-            Dim turnstofaint As Integer = Me.Project_Battle(attacker.Clone(), defender.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
-            REM first check to make sure that the stat move doesn't take longer to kill the opponent than
-            REM the opponent to kill me. Otherwise, don't think about using this move
-            If turnstofaint + 1 < me_turnstofaint Then
-                If turnstofaint + 1 < newmovestofaint Then
-                    newmovestofaint = turnstofaint
-                    statmove_touse = finalmove_enum.Current
+            Dim success As Boolean = poke_calc.apply_stattopokemon(attacker, finalmove_enum.Current.Clone, attacker.Name)
+            If success Then
+                Dim turnstofaint As Integer = Me.Project_Battle(attacker.Clone(), defender.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
+                REM first check to make sure that the stat move doesn't take longer to kill the opponent than
+                REM the opponent to kill me. Otherwise, don't think about using this move
+                If turnstofaint + 1 < me_turnstofaint Then
+                    If turnstofaint + 1 < newmovestofaint Then
+                        newmovestofaint = turnstofaint
+                        statmove_touse = finalmove_enum.Current
+                    End If
                 End If
             End If
+            
 
 
             finalmove_enum.MoveNext()
@@ -1497,12 +1533,12 @@ Public Class Battle_Prediction : Implements Predict
             Dim i As Integer = 0
             While i < effects.Length
                 If is_special = True Then
-                    If effects(i).Contains("SPDEFO-") Then
+                    If effects(i).Contains("SPDEFO-") And second_pokemon.SP_DEF_Boost > -6 Then
                         final_statmoves.Add(move_enum.Current)
                         Exit While
                     End If
                 Else
-                    If effects(i).Contains("DEFO-") Then
+                    If effects(i).Contains("DEFO-") And second_pokemon.DEF_Boost > -6 Then
                         REM we can add this move to the final list!
                         final_statmoves.Add(move_enum.Current)
                         Exit While
@@ -1522,6 +1558,9 @@ Public Class Battle_Prediction : Implements Predict
 
         REM first test to see how many turns it takes for first_pokemon to kill second_pokemon normally
         Dim turnstofaint_before As Integer = Me.Project_Battle(attacker, defender, movetouse, poke_calc, max_or_min, arena.Clone())
+        If turnstofaint_before = 1 Then
+            Return Nothing
+        End If
 
         REM test how long it takes for the second_pokemon to kill first_pokemon
         Dim oppo_move As Prediction_Move_Package = Me.FindBestMove(second_pokemon, first_pokemon, poke_calc, second_pokemon.Moves_For_Battle, max_or_min, arena.Clone())
@@ -1538,16 +1577,19 @@ Public Class Battle_Prediction : Implements Predict
                 Continue While
             End If
 
-            poke_calc.apply_stattopokemon(defender, finalmove_enum.Current, defender.Name)
-            Dim turnstofaint As Integer = Me.Project_Battle(attacker.Clone(), defender.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
-            REM first check to make sure that the stat move doesn't take longer to kill the opponent than
-            REM the opponent to kill me. Otherwise, don't think about using this move
-            If turnstofaint + 1 < me_turnstofaint Then
-                If turnstofaint + 1 < newmovestofaint Then
-                    newmovestofaint = turnstofaint
-                    statmove_touse = finalmove_enum.Current
+            Dim success As Boolean = poke_calc.apply_stattopokemon(defender, finalmove_enum.Current.Clone(), defender.Name)
+            If success Then
+                Dim turnstofaint As Integer = Me.Project_Battle(attacker.Clone(), defender.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
+                REM first check to make sure that the stat move doesn't take longer to kill the opponent than
+                REM the opponent to kill me. Otherwise, don't think about using this move
+                If turnstofaint + 1 < me_turnstofaint Then
+                    If turnstofaint + 1 < newmovestofaint Then
+                        newmovestofaint = turnstofaint
+                        statmove_touse = finalmove_enum.Current
+                    End If
                 End If
             End If
+            
 
 
             finalmove_enum.MoveNext()
@@ -1591,12 +1633,12 @@ Public Class Battle_Prediction : Implements Predict
             Dim i As Integer = 0
             While i < effects.Length
                 If second_pokemon.num_Special() > second_pokemon.num_Normal() Then
-                    If effects(i).Contains("SPATKO-") Then
+                    If effects(i).Contains("SPATKO-") And second_pokemon.SP_ATK_Boost > -6 Then
                         final_statmoves.Add(move_enum.Current)
                         Exit While
                     End If
                 Else
-                    If effects(i).Contains("ATKO-") Then
+                    If effects(i).Contains("ATKO-") And second_pokemon.ATK_Boost > -6 Then
                         REM we can add this move to the final list!
                         final_statmoves.Add(move_enum.Current)
                         Exit While
@@ -1618,6 +1660,9 @@ Public Class Battle_Prediction : Implements Predict
 
         REM project how long I need to take to kill opponent
         Dim oppo_turnstofaint As Integer = Me.Project_Battle(first_pokemon.Clone(), second_pokemon.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
+        If oppo_turnstofaint = 1 Then
+            Return Nothing
+        End If
 
         Dim attacker As Pokemon = first_pokemon.Clone()
         Dim defender As Pokemon = second_pokemon.Clone()
@@ -1632,18 +1677,21 @@ Public Class Battle_Prediction : Implements Predict
                 Continue While
             End If
 
-            poke_calc.apply_stattopokemon(defender, finalmove_enum.Current, first_pokemon.Name)
-            REM see how long it takes for opponent to kill us with the boost!
-            Dim turnstofaint As Integer = Me.Project_Battle(defender.Clone(), first_pokemon.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
-            REM see if the 
-            If oppo_turnstofaint + 1 < turnstofaint Then
-                REM check if the new result is better than the old one
-                REM we want to select the one that takes the longest to kill us
-                If turnstofaint > newmovestofaint Then
-                    newmovestofaint = turnstofaint
-                    statmove_touse = finalmove_enum.Current
+            Dim success As Boolean = poke_calc.apply_stattopokemon(defender, finalmove_enum.Current.Clone(), first_pokemon.Name)
+            If success Then
+                REM see how long it takes for opponent to kill us with the boost!
+                Dim turnstofaint As Integer = Me.Project_Battle(defender.Clone(), first_pokemon.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
+                REM see if the 
+                If oppo_turnstofaint + 1 < turnstofaint Then
+                    REM check if the new result is better than the old one
+                    REM we want to select the one that takes the longest to kill us
+                    If turnstofaint > newmovestofaint Then
+                        newmovestofaint = turnstofaint
+                        statmove_touse = finalmove_enum.Current
+                    End If
                 End If
             End If
+            
 
 
             finalmove_enum.MoveNext()
@@ -1686,12 +1734,12 @@ Public Class Battle_Prediction : Implements Predict
             While i < effects.Length
                 If second_pokemon.num_Special() > second_pokemon.num_Normal() Then
                     REM it's more likely the pokemon will choose a special move
-                    If effects(i).Contains("SPDEFU+") Then
+                    If effects(i).Contains("SPDEFU+") And first_pokemon.SP_DEF_Boost < 6 Then
                         final_statmoves.Add(move_enum.Current)
                         Exit While
                     End If
                 Else
-                    If effects(i).Contains("DEFU+") Then
+                    If effects(i).Contains("DEFU+") And first_pokemon.DEF_Boost < 6 Then
                         REM we can add this move to the final list!
                         final_statmoves.Add(move_enum.Current)
                         Exit While
@@ -1713,6 +1761,9 @@ Public Class Battle_Prediction : Implements Predict
 
         REM project how long I need to take to kill opponent
         Dim oppo_turnstofaint As Integer = Me.Project_Battle(first_pokemon.Clone(), second_pokemon.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
+        If oppo_turnstofaint = 1 Then
+            Return Nothing
+        End If
 
         Dim attacker As Pokemon = first_pokemon.Clone()
         Dim defender As Pokemon = second_pokemon.Clone()
@@ -1727,18 +1778,21 @@ Public Class Battle_Prediction : Implements Predict
                 Continue While
             End If
 
-            poke_calc.apply_stattopokemon(attacker, finalmove_enum.Current, attacker.Name)
-            REM see how long it takes for opponent to kill us with the boost!
-            Dim turnstofaint As Integer = Me.Project_Battle(defender.Clone(), attacker.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
-            REM see if the 
-            If oppo_turnstofaint + 1 < turnstofaint Then
-                REM check if the new result is better than the old one
-                REM we want to select the one that takes the longest to kill us
-                If turnstofaint > newmovestofaint Then
-                    newmovestofaint = turnstofaint
-                    statmove_touse = finalmove_enum.Current
+            Dim success As Boolean = poke_calc.apply_stattopokemon(attacker, finalmove_enum.Current.Clone(), attacker.Name)
+            If success Then
+                REM see how long it takes for opponent to kill us with the boost!
+                Dim turnstofaint As Integer = Me.Project_Battle(defender.Clone(), attacker.Clone(), movetouse, poke_calc, max_or_min, arena.Clone())
+                REM see if the 
+                If oppo_turnstofaint + 1 < turnstofaint Then
+                    REM check if the new result is better than the old one
+                    REM we want to select the one that takes the longest to kill us
+                    If turnstofaint > newmovestofaint Then
+                        newmovestofaint = turnstofaint
+                        statmove_touse = finalmove_enum.Current
+                    End If
                 End If
             End If
+            
 
 
             finalmove_enum.MoveNext()
@@ -1973,6 +2027,9 @@ Public Class Battle_Prediction : Implements Predict
             move_enum.MoveNext()
         Next
 
+        If return_package.Move Is Nothing Then
+            Return Nothing
+        End If
         If return_package.Move.Name = "" OrElse return_package.Move.PP <= 0 Then
             Return Nothing
         Else

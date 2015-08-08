@@ -288,6 +288,7 @@ Public Class Dex_Writer
         REM first print Pokemon information
         REM Team Blue:
         Dim blue_table As Table = newfile.AddTable(8, 4)
+        blue_table.Design = TableDesign.ColorfulGridAccent5
         blue_table.Rows(0).Cells(0).Paragraphs.First().Append("Name")
         blue_table.Rows(1).Cells(0).Paragraphs.First().Append("Type(s)")
         blue_table.Rows(2).Cells(0).Paragraphs.First().Append("HP")
@@ -321,6 +322,7 @@ Public Class Dex_Writer
         newfile.InsertParagraph("Team Red", False, redtableformat)
         REM Team Red:
         Dim red_table As Table = newfile.AddTable(8, 4)
+        red_table.Design = TableDesign.ColorfulGridAccent5
         red_table.Rows(0).Cells(0).Paragraphs.First().Append("Name")
         red_table.Rows(1).Cells(0).Paragraphs.First().Append("Type(s)")
         red_table.Rows(2).Cells(0).Paragraphs.First().Append("HP")
@@ -364,6 +366,18 @@ Public Class Dex_Writer
             End If
 
             If Logger.get_Log1.Item(i) = "END BATTLE" Then
+                newfile.InsertParagraph(Environment.NewLine, False, my_format)
+                Continue For
+            End If
+
+            If Logger.get_Log1.Item(i) = "BEGIN TEMP INFO" Then
+                newfile.InsertParagraph("-------Arena Status-------", False, my_format)
+                i = PrintArenaCondition(i + 1, newfile, arena)
+                Continue For
+            End If
+
+            If Logger.get_Log1.Item(i) = "END TEMP INFO" Then
+                newfile.InsertParagraph("-------Arena Status Completed-------", False, my_format)
                 newfile.InsertParagraph(Environment.NewLine, False, my_format)
                 Continue For
             End If
@@ -417,6 +431,7 @@ Public Class Dex_Writer
 
             For i As Integer = 0 To arena.Team_Blue.Get_Team("blue").Count - 1 Step 1
                 Dim bluetable As Table = newfile.AddTable(7, 5)
+                bluetable.Design = TableDesign.LightGridAccent1
                 Dim blueteam As List(Of Pokemon) = arena.Team_Blue.Get_Team("blue")
                 bluetable.Rows(0).Cells(0).Paragraphs.First().Append(blueteam(i).Name)
                 Dim namerow As Row = bluetable.Rows(0)
@@ -452,6 +467,7 @@ Public Class Dex_Writer
                     move_enum.MoveNext()
                 Next
                 newfile.InsertTable(bluetable)
+                newfile.InsertParagraph(Environment.NewLine, False)
             Next
 
 
@@ -462,6 +478,7 @@ Public Class Dex_Writer
 
             For i As Integer = 0 To arena.Team_Red.Get_Team("red").Count - 1 Step 1
                 Dim redtable As Table = newfile.AddTable(7, 5)
+                redtable.Design = TableDesign.LightGridAccent5
                 Dim redteam As List(Of Pokemon) = arena.Team_Red.Get_Team("red")
                 redtable.Rows(0).Cells(0).Paragraphs.First().Append(redteam(i).Name)
                 Dim namerow As Row = redtable.Rows(0)
@@ -498,9 +515,110 @@ Public Class Dex_Writer
                     move_enum.MoveNext()
                 Next
                 newfile.InsertTable(redtable)
+                newfile.InsertParagraph(Environment.NewLine, False)
             Next
         End If
     End Sub
+
+    Private Function PrintArenaCondition(ByVal start_index As Integer, ByRef newfile As DocX, ByVal arena As Pokemon_Arena) As Integer
+        Dim ending_index As Integer = start_index
+        Dim my_format As Formatting = Get_NormalTextFormat()
+        Dim workingon_red As Boolean = False
+        Dim workingon_blue As Boolean = False
+
+        For i As Integer = start_index To Logger.get_Log1.Count - 1 Step 1
+            ending_index = i
+            If Logger.get_Log1.Item(i) = "BEGIN TEAM BLUE" Then
+                workingon_blue = True
+                workingon_red = False
+                Continue For
+            End If
+
+            If Logger.get_Log1.Item(i) = "END TEAM BLUE" Then
+                workingon_blue = False
+                Continue For
+            End If
+
+            If Logger.get_Log1.Item(i) = "BEGIN TEAM RED" Then
+                workingon_blue = False
+                workingon_red = True
+                Continue For
+            End If
+
+            If Logger.get_Log1.Item(i) = "END TEAM RED" Then
+                REM by convention, this is the last one
+                ending_index = i
+                Exit For
+            End If
+
+            If Logger.get_Log1().Item(i).Contains(";") Or Logger.get_Log1().Item(i).Length = 1 Then
+                Get_Formatting(Logger.get_Log1().Item(i), my_format)
+                newfile.InsertParagraph(Logger.get_Log1().Item(i + 1), False, my_format)
+                i += 1
+                Reset_Formatting(my_format)
+                Continue For
+            End If
+
+            If Logger.get_Log1().Item(i).Contains("green") OrElse Logger.get_Log1().Item(i).Contains("yellow") OrElse Logger.get_Log1().Item(i).Contains("red") Then
+                If Logger.get_Log1().Item(i).Contains("green") Then
+                    my_format.FontColor = Color.Green
+                ElseIf Logger.get_Log1().Item(i).Contains("yellow") Then
+                    my_format.FontColor = Color.Yellow
+                Else
+                    my_format.FontColor = Color.Green
+                End If
+                newfile.InsertParagraph(Logger.get_Log1().Item(i), False, my_format)
+                Reset_Formatting(my_format)
+                Continue For
+            End If
+
+            If Logger.get_Log1().Item(i).Contains("ONE POKEMON") Then
+                i += 1 REM move to the next item which begins the important things
+                Dim n_columns As Integer
+                If workingon_blue Then
+                    n_columns = arena.Get_TeamBlue.Get_Team("blue").Count - 1
+                Else
+                    n_columns = arena.Get_TeamRed.Get_Team("red").Count - 1
+                End If
+
+                Dim infotable As Table = newfile.AddTable(4, n_columns)
+                infotable.Design = TableDesign.ColorfulListAccent5
+                For j As Integer = 0 To n_columns - 1 Step 1
+                    REM only be true for the iteration where j >=1 
+                    If Logger.get_Log1().Item(i).Contains("ONE POKEMON") Then
+                        i += 1
+                    End If
+
+                    infotable.Rows(0).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i)) 'Blue/Red Team #
+                    infotable.Rows(1).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i + 1)) 'HP:
+                    infotable.Rows(2).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i + 2)) 'HP color:
+                    REM apply a color to the paragraph
+                    If Logger.get_Log1.Item(i + 2) = "red" Then
+                        infotable.Rows(2).Cells(j).Paragraphs.First.Color(Color.Red)
+                    ElseIf Logger.get_Log1.Item(i + 2) = "yellow" Then
+                        infotable.Rows(2).Cells(j).Paragraphs.First.Color(Color.Yellow)
+                    Else
+                        infotable.Rows(2).Cells(j).Paragraphs.First.Color(Color.Green)
+                    End If
+                    infotable.Rows(3).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i + 3)) 'Status:
+
+                    i += 4
+                    If Logger.get_Log1.Item(i) = "END ONE POKEMON" Then
+                        i += 1
+                        Continue For
+                    End If
+                Next
+                newfile.InsertTable(infotable)
+                newfile.InsertParagraph(Environment.NewLine, False)
+                Continue For
+            End If
+
+            REM just insert the paragraph normally
+            newfile.InsertParagraph(Logger.get_Log1().Item(i), False, my_format)
+        Next
+
+        Return ending_index
+    End Function
 
     Private Sub Get_Formatting(ByVal properties As String, ByVal format As Formatting)
         Dim formatting As String() = properties.Split(";")
@@ -518,6 +636,7 @@ Public Class Dex_Writer
         format.Bold = False
         format.Italic = False
         format.UnderlineColor = Color.White
+        format.FontColor = Color.Black
     End Sub
 
     Private Function Get_TableHeadingFormat() As Formatting

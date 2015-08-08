@@ -25,10 +25,20 @@ PokemonBattlePredictor
 </member><member name="M:PokemonBattlePredictor.Pokemon_Arena.Get_HealthStatusofRed">
 	<summary>
  Gets the health status in colour of the current battling Pokemon of Red.
- Red -&gt; less than 20%
- Yellow -&gt; between 20 and 50%
- Green -&gt; greater than 50%
+ red -&gt; less than 20%
+ yellow -&gt; between 20 and 50%
+ green -&gt; greater than 50%
  </summary>
+	<returns>A string stating, "red," "yellow," and "green"</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Pokemon_Arena.Get_HealthStatusofPokemon(PokemonBattlePredictor.Pokemon)">
+	<summary>
+ Returns the health status, in colour, of the pokemon
+ red -&gt; less than 20%
+ yellow -&gt; between 20 and 50%
+ green -&gt; greater than 50%
+ </summary>
+	<param name="pokemon">The pokemon to evaluate</param>
 	<returns>A string stating, "red," "yellow," and "green"</returns>
 	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Pokemon_Arena.ManageTurns">
@@ -329,9 +339,11 @@ PokemonBattlePredictor
 	<summary>
  Apples statchanging_move to my_pokemon. This could be raising damage_move by 1 stage, 2 stages, or lower 1 stage, etc...
  This function cannot distinguish between an opponent or user move.
+ The function returns a boolean indicating if the application was successful or not.
  </summary>
 	<param name="my_pokemon">The move that applies damage</param>
 	<param name="statchanging_move">The non-damaging move</param>
+	<returns>A Boolean saying if the application was successful.</returns>
 	<remarks>This function does not know who the damage_move belongs to.</remarks>
 </member><member name="M:PokemonBattlePredictor.Poke_Calculator.apply_statustopokemon_wrapper(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon_Arena,System.Int32)">
 	<summary>

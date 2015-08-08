@@ -250,7 +250,7 @@ Public Class Pokemon
         Get
             For i As Integer = 0 To m_Moves_for_Battle.Count - 1 Step 1
                 If Constants.Get_FormattedString(m_Moves_for_Battle(i).Name) = Constants.Get_FormattedString(name) Then
-                    Return m_Moves_for_Battle(i)
+                    Return m_Moves_for_Battle.Item(i)
                 End If
             Next
             Return Nothing
@@ -262,7 +262,7 @@ Public Class Pokemon
 
         Dim nomoves_counter As Integer = 0
         For i As Integer = 0 To Me.Moves_For_Battle.Count - 1 Step 1
-            If Me.Moves_For_Battle(i).PP = 0 Then
+            If Me.Moves_For_Battle.Item(i).PP = 0 Then
                 nomoves_counter += 1
             End If
         Next

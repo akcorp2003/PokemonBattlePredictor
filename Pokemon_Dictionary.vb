@@ -27,7 +27,7 @@ Public Class Pokemon_Dictionary
     ''' <remarks>poke_name should be in lowercase and spaces removed. No quotations</remarks>
     Public Function Get_Pokemon(ByVal poke_name As String) As Pokemon
         Dim toreturn_pokemon As New Pokemon 'Hopefully this will be alright
-        poke_name = poke_name.ToLower
+        poke_name = Constants.Get_FormattedString(poke_name)
         If pokemon_dictionary.TryGetValue(poke_name, toreturn_pokemon) = True Then
             Return toreturn_pokemon
         Else

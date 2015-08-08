@@ -37,8 +37,77 @@ Module Logger
     ''' <param name="arena"></param>
     ''' <remarks></remarks>
     Public Sub Record_CurrentArenaInfo(ByVal arena As Pokemon_Arena)
+        Record("BEGIN TEAM BLUE")
+        Record("B")
+        Record("Current Battling Blue: " + arena.CurrentBattlingBlue.First.Name)
+        Record("HP: " + Convert.ToString(arena.CurrentBattlingBlue.First.HP))
+        Record("HP color: " + arena.Get_HealthStatusofPokemon(arena.CurrentBattlingBlue.First))
+        Dim statusstring_blue As String = Get_StatusString(arena.CurrentBattlingBlue.First)
+        Record("Status: " + statusstring_blue)
+
+        Dim blueteam As Pokemon_Team = arena.Team_Blue
+        For i As Integer = 0 To blueteam.Get_Team("blue").Count - 1 Step 1
+            If Not blueteam.Get_Team("blue").Item(i).Name = arena.CurrentBattlingBlue.First.Name Then
+                Record("ONE POKEMON")
+                Record("Blue team #" + Convert.ToString(i + 1) + ": " + blueteam.Get_Team("blue").Item(i).Name)
+                Record("HP: " + Convert.ToString(blueteam.Get_Team("blue").Item(i).HP))
+                Record("HP color: " + arena.Get_HealthStatusofPokemon(blueteam.Get_Team("blue").Item(i)))
+                Dim statusstring As String = Get_StatusString(blueteam.Get_Team("blue").Item(i))
+                Record("Status: " + statusstring)
+                Record("END ONE POKEMON")
+            End If
+        Next
+        Record("END TEAM BLUE")
+
+        Record("BEGIN TEAM RED")
+        Record("B")
+        Record("Current Battling Red: " + arena.CurrentBattlingRed.First.Name)
+        Record("HP: " + Convert.ToString(arena.CurrentBattlingRed.First.HP))
+        Record("HP color: " + arena.Get_HealthStatusofPokemon(arena.CurrentBattlingRed.First))
+        Dim statusstring_red As String = Get_StatusString(arena.CurrentBattlingRed.First)
+        Record("Status: " + statusstring_red)
+
+        Dim redteam As Pokemon_Team = arena.Team_Red
+        For i As Integer = 0 To redteam.Get_Team("red").Count - 1 Step 1
+            If Not redteam.Get_Team("red").Item(i).Name = arena.CurrentBattlingRed.First.Name Then
+                Record("ONE POKEMON")
+                Record("Red team #" + Convert.ToString(i + 1) + ": " + redteam.Get_Team("red").Item(i).Name)
+                Record("HP: " + Convert.ToString(redteam.Get_Team("red").Item(i).HP))
+                Record("HP color: " + arena.Get_HealthStatusofPokemon(redteam.Get_Team("red").Item(i)))
+                Dim statusstring As String = Get_StatusString(redteam.Get_Team("red").Item(i))
+                Record("Status: " + statusstring)
+                Record("END ONE POKEMON")
+            End If
+        Next
+        Record("END TEAM RED")
 
     End Sub
+
+    Private Function Get_StatusString(ByVal pokemon As Pokemon) As String
+        Dim statusstring As String
+        If pokemon.Status_Condition = Constants.StatusCondition.none Then
+            statusstring = "none"
+        ElseIf pokemon.Status_Condition = Constants.StatusCondition.attracted Then
+            statusstring = "attracted"
+        ElseIf pokemon.Status_Condition = Constants.StatusCondition.badly_poisoned Then
+            statusstring = "badly poisoned"
+        ElseIf pokemon.Status_Condition = StatusCondition.burn Then
+            statusstring = "burned"
+        ElseIf pokemon.Status_Condition = StatusCondition.confused Then
+            statusstring = "confused"
+        ElseIf pokemon.Status_Condition = StatusCondition.freeze Then
+            statusstring = "frozen"
+        ElseIf pokemon.Status_Condition = StatusCondition.paralyzed Then
+            statusstring = "paralyzed"
+        ElseIf pokemon.Status_Condition = StatusCondition.poison Then
+            statusstring = "poisoned"
+        ElseIf pokemon.Status_Condition = StatusCondition.sleep Then
+            statusstring = "sleeping"
+        Else
+            statusstring = "none"
+        End If
+        Return statusstring
+    End Function
 
     ''' <summary>
     ''' Return the last recording list information and 
