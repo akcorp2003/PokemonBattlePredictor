@@ -148,14 +148,28 @@ PokemonBattlePredictor
  </remarks>
 </member><member name="M:PokemonBattlePredictor.Battle_Prediction.FindBestMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,System.Collections.Generic.List{PokemonBattlePredictor.Move_Info},System.Int32,PokemonBattlePredictor.Pokemon_Arena)">
 	<summary>
- Finds the best (damaging) move for the pokemon to use given a list of moves to choose from
+ Finds the best (damaging) move for the pokemon to use given a list of moves to choose from.
+ Returns [packagename].Move as Nothing if no best move is found
  </summary>
 	<param name="first_pokemon"></param>
 	<param name="second_pokemon"></param>
 	<param name="poke_calc"></param>
 	<param name="availmoves">A list of moves to choose from</param>
 	<param name="max_or_min">Max(1) choose max damage, Min(-1) choose min damage, Norm(0) choose normal damage</param>
-	<returns>The best move for the pokemon to use</returns>
+	<returns>The best move for the pokemon to use. Returns [package].Move as Nothing</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.FindBestHealingMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Move_Info,System.Int32,PokemonBattlePredictor.Pokemon_Arena)">
+	<summary>
+ Considers if the pokemon should use a healing move, if one exists. If the function decides that a healing move should be used,
+ then it chooses the best healing move.
+ </summary>
+	<param name="first_pokemon"></param>
+	<param name="second_pokemon"></param>
+	<param name="poke_calc"></param>
+	<param name="movetouse">The best move for first_pokemon to use.</param>
+	<param name="max_or_min"></param>
+	<param name="poke_arena"></param>
+	<returns>A healing move if one exists. If not, then nothing.</returns>
 	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Battle_Prediction.FindBestStatMove(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Move_Info,System.Int32,System.Int32,PokemonBattlePredictor.Pokemon_Arena)">
 	<summary>

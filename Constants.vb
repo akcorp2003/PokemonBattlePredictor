@@ -42,6 +42,9 @@
         IterateParalysis = 10
         IterateConfusion = 20
         EvaluateGreenCase = 30
+        ApplyBattle = 40
+        ApplyBattle_SuperEffectiveBranch = 50
+        ApplyBattle_NormalMoveBranch = 60
     End Enum
 
     Enum Stat_Type
@@ -102,12 +105,16 @@
             Return "SLPO"
         ElseIf effect_id = 3 Then
             Return "PSNchanceO," + CSV_line(11) REM poison target with chance
+        ElseIf effect_id = 4 Then
+            Return "HPdrainO,0.5"
         ElseIf effect_id = 5 Then
-            Return "BRNchanceO" + CSV_line(11)
+            Return "BRNchanceO," + CSV_line(11)
         ElseIf effect_id = 6 Then
-            Return "FRZchanceO" + CSV_line(11)
+            Return "FRZchanceO," + CSV_line(11)
         ElseIf effect_id = 7 Then
             Return "PRLYZchanceO," + CSV_line(11)
+        ElseIf effect_id = 9 Then
+            Return "HPdrainOsleep,0.5" REM drain's half of damage inflicted on sleeping opponent
         ElseIf effect_id = 11 Then
             Return "ATKU+1"
         ElseIf effect_id = 12 Then
@@ -166,6 +173,8 @@
             Return "CONFchanceO," + CSV_line(11)
         ElseIf effect_id = 78 Then
             Return "DAM2," + "PSNchanceO," + CSV_line(11)
+        ElseIf effect_id = 85 Then
+            Return "HPdrainO,0.0625" REM 0.0625 => 1/16
             REM explore 93 - flnch and double turn
             REM explore 101
         ElseIf effect_id = 109 Then
@@ -206,7 +215,7 @@
             Return "BRNchanceO," + CSV_line(11) REM increase critical hit chance
         ElseIf effect_id = 203 Then
             Dim chance As String = "," + CSV_line(11)
-            Return "PSNBchanceO" + chance REM chance to badly affect target
+            Return "PSNBchanceO," + chance REM chance to badly affect target
         ElseIf effect_id = 205 Then
             Return "SPATKU-2" REM afer inflicting damage
         ElseIf effect_id = 206 Then
@@ -217,7 +226,7 @@
             Return "ATKU+1,DEFU+1"
         ElseIf effect_id = 210 Then
             Dim chance As String = "," + CSV_line(11)
-            Return "PSNchanceO" + chance
+            Return "PSNchanceO," + chance
         ElseIf effect_id = 212 Then
             Return "SPATKU+1,SPDEFU+1"
         ElseIf effect_id = 213 Then
@@ -282,9 +291,13 @@
             REM explore 342, 344, 355later
         ElseIf effect_id = 346 Then
             Return "ATKO-1,SPATKO-1"
+        ElseIf effect_id = 348 Then
+            Return "HPdrainO,1/2" REM also, inflicts damage to all opponents on the field
             REM explore 350
         ElseIf effect_id = 351 Then
             Return "ATKO-1,SPATKO-1" REM user switches out
+        ElseIf effect_id = 353 Then
+            Return "HPdrainO,0.75"
             REM explore 360
         ElseIf effect_id = 361 Then
             Return "SPATKO-1"

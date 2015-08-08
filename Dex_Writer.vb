@@ -564,6 +564,8 @@ Public Class Dex_Writer
                     my_format.FontColor = Color.Green
                 ElseIf Logger.get_Log1().Item(i).Contains("yellow") Then
                     my_format.FontColor = Color.Yellow
+                ElseIf Logger.get_Log1().Item(i).Contains("red") Then
+                    my_format.FontColor = Color.Red
                 Else
                     my_format.FontColor = Color.Green
                 End If

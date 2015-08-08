@@ -390,6 +390,21 @@ Public Class Pokemon
         Return st_list
     End Function
 
+    Public Function get_HealingMoves() As List(Of Move_Info)
+        Dim heal_list As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            If move_enum.Current.Effect.Contains("HPdrainO") OrElse move_enum.Current.Effect.Contains("HPhalfU") OrElse _
+                move_enum.Current.Effect.Contains("HPfullU") Then
+                heal_list.Add(move_enum.Current)
+            End If
+            move_enum.MoveNext()
+        End While
+        Return heal_list
+    End Function
+
     Public Function get_BRNMoves() As List(Of Move_Info)
         Dim brn_list As New List(Of Move_Info)
         Dim move_enum As New List(Of Move_Info).Enumerator

@@ -130,6 +130,7 @@
         defender.HP = defender.HP - damagevalue
 
         Me.apply_recoil(attacker, defender, attack_move, damagevalue)
+        Me.apply_drain(attacker, defender, attack_move, damagevalue)
 
         Dim is_pressure As Boolean = False
         For i As Integer = 0 To defender.Ability.Count - 1 Step 1
@@ -196,6 +197,20 @@
         Next
     End Sub
 
+    Public Sub apply_drain(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal draining_move As Move_Info, ByVal damage As Integer)
+        If draining_move Is Nothing Then
+            Return
+        End If
+
+        Dim effect_list As String() = draining_move.Effect.Split(",")
+        For i As Integer = 0 To effect_list.Length - 1 Step 1
+            If effect_list(i).Contains("HPdrainO") Then
+                Dim drain_amount As Double = Convert.ToDouble(damage) * (Convert.ToDouble(effect_list(i + 1)))
+                first_pokemon.HP += drain_amount
+            End If
+        Next
+    End Sub
+
     ''' <summary>
     ''' Applies the damage when the confused_pokemon is confused.
     ''' </summary>
@@ -239,7 +254,8 @@
             Return
         End If
 
-        If funct_id = Constants.Funct_IDs.EvaluateGreenCase Then
+        If funct_id = Constants.Funct_IDs.EvaluateGreenCase OrElse funct_id = Constants.Funct_IDs.ApplyBattle_SuperEffectiveBranch _
+            OrElse funct_id = Constants.Funct_IDs.ApplyBattle_NormalMoveBranch Then
             If it_funct_id = -1000 Then
                 If Not Logger.isMute() Then
                     Logger.Record(my_pokemon.Name + " uses " + move.Name + " on " + opponent_pokemon.Name + "!")

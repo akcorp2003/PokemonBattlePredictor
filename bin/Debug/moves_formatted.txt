@@ -1794,7 +1794,7 @@ URI
 SPECIAL
 True
 EFFECT
-BRNchanceO30
+BRNchanceO,30
 TYPE
 water
 END MOVE
@@ -2496,7 +2496,7 @@ URI
 SPECIAL
 True
 EFFECT
-BRNchanceO10
+BRNchanceO,10
 TYPE
 fire
 END MOVE
@@ -2784,7 +2784,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+HPdrainO,0.5
 TYPE
 fighting
 END MOVE
@@ -3450,7 +3450,7 @@ URI
 SPECIAL
 True
 EFFECT
-BRNchanceO10
+BRNchanceO,10
 TYPE
 fire
 END MOVE
@@ -3630,7 +3630,7 @@ URI
 SPECIAL
 True
 EFFECT
-
+HPdrainO,0.5
 TYPE
 grass
 END MOVE
@@ -3756,7 +3756,7 @@ URI
 SPECIAL
 False
 EFFECT
-FRZchanceO10
+FRZchanceO,10
 TYPE
 ice
 END MOVE
@@ -3774,7 +3774,7 @@ URI
 SPECIAL
 False
 EFFECT
-BRNchanceO10
+BRNchanceO,10
 TYPE
 fire
 END MOVE
@@ -3900,7 +3900,7 @@ URI
 SPECIAL
 True
 EFFECT
-
+HPdrainOsleep,0.5
 TYPE
 psychic
 END MOVE
@@ -3936,7 +3936,7 @@ URI
 SPECIAL
 True
 EFFECT
-BRNchanceO10
+BRNchanceO,10
 TYPE
 fire
 END MOVE
@@ -4116,7 +4116,7 @@ URI
 SPECIAL
 True
 EFFECT
-
+HPdrainO,0.5
 TYPE
 grass
 END MOVE
@@ -4746,7 +4746,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+HPdrainO,0.0625
 TYPE
 grass
 END MOVE
@@ -4818,7 +4818,7 @@ URI
 SPECIAL
 True
 EFFECT
-BRNchanceO100
+BRNchanceO,100
 TYPE
 fire
 END MOVE
@@ -5070,7 +5070,7 @@ URI
 SPECIAL
 True
 EFFECT
-BRNchanceO10
+BRNchanceO,10
 TYPE
 fire
 END MOVE
@@ -6114,7 +6114,7 @@ URI
 SPECIAL
 False
 EFFECT
-PSNchanceO,10
+PSNchanceO,,10
 TYPE
 poison
 END MOVE
@@ -6150,7 +6150,7 @@ URI
 SPECIAL
 False
 EFFECT
-PSNBchanceO,50
+PSNBchanceO,,50
 TYPE
 poison
 END MOVE
@@ -6798,7 +6798,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+HPdrainO,0.5
 TYPE
 bug
 END MOVE
@@ -6942,7 +6942,7 @@ URI
 SPECIAL
 True
 EFFECT
-
+HPdrainO,0.5
 TYPE
 grass
 END MOVE
@@ -6978,7 +6978,7 @@ URI
 SPECIAL
 False
 EFFECT
-PSNchanceO,10
+PSNchanceO,,10
 TYPE
 poison
 END MOVE
@@ -8724,7 +8724,7 @@ URI
 SPECIAL
 True
 EFFECT
-FRZchanceO10
+FRZchanceO,10
 TYPE
 ice
 END MOVE
@@ -8760,7 +8760,7 @@ URI
 SPECIAL
 True
 EFFECT
-BRNchanceO30
+BRNchanceO,30
 TYPE
 fire
 END MOVE
@@ -9462,7 +9462,7 @@ URI
 SPECIAL
 True
 EFFECT
-BRNchanceO30
+BRNchanceO,30
 TYPE
 fire
 END MOVE
@@ -9642,7 +9642,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+HPdrainO,0.5
 TYPE
 grass
 END MOVE
@@ -9768,7 +9768,7 @@ URI
 SPECIAL
 True
 EFFECT
-BRNchanceO20
+BRNchanceO,20
 TYPE
 fire
 END MOVE

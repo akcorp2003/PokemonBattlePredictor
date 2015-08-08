@@ -203,6 +203,8 @@ Public Class Battle_Prediction : Implements Predict
                     battle_arena.Current_Attacker = "blue"
                 End If
 
+                battle_arena.Increment_Turn()
+
             ElseIf turn_queue.Count = 1 Then
 
                 If poke_calc.apply_turnparalysis(turn_queue.Peek()) = False Then
@@ -281,6 +283,7 @@ Public Class Battle_Prediction : Implements Predict
                 End If
 
                 Logger.Record("END CYCLE")
+                battle_arena.Increment_Turn()
 
             Else
                 MessageBox.Show("Something went wrong in predict_battle(), specifically with the queue. Returning...", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -778,6 +781,7 @@ Public Class Battle_Prediction : Implements Predict
         Dim turn_poke_move_pack As New Prediction_Move_Package
         Dim turn_poke_move2_pack As New Prediction_Move_Package
         Dim turn_poke_move3_pack As New Prediction_Move_Package
+        Dim turn_poke_move4_pack As New Prediction_Move_Package
 
         REM check for any status conditions that prohibit movement
         If first_pokemon.Status_Condition = Constants.StatusCondition.freeze Then
@@ -804,14 +808,22 @@ Public Class Battle_Prediction : Implements Predict
             turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_SEmove, 1, poke_arena.Clone())
             REM check out an available offensive stat move
             turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, 1, poke_arena.Clone())
+            turn_poke_move3_pack = Me.FindBestHealingMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone())
             If funct_id = -1000 Then
                 REM only open it for recording if the function is not an iteration function
                 Logger.Set_Recording()
             End If
 
 
-            If turn_poke_move2_pack Is Nothing Then
+            If turn_poke_move2_pack Is Nothing And turn_poke_move3_pack Is Nothing Then
                 poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+            ElseIf Not turn_poke_move3_pack Is Nothing Then
+                REM healing moves have the priority, route it to the appropriate function
+                If turn_poke_move3_pack.Move.Effect.Contains("drain") Then
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, poke_calc, 1)
+                Else
+                    poke_calc.apply_moveeffect(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, Constants.Funct_IDs.ApplyBattle_SuperEffectiveBranch)
+                End If
             Else
                 If turn_poke_move2_pack.Opponent_Turns < turn_poke_move2_pack.My_Turns Then
                     REM then the opponenet kills us faster than we can kill it... No good. Just apply damage man...
@@ -857,13 +869,24 @@ Public Class Battle_Prediction : Implements Predict
                 End If
 
                 turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, 1, poke_arena.Clone())
+                turn_poke_move4_pack = Me.FindBestHealingMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone())
                 If funct_id = -1000 Then
                     Logger.Set_Recording()
                 End If
 
                 If turn_poke_move2_pack Is Nothing Then
                     If turn_poke_move3_pack Is Nothing OrElse turn_poke_move3_pack.Move Is Nothing Then
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+                        If turn_poke_move4_pack Is Nothing Then REM in this normal branch, we will prioritize status moves over healing moves
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+                        Else
+                            REM route to the appropriate function
+                            If turn_poke_move4_pack.Move.Effect.Contains("drain") Then
+                                poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move4_pack.Move, poke_calc, 1)
+                            Else
+                                poke_calc.apply_moveeffect(first_pokemon, second_pokemon, turn_poke_move4_pack.Move, Constants.Funct_IDs.ApplyBattle_NormalMoveBranch)
+                            End If
+                        End If
+
                     Else
                         REM we will apply the status move if the pokemon doesn't have a status already
                         REM (if FindBestStatusMove chose a confusion move, it's acceptable if the pokemon is not confused already)
@@ -1024,14 +1047,15 @@ Public Class Battle_Prediction : Implements Predict
     End Sub
 
     ''' <summary>
-    ''' Finds the best (damaging) move for the pokemon to use given a list of moves to choose from
+    ''' Finds the best (damaging) move for the pokemon to use given a list of moves to choose from.
+    ''' Returns [packagename].Move as Nothing if no best move is found
     ''' </summary>
     ''' <param name="first_pokemon"></param>
     ''' <param name="second_pokemon"></param>
     ''' <param name="poke_calc"></param>
     ''' <param name="availmoves">A list of moves to choose from</param>
     ''' <param name="max_or_min">Max(1) choose max damage, Min(-1) choose min damage, Norm(0) choose normal damage</param>
-    ''' <returns>The best move for the pokemon to use</returns>
+    ''' <returns>The best move for the pokemon to use. Returns [package].Move as Nothing</returns>
     ''' <remarks></remarks>
     Public Function FindBestMove(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
                                  ByVal availmoves As List(Of Move_Info), ByVal max_or_min As Integer, ByVal arena As Pokemon_Arena) As Prediction_Move_Package
@@ -1063,6 +1087,9 @@ Public Class Battle_Prediction : Implements Predict
                 REM choose the higher power
                 If move_enum.Current.Power > turn_poke_move.Power And move_enum.Current.PP > 0 Then
                     turn_poke_move = move_enum.Current
+                    REM we can also see if the move is a draining move, it could be beneficial!
+                ElseIf move_enum.Current.Effect.Contains("HPdrainO") AndAlso (arena.Get_HealthStatusofPokemon(first_pokemon) = "yellow" OrElse arena.Get_HealthStatusofPokemon(first_pokemon) = "red") Then
+                    turn_poke_move = move_enum.Current
                 End If
             End If
 
@@ -1078,6 +1105,73 @@ Public Class Battle_Prediction : Implements Predict
         End If        
 
         Return move_pack
+    End Function
+
+    ''' <summary>
+    ''' Considers if the pokemon should use a healing move, if one exists. If the function decides that a healing move should be used,
+    ''' then it chooses the best healing move.
+    ''' </summary>
+    ''' <param name="first_pokemon"></param>
+    ''' <param name="second_pokemon"></param>
+    ''' <param name="poke_calc"></param>
+    ''' <param name="movetouse">The best move for first_pokemon to use.</param>
+    ''' <param name="max_or_min"></param>
+    ''' <param name="poke_arena"></param>
+    ''' <returns>A healing move if one exists. If not, then nothing.</returns>
+    ''' <remarks></remarks>
+    Public Function FindBestHealingMove(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator,
+                                        ByVal movetouse As Move_Info, ByVal max_or_min As Integer, ByVal poke_arena As Pokemon_Arena) As Prediction_Move_Package
+        Dim firstpoke_status As String = poke_arena.Get_HealthStatusofPokemon(first_pokemon)
+        If firstpoke_status = "green" Then
+            Return Nothing REM it's better to not waste a move on healing
+        End If
+
+        Dim healingmove_pack As New Prediction_Move_Package
+        Dim listofhealing As List(Of Move_Info) = first_pokemon.get_HealingMoves()
+        If listofhealing.Count = 0 Then
+            Return Nothing
+        End If
+
+        Dim opp_bestmove As Prediction_Move_Package = FindBestMove(second_pokemon.Clone(), first_pokemon.Clone(), poke_calc, second_pokemon.Moves_For_Battle, max_or_min, poke_arena)
+        Dim mefaint As Integer = Project_Battle(second_pokemon.Clone(), first_pokemon.Clone(), opp_bestmove.Move, poke_calc, max_or_min, poke_arena)
+
+        Dim opp_faint As Integer = Project_Battle(first_pokemon.Clone(), second_pokemon.Clone(), movetouse, poke_calc, max_or_min, poke_arena)
+
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = listofhealing.GetEnumerator()
+        move_enum.MoveNext()
+        REM we will consider the moves depending on the situation of first_pokemon
+        While Not move_enum.Current Is Nothing
+            If firstpoke_status = "red" Then
+                REM the situation is dire and we need to heal if we can!
+                If move_enum.Current.Effect.Contains("HPfullU") OrElse move_enum.Current.Effect.Contains("HPdrain") OrElse move_enum.Current.Effect.Contains("HPhalfU") Then
+                    healingmove_pack.Move = move_enum.Current
+                End If
+            Else
+                If opp_faint + 1 < mefaint And (Not (Constants.Get_FormattedString(move_enum.Current.Name)) = "rest") Then REM if I can kill the opponent faster than it can kill me (including using the healing move)" Then
+                    If move_enum.Current.Effect.Contains("HPfullU") OrElse move_enum.Current.Effect.Contains("HPhalfU") OrElse _
+                        move_enum.Current.Effect.Contains("HPdrainO") Then
+                        healingmove_pack.Move = move_enum.Current
+                    End If
+                ElseIf (Constants.Get_FormattedString(move_enum.Current.Name) = "rest") AndAlso opp_faint + 3 < mefaint Then
+                    healingmove_pack.Move = move_enum.Current
+                End If
+            End If
+            move_enum.MoveNext()
+        End While
+
+        If healingmove_pack.Move Is Nothing Then
+            Return Nothing
+        Else
+            REM do a final check
+            If healingmove_pack.Move.Name = "" Then
+                Return Nothing
+            Else
+                healingmove_pack.My_Turns = opp_faint
+                healingmove_pack.Opponent_Turns = mefaint
+                Return healingmove_pack
+            End If
+        End If
     End Function
 
     ''' <summary>
@@ -1829,6 +1923,10 @@ Public Class Battle_Prediction : Implements Predict
                                      Optional ByVal funct_id As Integer = -1000, Optional ByVal movetouse_second As Move_Info = Nothing) As Prediction_Move_Package
 
         Dim return_package As New Prediction_Move_Package
+
+        If movetouse Is Nothing Then
+            Return Nothing
+        End If
 
         Dim listofstatus As List(Of Move_Info) = first_pokemon.get_StatusCondMoves()
         If listofstatus.Count = 0 Then
