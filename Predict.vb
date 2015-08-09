@@ -401,15 +401,15 @@ Public Class Battle_Prediction : Implements Predict
 
         If first_pokemon.HP <= 0 Then
             If first_pokemon.Team = "blue" Then
-                Return "blue"
-            Else
                 Return "red"
+            Else
+                Return "blue"
             End If
         ElseIf second_pokemon.HP <= 0 Then
             If second_pokemon.Team = "blue" Then
-                Return "blue"
-            Else
                 Return "red"
+            Else
+                Return "blue"
             End If
         Else
             Return Nothing
@@ -500,15 +500,15 @@ Public Class Battle_Prediction : Implements Predict
 
         If first_pokemon.HP <= 0 Then
             If first_pokemon.Team = "blue" Then
-                Return "blue"
-            Else
                 Return "red"
+            Else
+                Return "blue"
             End If
         ElseIf second_pokemon.HP <= 0 Then
             If second_pokemon.Team = "blue" Then
-                Return "blue"
-            Else
                 Return "red"
+            Else
+                Return "blue"
             End If
         Else
             Return Nothing
@@ -804,49 +804,7 @@ Public Class Battle_Prediction : Implements Predict
         If Not isthere_SEmove.Count = 0 Then
             REM there exists a supereffective move we can use!
 
-            Logger.Set_Mute()
-            turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_SEmove, 1, poke_arena.Clone())
-            REM check out an available offensive stat move
-            turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, 1, poke_arena.Clone())
-            turn_poke_move3_pack = Me.FindBestHealingMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone())
-            If funct_id = -1000 Then
-                REM only open it for recording if the function is not an iteration function
-                Logger.Set_Recording()
-            End If
-
-
-            If turn_poke_move2_pack Is Nothing And turn_poke_move3_pack Is Nothing Then
-                poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
-            ElseIf Not turn_poke_move3_pack Is Nothing Then
-                REM healing moves have the priority, route it to the appropriate function
-                If turn_poke_move3_pack.Move.Effect.Contains("drain") Then
-                    poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, poke_calc, 1)
-                Else
-                    poke_calc.apply_moveeffect(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, Constants.Funct_IDs.ApplyBattle_SuperEffectiveBranch)
-                End If
-            Else
-                If turn_poke_move2_pack.Opponent_Turns < turn_poke_move2_pack.My_Turns Then
-                    REM then the opponenet kills us faster than we can kill it... No good. Just apply damage man...
-                    'TODO: in a future edition, analyze these numbers carefully, as in look at the difference
-                    'between these 2 values and if it is too great, then go for offensive but if it is not too great
-                    'go into greater detail
-                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
-                ElseIf turn_poke_move2_pack.Opponent_Turns > turn_poke_move2_pack.My_Turns Then
-                    REM we can apply the stat move
-                    If turn_poke_move2_pack.Affect_Type = Constants.Stat_Type.Affect_Self Then
-                        poke_calc.apply_stattopokemon(first_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
-                    Else
-                        poke_calc.apply_stattopokemon(second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
-                    End If
-
-
-                Else
-                    REM we have a tie...just apply damage
-                    REM I like to always inflict damage, so even if it's equal
-                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
-                End If
-            End If
-
+            Me.apply_battle_supereffective_branch(first_pokemon, second_pokemon, poke_calc, poke_arena, isthere_SEmove, funct_id)
 
         Else
 
@@ -857,86 +815,22 @@ Public Class Battle_Prediction : Implements Predict
             If Not isthere_normmove.Count = 0 Then
                 REM we can apply a normal damaging move!
 
-                Logger.Set_Mute()
-                turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_normmove, 1, poke_arena.Clone())
-                If funct_id = -1000 Then
-                    REM proceed normally
-                    turn_poke_move3_pack = Me.FindBestStatusMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone())
-                Else
-                    REM something is signaling us. Call the "overloaded" FindBestStatusMove(). This should initiate a chain reaction where the program computes the best status move
-                    REM in a different fashion.
-                    turn_poke_move3_pack = Me.FindBestStatusMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone(), funct_id, movetouse_second)
-                End If
-
-                turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, 1, poke_arena.Clone())
-                turn_poke_move4_pack = Me.FindBestHealingMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone())
-                If funct_id = -1000 Then
-                    Logger.Set_Recording()
-                End If
-
-                If turn_poke_move2_pack Is Nothing Then
-                    If turn_poke_move3_pack Is Nothing OrElse turn_poke_move3_pack.Move Is Nothing Then
-                        If turn_poke_move4_pack Is Nothing Then REM in this normal branch, we will prioritize status moves over healing moves
-                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
-                        Else
-                            REM route to the appropriate function
-                            If turn_poke_move4_pack.Move.Effect.Contains("drain") Then
-                                poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move4_pack.Move, poke_calc, 1)
-                            Else
-                                poke_calc.apply_moveeffect(first_pokemon, second_pokemon, turn_poke_move4_pack.Move, Constants.Funct_IDs.ApplyBattle_NormalMoveBranch)
-                            End If
-                        End If
-
-                    Else
-                        REM we will apply the status move if the pokemon doesn't have a status already
-                        REM (if FindBestStatusMove chose a confusion move, it's acceptable if the pokemon is not confused already)
-                        If Not turn_poke_move3_pack.Move.get_StatusType() = Constants.StatusCondition.none And second_pokemon.Status_Condition = Constants.StatusCondition.none Then
-                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move3_pack.Move.Name), poke_calc, 1)
-
-                            REM give the move one more chance: evaluate if it is a confusion type of move. If pokemon is already confused though...
-                        ElseIf turn_poke_move3_pack.Move.isConfusion() = True And Not second_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
-                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move3_pack.Move.Name), poke_calc, 1)
-                        Else
-                            'TODO: possibly consider more advanced analytics to analyze whether to go with the normal or status effect move
-                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
-                        End If
-
-                    End If
-
-                Else
-                    If turn_poke_move2_pack.Opponent_Turns < turn_poke_move2_pack.My_Turns Then
-                        REM then the opponenet kills us faster than we can kill it... No good. Just apply damage man...
-                        'TODO: in a future edition, analyze these numbers carefully, as in look at the difference
-                        'between these 2 values and if it is too great, then go for offensive but if it is not too great
-                        'go into greater detail
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
-                    ElseIf turn_poke_move2_pack.Opponent_Turns > turn_poke_move2_pack.My_Turns Then
-                        REM we can apply the stat move
-                        If turn_poke_move2_pack.Affect_Type = Constants.Stat_Type.Affect_Self Then
-                            poke_calc.apply_stattopokemon(first_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
-                        Else
-                            poke_calc.apply_stattopokemon(second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
-                        End If
-
-                        'poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
-                    Else
-                        REM we have a tie...just apply damage
-                        REM For normal moves, it is better to go and rip apart the second_pokemon
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
-                    End If
-                End If
+                Me.apply_battle_normalmove_branch(first_pokemon, second_pokemon, poke_calc, poke_arena, isthere_normmove, funct_id, movetouse_second)
 
             Else
                 REM all we have are noneffective or status moves
                 Dim oppo_health As String
+                Dim my_health As String
                 If poke_arena.Current_Attacker = "blue" Then
                     oppo_health = poke_arena.Get_HealthStatusofRed()
+                    my_health = poke_arena.Get_HealthStatusofBlue()
                 Else
                     oppo_health = poke_arena.Get_HealthStatusofBlue()
+                    my_health = poke_arena.Get_HealthStatusofRed()
                 End If
 
-                If oppo_health = "green" Then
-                    REM choose a status/lower stat move
+                If oppo_health = "green" And my_health = "green" Then
+                    REM choose a status/lower stat move because we can still afford to
                     evaluate_greencase(first_pokemon, second_pokemon, poke_calc, poke_arena, 1, funct_id)
 
                 Else
@@ -963,6 +857,172 @@ Public Class Battle_Prediction : Implements Predict
 
         End If
     End Sub
+
+    ''' <summary>
+    ''' Given a list of SE moves to choose from, this function will decide which is the best move to choose and apply it to second_pokemon.
+    ''' Returns a boolean value indicating if the application was successful. This function DOES NOT simulate so pass in Clones when you want simulation to be performed.
+    ''' </summary>
+    ''' <param name="first_pokemon">The first pokemon. Generally, don't pass into clones into this function.</param>
+    ''' <param name="second_pokemon">The second pokemon. Generally, don't pass into clones into this function.</param>
+    ''' <param name="poke_calc"></param>
+    ''' <param name="poke_arena">The arena that contains the pokemon. Generally, don't pass into clones into this function.</param>
+    ''' <param name="isthere_SEmove">The list of SE moves for first_pokemon.</param>
+    ''' <param name="funct_id"></param>
+    ''' <returns>A boolean value indicating if the application was successful or not.</returns>
+    ''' <remarks>This function DOES NOT simulate so pass in Clones when you want simulation to be performed.</remarks>
+    Public Function apply_battle_supereffective_branch(ByRef first_pokemon As Pokemon, ByRef second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator, ByRef poke_arena As Pokemon_Arena,
+                                                       ByVal isthere_SEmove As List(Of Move_Info), ByVal funct_id As Integer) As Boolean
+        If isthere_SEmove.Count = 0 Then
+            Return False
+        End If
+
+        Dim turn_poke_move_pack As New Prediction_Move_Package
+        Dim turn_poke_move2_pack As New Prediction_Move_Package
+        Dim turn_poke_move3_pack As New Prediction_Move_Package
+        Dim turn_poke_move4_pack As New Prediction_Move_Package
+
+        Logger.Set_Mute()
+        turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_SEmove, 1, poke_arena.Clone())
+        REM check out an available offensive stat move
+        turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, 1, poke_arena.Clone())
+        turn_poke_move3_pack = Me.FindBestHealingMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone())
+        If funct_id = -1000 Then
+            REM only open it for recording if the function is not an iteration function
+            Logger.Set_Recording()
+        End If
+
+
+        If turn_poke_move2_pack Is Nothing And turn_poke_move3_pack Is Nothing Then
+            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+        ElseIf Not turn_poke_move3_pack Is Nothing Then
+            REM healing moves have the priority, route it to the appropriate function
+            If turn_poke_move3_pack.Move.Effect.Contains("drain") Then
+                poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, poke_calc, 1)
+            Else
+                poke_calc.apply_moveeffect(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, Constants.Funct_IDs.ApplyBattle_SuperEffectiveBranch)
+            End If
+        Else
+            If turn_poke_move2_pack.Opponent_Turns < turn_poke_move2_pack.My_Turns Then
+                REM then the opponenet kills us faster than we can kill it... No good. Just apply damage man...
+                'TODO: in a future edition, analyze these numbers carefully, as in look at the difference
+                'between these 2 values and if it is too great, then go for offensive but if it is not too great
+                'go into greater detail
+                poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+            ElseIf turn_poke_move2_pack.Opponent_Turns > turn_poke_move2_pack.My_Turns Then
+                REM we can apply the stat move
+                If turn_poke_move2_pack.Affect_Type = Constants.Stat_Type.Affect_Self Then
+                    poke_calc.apply_stattopokemon(first_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
+                Else
+                    poke_calc.apply_stattopokemon(second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
+                End If
+
+
+            Else
+                REM we have a tie...just apply damage
+                REM I like to always inflict damage, so even if it's equal
+                poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+            End If
+        End If
+
+        Return True
+    End Function
+
+    ''' <summary>
+    ''' This function handles the case when there are normal moves available for the first_pokemon to use. It evaluates the best normal move to use
+    ''' and applies it to second_pokemon. This function DOES NOT simulate so pass in Clones when you want simulation to be performed.
+    ''' Returns a boolean value indicating if the application of a normal move was successful.
+    ''' </summary>
+    ''' <param name="first_pokemon">The first pokemon. Generally, don't pass into clones into this function.</param>
+    ''' <param name="second_pokemon">The second pokemon. Generally, don't pass into clones into this function.</param>
+    ''' <param name="poke_calc"></param>
+    ''' <param name="poke_arena">The arena that contains the pokemon. Generally, don't pass into clones into this function.</param>
+    ''' <param name="isthere_normmove">The list of available normal moves for first_pokemon to choose from.</param>
+    ''' <param name="funct_id">The ID of the function calling this one.</param>
+    ''' <returns>A Boolean value indicating if the function successfully chose a normal move and applied it.</returns>
+    ''' <remarks></remarks>
+    Public Function apply_battle_normalmove_branch(ByRef first_pokemon As Pokemon, ByRef second_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator, ByRef poke_arena As Pokemon_Arena,
+                                              ByVal isthere_normmove As List(Of Move_Info), ByVal funct_id As Integer,
+                                              Optional ByVal movetouse_second As Move_Info = Nothing) As Boolean
+        Dim turn_poke_move_pack As New Prediction_Move_Package
+        Dim turn_poke_move2_pack As New Prediction_Move_Package
+        Dim turn_poke_move3_pack As New Prediction_Move_Package
+        Dim turn_poke_move4_pack As New Prediction_Move_Package
+
+        If isthere_normmove.Count = 0 Then
+            Return False
+        End If
+
+        Logger.Set_Mute()
+        turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_normmove, 1, poke_arena.Clone())
+        If funct_id = -1000 Then
+            REM proceed normally
+            turn_poke_move3_pack = Me.FindBestStatusMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone())
+        Else
+            REM something is signaling us. Call the "overloaded" FindBestStatusMove(). This should initiate a chain reaction where the program computes the best status move
+            REM in a different fashion.
+            turn_poke_move3_pack = Me.FindBestStatusMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone(), funct_id, movetouse_second)
+        End If
+
+        turn_poke_move2_pack = Me.FindBestStatMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, 1, poke_arena.Clone())
+        turn_poke_move4_pack = Me.FindBestHealingMove(first_pokemon, second_pokemon, poke_calc, turn_poke_move_pack.Move, 1, poke_arena.Clone())
+        If funct_id = -1000 Then
+            Logger.Set_Recording()
+        End If
+
+        If turn_poke_move2_pack Is Nothing Then
+            If turn_poke_move3_pack Is Nothing OrElse turn_poke_move3_pack.Move Is Nothing Then
+                If turn_poke_move4_pack Is Nothing Then REM in this normal branch, we will prioritize status moves over healing moves
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+                Else
+                    REM route to the appropriate function
+                    If turn_poke_move4_pack.Move.Effect.Contains("drain") Then
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move4_pack.Move, poke_calc, 1)
+                    Else
+                        poke_calc.apply_moveeffect(first_pokemon, second_pokemon, turn_poke_move4_pack.Move, Constants.Funct_IDs.ApplyBattle_NormalMoveBranch)
+                    End If
+                End If
+
+            Else
+                REM we will apply the status move if the pokemon doesn't have a status already
+                REM (if FindBestStatusMove chose a confusion move, it's acceptable if the pokemon is not confused already)
+                If Not turn_poke_move3_pack.Move.get_StatusType() = Constants.StatusCondition.none And second_pokemon.Status_Condition = Constants.StatusCondition.none Then
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move3_pack.Move.Name), poke_calc, 1)
+
+                    REM give the move one more chance: evaluate if it is a confusion type of move. If pokemon is already confused though...
+                ElseIf turn_poke_move3_pack.Move.isConfusion() = True And Not second_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move3_pack.Move.Name), poke_calc, 1)
+                Else
+                    'TODO: possibly consider more advanced analytics to analyze whether to go with the normal or status effect move
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+                End If
+
+            End If
+
+        Else
+            If turn_poke_move2_pack.Opponent_Turns < turn_poke_move2_pack.My_Turns Then
+                REM then the opponenet kills us faster than we can kill it... No good. Just apply damage man...
+                'TODO: in a future edition, analyze these numbers carefully, as in look at the difference
+                'between these 2 values and if it is too great, then go for offensive but if it is not too great
+                'go into greater detail
+                poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+            ElseIf turn_poke_move2_pack.Opponent_Turns > turn_poke_move2_pack.My_Turns Then
+                REM we can apply the stat move
+                If turn_poke_move2_pack.Affect_Type = Constants.Stat_Type.Affect_Self Then
+                    poke_calc.apply_stattopokemon(first_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
+                Else
+                    poke_calc.apply_stattopokemon(second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move2_pack.Move.Name), first_pokemon.Name)
+                End If
+
+                'poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+            Else
+                REM we have a tie...just apply damage
+                REM For normal moves, it is better to go and rip apart the second_pokemon
+                poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+            End If
+        End If
+
+        Return True
+    End Function
 
     ''' <summary>
     ''' Chooses a status/lower stat move. STRONGLY SUGGESTED to be used to evaluate the case when the opposing pokemon has a green health.
@@ -1102,7 +1162,7 @@ Public Class Battle_Prediction : Implements Predict
         Else
             move_pack.Move = turn_poke_move
             move_pack.My_Turns = turnstofaint
-        End If        
+        End If
 
         Return move_pack
     End Function
@@ -1580,7 +1640,7 @@ Public Class Battle_Prediction : Implements Predict
                     End If
                 End If
             End If
-            
+
 
 
             finalmove_enum.MoveNext()
@@ -1683,7 +1743,7 @@ Public Class Battle_Prediction : Implements Predict
                     End If
                 End If
             End If
-            
+
 
 
             finalmove_enum.MoveNext()
@@ -1785,7 +1845,7 @@ Public Class Battle_Prediction : Implements Predict
                     End If
                 End If
             End If
-            
+
 
 
             finalmove_enum.MoveNext()
@@ -1886,7 +1946,7 @@ Public Class Battle_Prediction : Implements Predict
                     End If
                 End If
             End If
-            
+
 
 
             finalmove_enum.MoveNext()
@@ -1929,7 +1989,13 @@ Public Class Battle_Prediction : Implements Predict
         End If
 
         Dim listofstatus As List(Of Move_Info) = first_pokemon.get_StatusCondMoves()
-        If listofstatus.Count = 0 Then
+        Dim otherstats As List(Of Move_Info) = first_pokemon.get_OtherStatusCondMoves()
+        If otherstats.Count > 0 Then
+            For i As Integer = 0 To otherstats.Count - 1 Step 1
+                listofstatus.Add(otherstats(i))
+            Next
+        End If
+        If listofstatus.Count <= 0 Then
             Return Nothing
         End If
 
@@ -2044,7 +2110,7 @@ Public Class Battle_Prediction : Implements Predict
 
             End If
 
-            If s_pokemon.Status_Condition = Constants.StatusCondition.confused Then
+            If s_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
                 Dim resulting_team As String
                 If funct_id = -1000 Or Constants.stateof_iterationflag(funct_id) = -100 Or Constants.stateof_iterationflag(funct_id) = 0 Then
                     resulting_team = IterateConfusion(f_pokemon, s_pokemon, poke_calc, movetouse, max_or_min, arena, Constants.ACCURACY_HIGH)
@@ -2175,7 +2241,7 @@ Public Class Battle_Prediction : Implements Predict
                     the_move.Move = the_list(i)
                     Return the_move
                 End If
-            End While            
+            End While
         End If
 
         the_list = first_pokemon.get_SLPMoves()
@@ -2187,7 +2253,7 @@ Public Class Battle_Prediction : Implements Predict
                     Return the_move
                 End If
             End While
-            
+
         End If
 
         the_list = first_pokemon.get_CONFMoves()
@@ -2197,7 +2263,7 @@ Public Class Battle_Prediction : Implements Predict
                 If the_list(i).PP > 0 Then
                     the_move.Move = the_list(i)
                     Return the_move
-                End If               
+                End If
             End While
         End If
 

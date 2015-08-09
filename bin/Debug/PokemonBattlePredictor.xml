@@ -135,6 +135,33 @@ PokemonBattlePredictor
  The pokemon will be damaged! Do not use this function for simulation purposes unless if you 
  pass in clones of first_pokemon and second_pokemon. The function also only applies one battle.
  </remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.apply_battle_supereffective_branch(PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Pokemon_Arena@,System.Collections.Generic.List{PokemonBattlePredictor.Move_Info},System.Int32)">
+	<summary>
+ Given a list of SE moves to choose from, this function will decide which is the best move to choose and apply it to second_pokemon.
+ Returns a boolean value indicating if the application was successful. This function DOES NOT simulate so pass in Clones when you want simulation to be performed.
+ </summary>
+	<param name="first_pokemon">The first pokemon. Generally, don't pass into clones into this function.</param>
+	<param name="second_pokemon">The second pokemon. Generally, don't pass into clones into this function.</param>
+	<param name="poke_calc"></param>
+	<param name="poke_arena">The arena that contains the pokemon. Generally, don't pass into clones into this function.</param>
+	<param name="isthere_SEmove">The list of SE moves for first_pokemon.</param>
+	<param name="funct_id"></param>
+	<returns>A boolean value indicating if the application was successful or not.</returns>
+	<remarks>This function DOES NOT simulate so pass in Clones when you want simulation to be performed.</remarks>
+</member><member name="M:PokemonBattlePredictor.Battle_Prediction.apply_battle_normalmove_branch(PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Pokemon@,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Pokemon_Arena@,System.Collections.Generic.List{PokemonBattlePredictor.Move_Info},System.Int32,PokemonBattlePredictor.Move_Info)">
+	<summary>
+ This function handles the case when there are normal moves available for the first_pokemon to use. It evaluates the best normal move to use
+ and applies it to second_pokemon. This function DOES NOT simulate so pass in Clones when you want simulation to be performed.
+ Returns a boolean value indicating if the application of a normal move was successful.
+ </summary>
+	<param name="first_pokemon">The first pokemon. Generally, don't pass into clones into this function.</param>
+	<param name="second_pokemon">The second pokemon. Generally, don't pass into clones into this function.</param>
+	<param name="poke_calc"></param>
+	<param name="poke_arena">The arena that contains the pokemon. Generally, don't pass into clones into this function.</param>
+	<param name="isthere_normmove">The list of available normal moves for first_pokemon to choose from.</param>
+	<param name="funct_id">The ID of the function calling this one.</param>
+	<returns>A Boolean value indicating if the function successfully chose a normal move and applied it.</returns>
+	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.Battle_Prediction.evaluate_greencase(PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Pokemon,PokemonBattlePredictor.Poke_Calculator,PokemonBattlePredictor.Pokemon_Arena,System.Int32,System.Int32)">
 	<summary>
  Chooses a status/lower stat move. STRONGLY SUGGESTED to be used to evaluate the case when the opposing pokemon has a green health.

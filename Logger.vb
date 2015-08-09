@@ -93,8 +93,6 @@ Module Logger
             statusstring = "badly poisoned"
         ElseIf pokemon.Status_Condition = StatusCondition.burn Then
             statusstring = "burned"
-        ElseIf pokemon.Status_Condition = StatusCondition.confused Then
-            statusstring = "confused"
         ElseIf pokemon.Status_Condition = StatusCondition.freeze Then
             statusstring = "frozen"
         ElseIf pokemon.Status_Condition = StatusCondition.paralyzed Then
@@ -105,6 +103,9 @@ Module Logger
             statusstring = "sleeping"
         Else
             statusstring = "none"
+        End If
+        If pokemon.Other_Status_Condition = StatusCondition.confused Then
+            statusstring += ", confused"
         End If
         Return statusstring
     End Function

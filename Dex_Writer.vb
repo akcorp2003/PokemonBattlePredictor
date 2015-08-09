@@ -300,7 +300,13 @@ Public Class Dex_Writer
 
         For i As Integer = 0 To arena.Get_TeamBlue.Get_Team("blue").Count - 1 Step 1
             Dim pokemon As Pokemon = arena.Get_TeamBlue.Get_Team("blue").Item(i)
-            blue_table.Rows(0).Cells(i + 1).Paragraphs.First().Append(pokemon.Name)
+
+            REM perform steps to add image to file
+            Dim poke_img As Novacode.Image = newfile.AddImage("sprites\" + Constants.Get_FormattedString(pokemon.Name) + ".bmp")
+            Dim poke_pic As Novacode.Picture = poke_img.CreatePicture()
+            blue_table.Rows(0).Cells(i + 1).Paragraphs.First().InsertPicture(poke_pic)
+            blue_table.Rows(0).Cells(i + 1).InsertParagraph(pokemon.Name)
+
             For j As Integer = 0 To pokemon.Types.Count - 1 Step 1
                 blue_table.Rows(1).Cells(i + 1).Paragraphs.First().Append(pokemon.Types(j))
                 If j < pokemon.Types.Count - 1 Then
@@ -334,7 +340,13 @@ Public Class Dex_Writer
 
         For i As Integer = 0 To arena.Get_TeamRed.Get_Team("red").Count - 1 Step 1
             Dim pokemon As Pokemon = arena.Get_TeamRed.Get_Team("red").Item(i)
-            red_table.Rows(0).Cells(i + 1).Paragraphs.First().Append(pokemon.Name)
+
+            REM perform steps to create picture
+            Dim poke_img As Novacode.Image = newfile.AddImage("sprites\" + Constants.Get_FormattedString(pokemon.Name) + ".bmp")
+            Dim poke_pic As Novacode.Picture = poke_img.CreatePicture()
+            red_table.Rows(0).Cells(i + 1).Paragraphs.First().InsertPicture(poke_pic)
+            red_table.Rows(0).Cells(i + 1).InsertParagraph(pokemon.Name)
+
             For j As Integer = 0 To pokemon.Types.Count - 1 Step 1
                 red_table.Rows(1).Cells(i + 1).Paragraphs.First.Append(pokemon.Types(j))
                 If j < pokemon.Types.Count - 1 Then
@@ -373,6 +385,7 @@ Public Class Dex_Writer
             If Logger.get_Log1.Item(i) = "BEGIN TEMP INFO" Then
                 newfile.InsertParagraph("-------Arena Status-------", False, my_format)
                 i = PrintArenaCondition(i + 1, newfile, arena)
+                i -= 1 REM off by one, PrintArenaCondition() returns the index to END TEMP INFO, now we need to pull it back by one
                 Continue For
             End If
 

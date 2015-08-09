@@ -130,6 +130,8 @@ Public Class Pokemon_Arena
     Dim m_sleepturns_red As Integer
     Dim m_bpoisonturns_blue As Integer
     Dim m_bpoisonturns_red As Integer
+    Dim m_confuseturns_red As Integer
+    Dim m_confuseturns_blue As Integer
 
     Public Sub New()
 
@@ -194,6 +196,32 @@ Public Class Pokemon_Arena
 
     Public Sub IncreaseNumBadPoison_Red()
         m_bpoisonturns_red += 1
+    End Sub
+
+    Public Property Blue_NumConfused As Integer
+        Get
+            Return m_confuseturns_blue
+        End Get
+        Set(value As Integer)
+            m_confuseturns_blue = value
+        End Set
+    End Property
+
+    Public Sub IncreaseConfuseTurns_Blue()
+        m_confuseturns_blue += 1
+    End Sub
+
+    Public Property Red_NumConfused As Integer
+        Get
+            Return m_confuseturns_red
+        End Get
+        Set(value As Integer)
+            m_confuseturns_red = value
+        End Set
+    End Property
+
+    Public Sub IncreaseConfuseTurns_Red()
+        m_confuseturns_red += 1
     End Sub
 
     Public Property Last_Fainted() As String
@@ -350,6 +378,9 @@ Public Class Pokemon_Arena
             If Me.CurrentBattlingBlue.First.Status_Condition = Constants.StatusCondition.sleep Then
                 Me.IncreaseNumSleep_Blue()
             End If
+            If Me.CurrentBattlingBlue.First.Other_Status_Condition = Constants.StatusCondition.confused Then
+                Me.IncreaseConfuseTurns_Blue()
+            End If
             If Me.CurrentBattlingBlue.First.Status_Condition = Constants.StatusCondition.none Then
                 REM reset some counters
                 If Me.Blue_NumSleep > 0 Then
@@ -357,6 +388,9 @@ Public Class Pokemon_Arena
                 End If
                 If Me.Blue_NumBadPoison > 0 Then
                     Me.Blue_NumBadPoison = 0
+                End If
+                If Me.Blue_NumConfused > 0 Then
+                    Me.Blue_NumConfused = 0
                 End If
             End If
         End If
@@ -367,6 +401,9 @@ Public Class Pokemon_Arena
             If Me.CurrentBattlingRed.First.Status_Condition = Constants.StatusCondition.sleep Then
                 Me.IncreaseNumSleep_Red()
             End If
+            If Me.CurrentBattlingRed.First.Other_Status_Condition = Constants.StatusCondition.confused Then
+                Me.IncreaseConfuseTurns_Red()
+            End If
             If Me.CurrentBattlingRed.First.Status_Condition = Constants.StatusCondition.none Then
                 REM reset some counters
                 If Me.Red_NumSleep > 0 Then
@@ -375,9 +412,12 @@ Public Class Pokemon_Arena
                 If Me.Red_NumBadPoison > 0 Then
                     Me.Red_NumBadPoison = 0
                 End If
+                If Me.Red_NumConfused > 0 Then
+                    Me.Red_NumConfused = 0
+                End If
             End If
         End If
-        
+
     End Sub
 
     Public Sub Clear()

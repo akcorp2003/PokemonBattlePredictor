@@ -390,6 +390,23 @@ Public Class Pokemon
         Return st_list
     End Function
 
+    Public Function get_OtherStatusCondMoves() As List(Of Move_Info)
+        Dim otherst_list As New List(Of Move_Info)
+        Dim move_enum As New List(Of Move_Info).Enumerator
+        move_enum = m_Moves_for_Battle.GetEnumerator()
+        move_enum.MoveNext()
+        While Not move_enum.Current Is Nothing
+            Dim other_stats As String() = {"CONF", "ATTR"}
+            For i As Integer = 0 To other_stats.Length - 1 Step 1
+                If move_enum.Current.Effect.Contains(other_stats(i)) Then
+                    otherst_list.Add(move_enum.Current)
+                End If
+            Next
+            move_enum.MoveNext()
+        End While
+        Return otherst_list
+    End Function
+
     Public Function get_HealingMoves() As List(Of Move_Info)
         Dim heal_list As New List(Of Move_Info)
         Dim move_enum As New List(Of Move_Info).Enumerator

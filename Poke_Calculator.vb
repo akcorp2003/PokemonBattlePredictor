@@ -221,6 +221,10 @@
     Public Function apply_confusion(ByVal confused_pokemon As Pokemon, ByVal poke_calc As Poke_Calculator) As Boolean
         Dim confuse_success As Boolean = False
         If confused_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
+            If Not Logger.isMute() Then
+                Logger.Record("I")
+                Logger.Record(confused_pokemon.Name + " is confused!")
+            End If
             Dim chance As Integer = Poke_Calculator.GenerateRandomNumber()
             If chance <= 50 Then
                 REM 50% chance that the pokemon will hit itself
@@ -763,6 +767,7 @@
                 If arena.Red_NumSleep > 3 Then
                     the_pokemon.Status_Condition = Constants.StatusCondition.none
                     If Not Logger.isMute() Then
+                        Logger.Record("I")
                         Logger.Record(the_pokemon.Name + " woke up!")
                     End If
                     arena.Red_NumSleep = 0
@@ -772,6 +777,7 @@
                 If arena.Blue_NumSleep > 3 Then
                     the_pokemon.Status_Condition = Constants.StatusCondition.none
                     If Not Logger.isMute() Then
+                        Logger.Record("I")
                         Logger.Record(the_pokemon.Name + " woke up!")
                     End If
                     arena.Blue_NumSleep = 0
@@ -784,6 +790,7 @@
                 REM pokemon has a 33% chance of waking up each turn
                 the_pokemon.Status_Condition = Constants.StatusCondition.none
                 If Not Logger.isMute() Then
+                    Logger.Record("I")
                     Logger.Record(the_pokemon.Name + " woke up!")
                 End If
             End If
@@ -793,10 +800,45 @@
                 REM the pokemon has a 20% chance of thawing
                 the_pokemon.Status_Condition = Constants.StatusCondition.none
                 If Not Logger.isMute() Then
+                    Logger.Record("I")
                     Logger.Record(the_pokemon.Name + " defrosted! It's no longer frozen!")
                 End If
             End If
         End If
+        If the_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
+            If the_pokemon.Team = "red" Then
+                If arena.Red_NumConfused > 4 Then
+                    the_pokemon.Other_Status_Condition = Constants.StatusCondition.none
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(the_pokemon.Name + " snapped out of confusion!")
+                    End If
+                    arena.Red_NumConfused = 0
+                    Return
+                End If
+            ElseIf the_pokemon.Team = "blue" Then
+                If arena.Blue_NumConfused > 4 Then
+                    the_pokemon.Other_Status_Condition = Constants.StatusCondition.none
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(the_pokemon.Name + " snapped out of confusion!")
+                    End If
+                    arena.Blue_NumConfused = 0
+                    Return
+                End If
+            End If
+
+            Dim random As Integer = Poke_Calculator.GenerateRandomNumber()
+            REM apply a 50% snapping out of confusion, could not find more information about this...
+            If random <= 50 Then
+                the_pokemon.Other_Status_Condition = Constants.StatusCondition.none
+                If Not Logger.isMute() Then
+                    Logger.Record("I")
+                    Logger.Record(the_pokemon.Name + " snapped out of confusion!")
+                End If
+            End If
+        End If
+
     End Sub
 
     ''' <summary>

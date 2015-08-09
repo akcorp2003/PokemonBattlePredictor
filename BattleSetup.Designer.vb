@@ -61,7 +61,7 @@ Partial Class BattleSetup
         Me.Pokemon_Name.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend
         Me.Pokemon_Name.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource
         Me.Pokemon_Name.Font = New System.Drawing.Font("Lucida Bright", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Pokemon_Name.Location = New System.Drawing.Point(254, 27)
+        Me.Pokemon_Name.Location = New System.Drawing.Point(254, 36)
         Me.Pokemon_Name.Name = "Pokemon_Name"
         Me.Pokemon_Name.Size = New System.Drawing.Size(267, 21)
         Me.Pokemon_Name.TabIndex = 0
@@ -70,7 +70,7 @@ Partial Class BattleSetup
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Comic Sans MS", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(32, 27)
+        Me.Label1.Location = New System.Drawing.Point(32, 36)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(188, 20)
         Me.Label1.TabIndex = 1
@@ -78,7 +78,7 @@ Partial Class BattleSetup
         '
         'InsertPokemon
         '
-        Me.InsertPokemon.Location = New System.Drawing.Point(347, 53)
+        Me.InsertPokemon.Location = New System.Drawing.Point(347, 62)
         Me.InsertPokemon.Name = "InsertPokemon"
         Me.InsertPokemon.Size = New System.Drawing.Size(75, 23)
         Me.InsertPokemon.TabIndex = 2
@@ -219,6 +219,7 @@ Partial Class BattleSetup
         '
         'MenuStrip1
         '
+        Me.MenuStrip1.BackColor = System.Drawing.SystemColors.MenuHighlight
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
@@ -255,6 +256,7 @@ Partial Class BattleSetup
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.ClientSize = New System.Drawing.Size(762, 626)
         Me.Controls.Add(Me.TeamRed_List)
         Me.Controls.Add(Me.TeamBlue_List)

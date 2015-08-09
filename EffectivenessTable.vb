@@ -78,7 +78,11 @@
         Dim i As Integer = 0
         While i < def_types.Length
             Dim defend_index As Integer = GetTypeIndexInChart(def_types(i))
-            EFF = master_table(attack_index, defend_index) * EFF
+            If attack_index = -1 Or defend_index = -1 Then
+                EFF = 0 REM immediately throw this move under the bus
+            Else
+                EFF = master_table(attack_index, defend_index) * EFF
+            End If
             i += 1
         End While
 

@@ -518,7 +518,7 @@ False
 EFFECT
 
 TYPE
-
+fighting
 END MOVE
 MOVE
 NAME
@@ -864,7 +864,7 @@ normal
 END MOVE
 MOVE
 NAME
-"Thunderpunch"
+"Thunder-punch"
 ACCURACY
 100
 POWER
@@ -878,7 +878,7 @@ False
 EFFECT
 
 TYPE
-
+electric
 END MOVE
 MOVE
 NAME

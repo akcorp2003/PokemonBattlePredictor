@@ -149,4 +149,8 @@ Public Class BattleSetup
         image_reader.Build_Sprites()
         MessageBox.Show("All done building images!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
+
+    Private Sub BattleSetup_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        Form1.Show()
+    End Sub
 End Class
