@@ -160,6 +160,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\Debug\moves.csv" />
+    <None Include="bin\Debug\typeid.csv" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -171,6 +173,24 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\224760.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\326271.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\344927.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\attack_on_titan___eren_levi_mikasa_by_welterz-d7glcks.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\attack-on-titan %281%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\attack-on-titan.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

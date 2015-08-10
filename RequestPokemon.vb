@@ -1,6 +1,7 @@
 ﻿Imports System
 Imports System.Net
 Imports System.IO
+Imports PokemonBattlePredictor.PBP
 
 Public Class RequestPokemon_API
 

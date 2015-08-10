@@ -3,6 +3,12 @@ Imports System
 Imports System.Net
 Imports System.IO
 Imports System.Drawing
+Imports PokemonBattlePredictor
+Imports PokemonBattlePredictor.PBP
+Imports PokemonBattlePredictor.PBP.Dictionary
+Imports PokemonBattlePredictor.PBP.Constants
+Imports PokemonBattlePredictor.PBP.InfoBlocks
+Imports PokemonBattlePredictor.PBP.Dex_IO
 
 Public Class Form1
 

@@ -2,6 +2,9 @@
 Imports System.Collections
 Imports System.Net
 Imports System.IO
+Imports PokemonBattlePredictor
+Imports PokemonBattlePredictor.PBP
+Imports PokemonBattlePredictor.PBP.Dex_IO
 
 Public Class BattleSetup
 

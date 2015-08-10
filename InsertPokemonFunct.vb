@@ -1,5 +1,8 @@
 ﻿Imports System
 Imports System.Drawing
+Imports PokemonBattlePredictor
+Imports PokemonBattlePredictor.PBP
+Imports PokemonBattlePredictor.PBP.InfoBlocks
 
 Public Class InsertPokemonFunct
 
