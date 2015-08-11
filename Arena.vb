@@ -3,6 +3,7 @@ Imports System.Collections
 Imports System.Collections.Generic
 Imports PokemonBattlePredictor
 Imports PokemonBattlePredictor.PBP
+Imports PokemonBattlePredictor.PBP.InfoBlocks
 
 'Arena_Constants is not thread-safe!
 Namespace PBP
@@ -131,16 +132,23 @@ Namespace PBP
     Public Class Pokemon_Arena
         Inherits Arena
 
-        Dim m_last_fainted As String
-        Dim m_sleepturns_blue As Integer
-        Dim m_sleepturns_red As Integer
-        Dim m_bpoisonturns_blue As Integer
-        Dim m_bpoisonturns_red As Integer
-        Dim m_confuseturns_red As Integer
-        Dim m_confuseturns_blue As Integer
+        Private m_last_fainted As String
+        Private m_sleepturns_blue As Integer
+        Private m_sleepturns_red As Integer
+        Private m_bpoisonturns_blue As Integer
+        Private m_bpoisonturns_red As Integer
+        Private m_confuseturns_red As Integer
+        Private m_confuseturns_blue As Integer
+        Private m_bluelocation As String
+        Private m_redlocation As String
+        Private m_bluemovequeue As New Queue(Of Move_Info)
+        Private m_redmovequeue As New Queue(Of Move_Info)
+
 
         Public Sub New()
-
+            m_last_fainted = ""
+            m_bluelocation = ""
+            m_redlocation = ""
         End Sub
 
         Public Sub New(ByVal p_arena As Pokemon_Arena)
@@ -150,6 +158,8 @@ Namespace PBP
             m_sleepturns_red = p_arena.Red_NumSleep
             m_bpoisonturns_blue = p_arena.Blue_NumBadPoison
             m_bpoisonturns_red = p_arena.Red_NumBadPoison
+            m_bluelocation = p_arena.Blue_Location
+            m_redlocation = p_arena.Red_Location
         End Sub
 
         Public Property Blue_NumSleep As Integer
@@ -236,6 +246,24 @@ Namespace PBP
             End Get
             Set(value As String)
                 m_last_fainted = value
+            End Set
+        End Property
+
+        Public Property Blue_Location() As String
+            Get
+                Return m_bluelocation
+            End Get
+            Set(value As String)
+                m_bluelocation = value
+            End Set
+        End Property
+
+        Public Property Red_Location() As String
+            Get
+                Return m_redlocation
+            End Get
+            Set(value As String)
+                m_redlocation = value
             End Set
         End Property
 
@@ -369,6 +397,48 @@ Namespace PBP
                 Return "red"
             Else
                 Return "green"
+            End If
+        End Function
+
+        Public Function Enqueue_BlueMove(ByVal move As Move_Info) As Integer
+            m_bluemovequeue.Enqueue(move)
+            Return m_bluemovequeue.Count
+        End Function
+
+        Public Function Dequeue_BlueMove() As Move_Info
+            Return m_bluemovequeue.Dequeue()
+        End Function
+
+        Public Function Peek_BlueMoveQueue() As Move_Info
+            Return m_bluemovequeue.Peek()
+        End Function
+
+        Public Function is_BlueMoveQueueEmpty() As Boolean
+            If m_bluemovequeue.Count <= 0 Then
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
+        Public Function Enqueue_RedMove(ByVal move As Move_Info) As Integer
+            m_redmovequeue.Enqueue(move)
+            Return m_redmovequeue.Count
+        End Function
+
+        Public Function Dequeue_RedMove() As Move_Info
+            Return m_redmovequeue.Dequeue()
+        End Function
+
+        Public Function Peek_RedMoveQueue() As Move_Info
+            Return m_redmovequeue.Peek()
+        End Function
+
+        Public Function is_RedMoveQueueEmpty() As Boolean
+            If m_redmovequeue.Count <= 0 Then
+                Return True
+            Else
+                Return False
             End If
         End Function
 

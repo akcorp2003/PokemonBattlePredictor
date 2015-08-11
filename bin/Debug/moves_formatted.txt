@@ -444,7 +444,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+2turn,ground
 TYPE
 ground
 END MOVE
@@ -876,7 +876,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+PRLYZchanceO,10
 TYPE
 electric
 END MOVE
@@ -948,7 +948,7 @@ URI
 SPECIAL
 False
 EFFECT
-DEFU+1
+2turn,n,DEFU+1
 TYPE
 normal
 END MOVE
@@ -1776,7 +1776,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+2turn,air
 TYPE
 flying
 END MOVE
@@ -2388,7 +2388,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+2turn,air,PRLYZchanceO,30
 TYPE
 flying
 END MOVE
@@ -3324,7 +3324,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+2turn,water
 TYPE
 water
 END MOVE
@@ -3882,7 +3882,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+2turn,n,FLNCHchanceO,30
 TYPE
 flying
 END MOVE
@@ -4242,7 +4242,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+2turn,air
 TYPE
 flying
 END MOVE
@@ -4314,7 +4314,7 @@ URI
 SPECIAL
 True
 EFFECT
-
+2turn,n
 TYPE
 normal
 END MOVE
@@ -9606,7 +9606,7 @@ URI
 SPECIAL
 False
 EFFECT
-
+2turn,van
 TYPE
 ghost
 END MOVE
@@ -9912,7 +9912,7 @@ URI
 SPECIAL
 True
 EFFECT
-BRNchanceO,30
+2turn,n,BRNchanceO,30
 TYPE
 ice
 END MOVE
@@ -9930,7 +9930,7 @@ URI
 SPECIAL
 False
 EFFECT
-PRLYZchanceO,30
+2turn,n,PRLYZchanceO,30
 TYPE
 ice
 END MOVE

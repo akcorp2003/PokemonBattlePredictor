@@ -339,7 +339,7 @@ PokemonBattlePredictor
  regular damage. </param>
 	<returns>The damage value</returns>
 	<remarks></remarks>
-</member><member name="M:PokemonBattlePredictor.PBP.Calculator.Poke_Calculator.apply_damage(PokemonBattlePredictor.PBP.Pokemon@,PokemonBattlePredictor.PBP.Pokemon@,PokemonBattlePredictor.PBP.InfoBlocks.Move_Info,PokemonBattlePredictor.PBP.Calculator.Poke_Calculator,System.Int32)">
+</member><member name="M:PokemonBattlePredictor.PBP.Calculator.Poke_Calculator.apply_damage(PokemonBattlePredictor.PBP.Pokemon@,PokemonBattlePredictor.PBP.Pokemon@,PokemonBattlePredictor.PBP.InfoBlocks.Move_Info,PokemonBattlePredictor.PBP.Calculator.Poke_Calculator,System.Int32,PokemonBattlePredictor.PBP.Pokemon_Arena)">
 	<summary>
  Applies the damage that attack_move inflicts on defender. The function can accept non-damaging moves.
  The function also applies any effects attack_move may have.
@@ -367,6 +367,18 @@ PokemonBattlePredictor
 	<param name="confused_pokemon">The confused pokemon</param>
 	<param name="poke_calc"></param>
 	<returns>A boolean value indicating whether the confused_pokemon hit itself or not.</returns>
+	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.PBP.Calculator.Poke_Calculator.apply_twoturnmove(PokemonBattlePredictor.PBP.Pokemon,PokemonBattlePredictor.PBP.Pokemon,PokemonBattlePredictor.PBP.InfoBlocks.Move_Info,PokemonBattlePredictor.PBP.Pokemon_Arena)">
+	<summary>
+ The function analyzes if twoturnmove is a move that requires two turns to execute and prepares the move to be used for next turn.
+ This function DOES NOT apply any damage to second_ or first_pokemon.
+ Returns true if the move is a 2 turn move. Otherwise, false.
+ </summary>
+	<param name="first_pokemon">The first pokemon.</param>
+	<param name="second_pokemon">The pokemon that will be hit by the move.</param>
+	<param name="twoturnmove">The move in question.</param>
+	<param name="arena"></param>
+	<returns>Returns true if the move is a 2 turn move. False if not.</returns>
 	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.PBP.Calculator.Poke_Calculator.apply_moveeffect(PokemonBattlePredictor.PBP.Pokemon,PokemonBattlePredictor.PBP.Pokemon,PokemonBattlePredictor.PBP.InfoBlocks.Move_Info,System.Int32,System.Int32)">
 	<summary>

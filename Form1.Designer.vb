@@ -141,7 +141,7 @@ Partial Class Form1
         '
         Me.Button2.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(0, Byte), Integer))
         Me.Button2.Font = New System.Drawing.Font("Comic Sans MS", 14.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button2.Location = New System.Drawing.Point(188, 567)
+        Me.Button2.Location = New System.Drawing.Point(186, 547)
         Me.Button2.Name = "Button2"
         Me.Button2.Size = New System.Drawing.Size(214, 60)
         Me.Button2.TabIndex = 8

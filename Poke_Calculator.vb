@@ -83,7 +83,7 @@ Namespace PBP.Calculator
         ''' <param name="max_or_min">Max(1) damage, Min(-1) damage, or Norm(0) damage.</param>
         ''' <remarks></remarks>
         Public Sub apply_damage(ByRef attacker As Pokemon, ByRef defender As Pokemon, ByVal attack_move As Move_Info,
-                                ByVal poke_calc As Poke_Calculator, ByVal max_or_min As Integer)
+                                ByVal poke_calc As Poke_Calculator, ByVal max_or_min As Integer, ByVal poke_arena As Pokemon_Arena)
 
             Dim eff_table As New EffectivenessTable
             Dim damagevalue As Integer = 0
@@ -93,6 +93,29 @@ Namespace PBP.Calculator
 
             If Not Logger.isMute() Then
                 Logger.Record(attacker.Name + " uses " + attack_move.Name + " on " + defender.Name)
+            End If
+
+            REM check to see if move is a 2-turn
+            If attacker.Team = "blue" Then
+                If poke_arena.is_BlueMoveQueueEmpty() Then
+                    If Me.apply_twoturnmove(attacker, defender, attack_move, poke_arena) Then
+                        Return
+                    End If
+                Else
+                    poke_arena.Dequeue_BlueMove()
+                    poke_arena.Blue_Location = ""
+                End If
+
+            ElseIf attacker.Team = "red" Then
+                If poke_arena.is_RedMoveQueueEmpty() Then
+                    If Me.apply_twoturnmove(attacker, defender, attack_move, poke_arena) Then
+                        Return
+                    End If
+                Else
+                    poke_arena.Dequeue_RedMove()
+                    poke_arena.Red_Location = ""
+                End If
+                
             End If
 
             If attack_move.Accuracy > 0 And attack_move.Accuracy < 100 Then
@@ -105,6 +128,20 @@ Namespace PBP.Calculator
                     End If
                     Return
                 End If
+            End If
+
+            If attacker.Team = "blue" AndAlso Not poke_arena.Red_Location = "" Then
+                If Not Logger.isMute() Then
+                    Logger.Record("I")
+                    Logger.Record(attacker.Name + " misses!")
+                End If
+                Return
+            ElseIf attacker.Team = "red" AndAlso Not poke_arena.Blue_Location = "" Then
+                If Not Logger.isMute() Then
+                    Logger.Record("I")
+                    Logger.Record(attacker.Name + " misses!")
+                End If
+                Return
             End If
 
             If Not Logger.isMute() Then
@@ -214,6 +251,12 @@ Namespace PBP.Calculator
                 If effect_list(i).Contains("HPdrainO") Then
                     Dim drain_amount As Double = Convert.ToDouble(damage) * (Convert.ToDouble(effect_list(i + 1)))
                     first_pokemon.HP += drain_amount
+                    If Not Logger.isMute() Then
+                        Logger.Record("I")
+                        Logger.Record(second_pokemon.Name + " has its health sapped by " + draining_move.Name + "!")
+                        Logger.Record("I")
+                        Logger.Record(first_pokemon.Name + " gains " + Convert.ToString(drain_amount) + " in HP!")
+                    End If
                 End If
             Next
         End Sub
@@ -248,6 +291,96 @@ Namespace PBP.Calculator
                 End If
             End If
             Return confuse_success
+        End Function
+
+        ''' <summary>
+        ''' The function analyzes if twoturnmove is a move that requires two turns to execute and prepares the move to be used for next turn.
+        ''' This function DOES NOT apply any damage to second_ or first_pokemon.
+        ''' Returns true if the move is a 2 turn move. Otherwise, false.
+        ''' </summary>
+        ''' <param name="first_pokemon">The first pokemon.</param>
+        ''' <param name="second_pokemon">The pokemon that will be hit by the move.</param>
+        ''' <param name="twoturnmove">The move in question.</param>
+        ''' <param name="arena"></param>
+        ''' <returns>Returns true if the move is a 2 turn move. False if not.</returns>
+        ''' <remarks></remarks>
+        Public Function apply_twoturnmove(ByVal first_pokemon As Pokemon, ByVal second_pokemon As Pokemon, ByVal twoturnmove As Move_Info,
+                                          ByVal arena As Pokemon_Arena) As Boolean
+            Dim effectlist As String() = twoturnmove.Effect.Split(",")
+            If effectlist.Length = 0 OrElse effectlist(0) = "" Then
+                Return False
+            End If
+
+            Dim app_success As Boolean = False
+            For i As Integer = 0 To effectlist.Length() - 1 Step 1
+                If effectlist(i) = "2turn" Then
+                    app_success = True
+                    Dim pokemon_location As String = effectlist(i + 1)
+                    If pokemon_location = "air" Then
+                        If Not Constants.Get_FormattedString(twoturnmove.Name) = "bounce" Then
+                            If Not Logger.isMute() Then
+                                Logger.Record("I")
+                                Logger.Record(first_pokemon.Name + " flies up high!")
+                            End If
+                        Else
+                            If Not Logger.isMute() Then
+                                Logger.Record("I")
+                                Logger.Record(first_pokemon.Name + " bounces high up in the air!")
+                            End If
+                        End If
+                        If first_pokemon.Team = "blue" Then
+                            arena.Blue_Location = "air"
+                        Else
+                            arena.Red_Location = "air"
+                        End If
+                    ElseIf pokemon_location = "ground" Then
+                        If Not Logger.isMute() Then
+                            Logger.Record("I")
+                            Logger.Record(first_pokemon.Name + " goes underground!")
+                        End If
+                        If first_pokemon.Team = "blue" Then
+                            arena.Blue_Location = "ground"
+                        Else
+                            arena.Red_Location = "ground"
+                        End If
+                    ElseIf pokemon_location = "water" Then
+                        If Not Logger.isMute() Then
+                            Logger.Record("I")
+                            Logger.Record(first_pokemon.Name + " goes underwater!")
+                        End If
+                        If first_pokemon.Team = "blue" Then
+                            arena.Blue_Location = "water"
+                        Else
+                            arena.Red_Location = "water"
+                        End If
+                    ElseIf pokemon_location = "van" Then
+                        If Not Logger.isMute() Then
+                            Logger.Record("I")
+                            Logger.Record(first_pokemon.Name + " vanishes!")
+                        End If
+                        If first_pokemon.Team = "blue" Then
+                            arena.Blue_Location = "van"
+                        Else
+                            arena.Red_Location = "van"
+                        End If
+                    Else
+                        If Not Logger.isMute() Then
+                            Logger.Record("I")
+                            Logger.Record(first_pokemon.Name + " loads up!")
+                        End If
+                    End If
+
+                    If first_pokemon.Team = "blue" Then
+                        arena.Enqueue_BlueMove(twoturnmove)
+                    Else
+                        arena.Enqueue_RedMove(twoturnmove)
+                    End If
+                    app_success = True
+                    Return app_success
+                End If
+            Next
+
+            Return app_success
         End Function
 
         ''' <summary>

@@ -145,6 +145,8 @@
                 Return "SLPU,HPfullU"
             ElseIf effect_id = 39 Then
                 Return "HITKO" REM one-hit KO
+            ElseIf effect_id = 40 Then
+                Return "2turn,n"
             ElseIf effect_id = 50 Then
                 Return "CONFO"
             ElseIf effect_id = 51 Then
@@ -169,7 +171,8 @@
                 Return "PSNO"
             ElseIf effect_id = 68 Then
                 Return "PRLYZO"
-                REM explore 76 - charge and flnch
+            ElseIf effect_id = 76 Then
+                Return "2turn,n,FLNCHchanceO," + CSV_line(11)
             ElseIf effect_id = 77 Then
                 Return "CONFchanceO," + CSV_line(11)
             ElseIf effect_id = 78 Then
@@ -187,13 +190,17 @@
             ElseIf effect_id = 133 Then
                 Return "HPhalfU"
             ElseIf effect_id = 146 Then
-                Return "DEFU+1" REM also user charges for one turn before attacking
+                Return "2turn,n,DEFU+1" REM also user charges for one turn before attacking
             ElseIf effect_id = 147 Then
                 Return "FLNCHchanceO," + CSV_line(11)
             ElseIf effect_id = 151 Then
                 Return "FLNCHchanceO," + CSV_line(11)
+            ElseIf effect_id = 152 Then
+                Return "2turn,n"
             ElseIf effect_id = 153 Then
                 Return "PRLYZchanceO," + CSV_line(11)
+            ElseIf effect_id = 156 Then
+                Return "2turn,air" REM means the move takes 2 turns and pokemon goes into the air
             ElseIf effect_id = 157 Then
                 Return "DEFU+1"
                 REM explore 159 Fake Out
@@ -240,13 +247,21 @@
                 Return "DEFU-1,SPDEFU-1" REM after inflicting damage
             ElseIf effect_id = 254 Then
                 Return "BRNchanceO," + CSV_line(11) + "RECL,1/3"
+            ElseIf effect_id = 256 Then
+                Return "2turn,water"
+            ElseIf effect_id = 257 Then
+                Return "2turn,ground"
             ElseIf effect_id = 259 Then
                 Return "EVAO-1" REM removes field effects on other side
             ElseIf effect_id = 261 Then
                 Return "FRZchanceO," + CSV_line(11)
             ElseIf effect_id = 263 Then
                 Return "RECL,1/3," + "PRLYZchanceO," + CSV_line(11)
+            ElseIf effect_id = 264 Then
+                Return "2turn,air,PRLYZchanceO," + CSV_line(11)
                 REM explore 266
+            ElseIf effect_id = 273 Then
+                Return "2turn,van"
             ElseIf effect_id = 274 Then
                 Return "FLNCHchanceO," + CSV_line(11) + ",BRNchanceO," + CSV_line(11)
             ElseIf effect_id = 275 Then
@@ -265,6 +280,8 @@
                 Return "SPDEFO-2"
             ElseIf effect_id = 309 Then
                 Return "ATKU+2,SPATKU+2,SPDU+2,DEFU-1,SPDEFU-1"
+            ElseIf effect_id = 312 Then
+                Return "2turn,air"
             ElseIf effect_id = 313 Then
                 Return "ATKU+1,SPDU+2"
             ElseIf effect_id = 317 Then
@@ -282,9 +299,9 @@
             ElseIf effect_id = 331 Then
                 Return "SPDO-1"
             ElseIf effect_id = 332 Then
-                Return "PRLYZchanceO," + CSV_line(11) REM also requires one turn to charge
+                Return "2turn,n,PRLYZchanceO," + CSV_line(11) REM also requires one turn to charge
             ElseIf effect_id = 333 Then
-                Return "BRNchanceO," + CSV_line(11) REM also requires one turn to charge
+                Return "2turn,n,BRNchanceO," + CSV_line(11) REM also requires one turn to charge
             ElseIf effect_id = 335 Then
                 Return "DEFU-1,SPDEFU-1,SPDU-1"
             ElseIf effect_id = 338 Then
@@ -305,7 +322,7 @@
             ElseIf effect_id = 364 Then
                 Return "ATKO-1,SPATKO-1,SPDO-1" REM if O is poisoned
             ElseIf effect_id = 366 Then
-                Return "SPATKU+2,SPDEFU+2,SPD+2"
+                Return "2turn,n,SPATKU+2,SPDEFU+2,SPD+2"
             ElseIf effect_id = 269 Then
                 Return "SPATKO-2"
             ElseIf effect_id = 10004 Then

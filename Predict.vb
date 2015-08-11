@@ -357,7 +357,7 @@ Namespace PBP
                                 REM check for confusion. The reason we are wrapping checking confusion around apply_damage is because
                                 REM apply_battle() determines confusion. So we do not want to calculate confusion two times.
                                 If poke_calc.apply_confusion(f_pokemon, poke_calc) = False Then
-                                    poke_calc.apply_damage(f_pokemon, turn_queue.Peek(), movetouse, poke_calc, max_or_min)
+                                    poke_calc.apply_damage(f_pokemon, turn_queue.Peek(), movetouse, poke_calc, max_or_min, arena)
                                 End If
                             Else
                                 REM we need to carry through apply_battle in order to let the function select the best move for us
@@ -396,7 +396,7 @@ Namespace PBP
 
                             Else
                                 If poke_calc.apply_confusion(s_pokemon, poke_calc) = False Then
-                                    poke_calc.apply_damage(s_pokemon, f_pokemon, movetouse, poke_calc, max_or_min)
+                                    poke_calc.apply_damage(s_pokemon, f_pokemon, movetouse, poke_calc, max_or_min, arena)
                                 End If
                             End If
                         End If
@@ -469,12 +469,12 @@ Namespace PBP
                                 REM check for confusion. The reason we are wrapping checking confusion around apply_damage is because
                                 REM apply_battle() determines confusion. So we do not want to calculate confusion two times.
                                 If poke_calc.apply_confusion(f_pokemon, poke_calc) = False Then
-                                    poke_calc.apply_damage(f_pokemon, turn_queue.Peek(), movetouse_first, poke_calc, max_or_min)
+                                    poke_calc.apply_damage(f_pokemon, turn_queue.Peek(), movetouse_first, poke_calc, max_or_min, arena)
                                 End If
                             Else
                                 REM we need to carry through apply_battle in order to let the function select the best move for us
                                 'apply_battle(f_pokemon, turn_queue.Peek(), poke_calc, arena) REM causing a potential infinite loop
-                                poke_calc.apply_damage(f_pokemon, turn_queue.Peek(), movetouse_second, poke_calc, max_or_min)
+                                poke_calc.apply_damage(f_pokemon, turn_queue.Peek(), movetouse_second, poke_calc, max_or_min, arena)
                             End If
 
                         End If
@@ -492,10 +492,10 @@ Namespace PBP
                             REM do the same thing as above
                             If s_pokemon.Team = second_pokemon.Team Then
                                 'apply_battle(s_pokemon, f_pokemon, poke_calc, arena) REM possible infinite loop
-                                poke_calc.apply_damage(s_pokemon, f_pokemon, movetouse_second, poke_calc, max_or_min)
+                                poke_calc.apply_damage(s_pokemon, f_pokemon, movetouse_second, poke_calc, max_or_min, arena)
                             Else
                                 If poke_calc.apply_confusion(s_pokemon, poke_calc) = False Then
-                                    poke_calc.apply_damage(s_pokemon, f_pokemon, movetouse_first, poke_calc, max_or_min)
+                                    poke_calc.apply_damage(s_pokemon, f_pokemon, movetouse_first, poke_calc, max_or_min, arena)
                                 End If
                             End If
                         End If
@@ -806,6 +806,17 @@ Namespace PBP
                 End If
             End If
 
+            REM check if there's a move already prepared for Blue or Red
+            If first_pokemon.Team = "blue" AndAlso Not poke_arena.is_BlueMoveQueueEmpty() Then
+                Dim twoturnmove As Move_Info = poke_arena.Peek_BlueMoveQueue()
+                poke_calc.apply_damage(first_pokemon, second_pokemon, twoturnmove, poke_calc, 1, poke_arena)
+                Return
+            ElseIf first_pokemon.Team = "red" AndAlso Not poke_arena.is_RedMoveQueueEmpty() Then
+                Dim twoturnmove As Move_Info = poke_arena.Peek_RedMoveQueue()
+                poke_calc.apply_damage(first_pokemon, second_pokemon, twoturnmove, poke_calc, 1, poke_arena)
+                Return
+            End If
+
             Dim isthere_SEmove As List(Of Move_Info)
             isthere_SEmove = Me.IsThereSuperEffectiveMove(first_pokemon, second_pokemon, effectiveness_table)
 
@@ -853,7 +864,7 @@ Namespace PBP
                                 Logger.Set_Recording()
                             End If
 
-                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1, poke_arena)
 
                         Else
                             REM just go back to evaluating the green case
@@ -901,11 +912,11 @@ Namespace PBP
 
 
             If turn_poke_move2_pack Is Nothing And turn_poke_move3_pack Is Nothing Then
-                poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+                poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1, poke_arena)
             ElseIf Not turn_poke_move3_pack Is Nothing Then
                 REM healing moves have the priority, route it to the appropriate function
                 If turn_poke_move3_pack.Move.Effect.Contains("drain") Then
-                    poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, poke_calc, 1)
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, poke_calc, 1, poke_arena)
                 Else
                     poke_calc.apply_moveeffect(first_pokemon, second_pokemon, turn_poke_move3_pack.Move, Constants.Funct_IDs.ApplyBattle_SuperEffectiveBranch)
                 End If
@@ -915,7 +926,7 @@ Namespace PBP
                     'TODO: in a future edition, analyze these numbers carefully, as in look at the difference
                     'between these 2 values and if it is too great, then go for offensive but if it is not too great
                     'go into greater detail
-                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1, poke_arena)
                 ElseIf turn_poke_move2_pack.Opponent_Turns > turn_poke_move2_pack.My_Turns Then
                     REM we can apply the stat move
                     If turn_poke_move2_pack.Affect_Type = Constants.Stat_Type.Affect_Self Then
@@ -928,7 +939,7 @@ Namespace PBP
                 Else
                     REM we have a tie...just apply damage
                     REM I like to always inflict damage, so even if it's equal
-                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1, poke_arena)
                 End If
             End If
 
@@ -980,11 +991,11 @@ Namespace PBP
             If turn_poke_move2_pack Is Nothing Then
                 If turn_poke_move3_pack Is Nothing OrElse turn_poke_move3_pack.Move Is Nothing Then
                     If turn_poke_move4_pack Is Nothing Then REM in this normal branch, we will prioritize status moves over healing moves
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1, poke_arena)
                     Else
                         REM route to the appropriate function
                         If turn_poke_move4_pack.Move.Effect.Contains("drain") Then
-                            poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move4_pack.Move, poke_calc, 1)
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move4_pack.Move, poke_calc, 1, poke_arena)
                         Else
                             poke_calc.apply_moveeffect(first_pokemon, second_pokemon, turn_poke_move4_pack.Move, Constants.Funct_IDs.ApplyBattle_NormalMoveBranch)
                         End If
@@ -994,14 +1005,14 @@ Namespace PBP
                     REM we will apply the status move if the pokemon doesn't have a status already
                     REM (if FindBestStatusMove chose a confusion move, it's acceptable if the pokemon is not confused already)
                     If Not turn_poke_move3_pack.Move.get_StatusType() = Constants.StatusCondition.none And second_pokemon.Status_Condition = Constants.StatusCondition.none Then
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move3_pack.Move.Name), poke_calc, 1)
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move3_pack.Move.Name), poke_calc, 1, poke_arena)
 
                         REM give the move one more chance: evaluate if it is a confusion type of move. If pokemon is already confused though...
                     ElseIf turn_poke_move3_pack.Move.isConfusion() = True And Not second_pokemon.Other_Status_Condition = Constants.StatusCondition.confused Then
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move3_pack.Move.Name), poke_calc, 1)
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move3_pack.Move.Name), poke_calc, 1, poke_arena)
                     Else
                         'TODO: possibly consider more advanced analytics to analyze whether to go with the normal or status effect move
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1, poke_arena)
                     End If
 
                 End If
@@ -1012,7 +1023,7 @@ Namespace PBP
                     'TODO: in a future edition, analyze these numbers carefully, as in look at the difference
                     'between these 2 values and if it is too great, then go for offensive but if it is not too great
                     'go into greater detail
-                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1, poke_arena)
                 ElseIf turn_poke_move2_pack.Opponent_Turns > turn_poke_move2_pack.My_Turns Then
                     REM we can apply the stat move
                     If turn_poke_move2_pack.Affect_Type = Constants.Stat_Type.Affect_Self Then
@@ -1025,7 +1036,7 @@ Namespace PBP
                 Else
                     REM we have a tie...just apply damage
                     REM For normal moves, it is better to go and rip apart the second_pokemon
-                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1)
+                    poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(turn_poke_move_pack.Move.Name), poke_calc, 1, poke_arena)
                 End If
             End If
 
@@ -1074,7 +1085,7 @@ Namespace PBP
                     If Not isthere_noneffectivemove.Count = 0 Then
 
                         turn_poke_move_pack = Me.FindBestMove(first_pokemon, second_pokemon, poke_calc, isthere_noneffectivemove, 1, poke_arena.Clone())
-                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1)
+                        poke_calc.apply_damage(first_pokemon, second_pokemon, turn_poke_move_pack.Move, poke_calc, 1, poke_arena)
 
                     Else
                         REM well...this is bad news...there are no stat/status moves...no noneffective moves...
@@ -1084,7 +1095,7 @@ Namespace PBP
                         last_list = IsThereNotEffectiveMoves(first_pokemon, second_pokemon, eff_table)
                         If last_list.Count > 0 Then REM since this function can't be called anywhere else, this condition MUST be true at this point
                             REM just pick the first one
-                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(last_list(0).Name), poke_calc, max_or_min)
+                            poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle(last_list(0).Name), poke_calc, max_or_min, poke_arena)
                         Else REM in case it isn't true...
                             REM just apply any move since at this point, we have determined that there is absolutely no good move to use
                             REM first make sure that there are still moves left that we can use
@@ -1099,11 +1110,11 @@ Namespace PBP
                                 ElseIf rand <= 100 AndAlso rand > 75 Then
                                     rand = 3
                                 End If
-                                poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle.Item(rand), poke_calc, max_or_min)
+                                poke_calc.apply_damage(first_pokemon, second_pokemon, first_pokemon.Moves_For_Battle.Item(rand), poke_calc, max_or_min, poke_arena)
                             Else
                                 REM apply struggle move
                                 Dim struggle As Move_Info = Move_Info.get_StruggleMove()
-                                poke_calc.apply_damage(first_pokemon, second_pokemon, struggle, poke_calc, max_or_min)
+                                poke_calc.apply_damage(first_pokemon, second_pokemon, struggle, poke_calc, max_or_min, poke_arena)
                             End If
 
 
@@ -2029,7 +2040,7 @@ Namespace PBP
                     poke_calc.apply_moveeffect(f_pokemon, s_pokemon, move_enum.Current)
                 Else
                     REM we need to apply damage since this is not the primary move first_pokemon will be using
-                    poke_calc.apply_damage(f_pokemon, s_pokemon, move_enum.Current, poke_calc, max_or_min)
+                    poke_calc.apply_damage(f_pokemon, s_pokemon, move_enum.Current, poke_calc, max_or_min, arena)
                 End If
 
                 REM now check what apply_moveeffect() did to s_pokemon and evaluate if using that move is worthy

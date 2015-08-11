@@ -392,7 +392,11 @@ Namespace PBP.Dex_IO
                 If Logger.get_Log1.Item(i) = "BEGIN TEMP INFO" Then
                     newfile.InsertParagraph("-------Arena Status-------", False, my_format)
                     i = PrintArenaCondition(i + 1, newfile, arena)
-                    i -= 1 REM off by one, PrintArenaCondition() returns the index to END TEMP INFO, now we need to pull it back by one
+                    If Logger.get_Log1.Item(i) = "END TEAM RED" Then
+                        Continue For
+                    ElseIf Logger.get_Log1.Item(i) = "END TEMP INFO" Then
+                        i -= 1 REM off by one, PrintArenaCondition() returns the index to END TEMP INFO, now we need to rewind it by one
+                    End If
                     Continue For
                 End If
 
@@ -571,6 +575,12 @@ Namespace PBP.Dex_IO
                     Exit For
                 End If
 
+                If Logger.get_Log1.Item(i) = "END TEMP INFO" Then
+                    REM the second trap in case END TEAM RED is not read
+                    ending_index = i
+                    Exit For
+                End If
+
                 If Logger.get_Log1().Item(i).Contains(";") Or Logger.get_Log1().Item(i).Length = 1 Then
                     Get_Formatting(Logger.get_Log1().Item(i), my_format)
                     newfile.InsertParagraph(Logger.get_Log1().Item(i + 1), False, my_format)
@@ -613,17 +623,24 @@ Namespace PBP.Dex_IO
 
                         infotable.Rows(0).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i)) 'Blue/Red Team #
                         infotable.Rows(1).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i + 1)) 'HP:
-                        infotable.Rows(2).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i + 2)) 'HP color:
+
+                        Dim hp_para As Paragraph = infotable.Rows(2).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i + 2)) 'HP color:
                         REM apply a color to the paragraph
                         If Logger.get_Log1.Item(i + 2) = "red" Then
-                            infotable.Rows(2).Cells(j).Paragraphs.First.Color(Color.Red)
+                            my_format.FontColor = Color.Red
+                            hp_para.Color(Color.Red)
                         ElseIf Logger.get_Log1.Item(i + 2) = "yellow" Then
-                            infotable.Rows(2).Cells(j).Paragraphs.First.Color(Color.Yellow)
+                            'infotable.Rows(2).Cells(j).Paragraphs.First.Color(Color.Yellow)
+                            my_format.FontColor = Color.Yellow
+                            hp_para.Color(Color.Red)
                         Else
-                            infotable.Rows(2).Cells(j).Paragraphs.First.Color(Color.Green)
+                            'infotable.Rows(2).Cells(j).Paragraphs.First.Color(Color.Green)
+                            my_format.FontColor = Color.Green
+                            hp_para.Color(Color.Green)
                         End If
+                        infotable.Rows(2).Cells(j).InsertParagraph(Logger.get_Log1.Item(i + 2), False, my_format)
                         infotable.Rows(3).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i + 3)) 'Status:
-
+                        Reset_Formatting(my_format)
                         i += 4
                         If Logger.get_Log1.Item(i) = "END ONE POKEMON" Then
                             i += 1
@@ -637,6 +654,7 @@ Namespace PBP.Dex_IO
 
                 REM just insert the paragraph normally
                 newfile.InsertParagraph(Logger.get_Log1().Item(i), False, my_format)
+
             Next
 
             Return ending_index
