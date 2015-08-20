@@ -47,12 +47,27 @@ Partial Class Form1
         Me.Worker_Pokemonreader = New System.ComponentModel.BackgroundWorker()
         Me.Worker_Movereader = New System.ComponentModel.BackgroundWorker()
         Me.Worker_Abilityreader = New System.ComponentModel.BackgroundWorker()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PrintToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RecentBattleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LastBattleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SettingsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AccuracyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HighAccuracyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MediumAccuracyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LowAccuracyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.DamageToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MaximumToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NormalToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.MinimumToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.TeamBlue_3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TeamBlue_2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TeamBlue_1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TeamRed_3, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TeamRed_2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.TeamRed_1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -61,7 +76,7 @@ Partial Class Form1
         Me.Label1.BackColor = System.Drawing.Color.Ivory
         Me.Label1.Font = New System.Drawing.Font("Comic Sans MS", 20.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.Label1.Location = New System.Drawing.Point(116, 9)
+        Me.Label1.Location = New System.Drawing.Point(116, 31)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(347, 38)
         Me.Label1.TabIndex = 0
@@ -110,7 +125,7 @@ Partial Class Form1
         'BattleButton
         '
         Me.BattleButton.Font = New System.Drawing.Font("Comic Sans MS", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.BattleButton.Location = New System.Drawing.Point(157, 76)
+        Me.BattleButton.Location = New System.Drawing.Point(157, 78)
         Me.BattleButton.Name = "BattleButton"
         Me.BattleButton.Size = New System.Drawing.Size(272, 54)
         Me.BattleButton.TabIndex = 5
@@ -255,6 +270,102 @@ Partial Class Form1
         'Worker_Abilityreader
         '
         '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.BackColor = System.Drawing.SystemColors.HotTrack
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.SettingsToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(576, 24)
+        Me.MenuStrip1.TabIndex = 18
+        Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'FileToolStripMenuItem
+        '
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.PrintToolStripMenuItem})
+        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
+        Me.FileToolStripMenuItem.Text = "File"
+        '
+        'PrintToolStripMenuItem
+        '
+        Me.PrintToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RecentBattleToolStripMenuItem, Me.LastBattleToolStripMenuItem})
+        Me.PrintToolStripMenuItem.Name = "PrintToolStripMenuItem"
+        Me.PrintToolStripMenuItem.Size = New System.Drawing.Size(99, 22)
+        Me.PrintToolStripMenuItem.Text = "Print"
+        '
+        'RecentBattleToolStripMenuItem
+        '
+        Me.RecentBattleToolStripMenuItem.Name = "RecentBattleToolStripMenuItem"
+        Me.RecentBattleToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
+        Me.RecentBattleToolStripMenuItem.Text = "Current Log"
+        Me.RecentBattleToolStripMenuItem.ToolTipText = "Print Information on the most recent predicted battle."
+        '
+        'LastBattleToolStripMenuItem
+        '
+        Me.LastBattleToolStripMenuItem.Name = "LastBattleToolStripMenuItem"
+        Me.LastBattleToolStripMenuItem.Size = New System.Drawing.Size(137, 22)
+        Me.LastBattleToolStripMenuItem.Text = "Last Log"
+        Me.LastBattleToolStripMenuItem.ToolTipText = "Print information on the battle that occured before the current one."
+        '
+        'SettingsToolStripMenuItem
+        '
+        Me.SettingsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AccuracyToolStripMenuItem, Me.DamageToolStripMenuItem})
+        Me.SettingsToolStripMenuItem.Name = "SettingsToolStripMenuItem"
+        Me.SettingsToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
+        Me.SettingsToolStripMenuItem.Text = "Settings"
+        Me.SettingsToolStripMenuItem.ToolTipText = "Set the realistic value of the predictor."
+        '
+        'AccuracyToolStripMenuItem
+        '
+        Me.AccuracyToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.HighAccuracyToolStripMenuItem, Me.MediumAccuracyToolStripMenuItem, Me.LowAccuracyToolStripMenuItem})
+        Me.AccuracyToolStripMenuItem.Name = "AccuracyToolStripMenuItem"
+        Me.AccuracyToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.AccuracyToolStripMenuItem.Text = "Accuracy"
+        '
+        'HighAccuracyToolStripMenuItem
+        '
+        Me.HighAccuracyToolStripMenuItem.Name = "HighAccuracyToolStripMenuItem"
+        Me.HighAccuracyToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
+        Me.HighAccuracyToolStripMenuItem.Text = "High Accuracy"
+        '
+        'MediumAccuracyToolStripMenuItem
+        '
+        Me.MediumAccuracyToolStripMenuItem.Name = "MediumAccuracyToolStripMenuItem"
+        Me.MediumAccuracyToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
+        Me.MediumAccuracyToolStripMenuItem.Text = "Medium Accuracy"
+        '
+        'LowAccuracyToolStripMenuItem
+        '
+        Me.LowAccuracyToolStripMenuItem.Name = "LowAccuracyToolStripMenuItem"
+        Me.LowAccuracyToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
+        Me.LowAccuracyToolStripMenuItem.Text = "Low Accuracy"
+        '
+        'DamageToolStripMenuItem
+        '
+        Me.DamageToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.MaximumToolStripMenuItem, Me.NormalToolStripMenuItem, Me.MinimumToolStripMenuItem})
+        Me.DamageToolStripMenuItem.Name = "DamageToolStripMenuItem"
+        Me.DamageToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.DamageToolStripMenuItem.Text = "Damage"
+        '
+        'MaximumToolStripMenuItem
+        '
+        Me.MaximumToolStripMenuItem.Name = "MaximumToolStripMenuItem"
+        Me.MaximumToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.MaximumToolStripMenuItem.Text = "Maximum"
+        '
+        'NormalToolStripMenuItem
+        '
+        Me.NormalToolStripMenuItem.Name = "NormalToolStripMenuItem"
+        Me.NormalToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.NormalToolStripMenuItem.Text = "Normal"
+        '
+        'MinimumToolStripMenuItem
+        '
+        Me.MinimumToolStripMenuItem.Name = "MinimumToolStripMenuItem"
+        Me.MinimumToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.MinimumToolStripMenuItem.Text = "Minimum"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -280,6 +391,8 @@ Partial Class Form1
         Me.Controls.Add(Me.TeamBlue_2)
         Me.Controls.Add(Me.TeamBlue_3)
         Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.MenuStrip1)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "Form1"
         Me.Text = "Pokemon Battle Simulation"
         CType(Me.TeamBlue_3, System.ComponentModel.ISupportInitialize).EndInit()
@@ -288,6 +401,8 @@ Partial Class Form1
         CType(Me.TeamRed_3, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.TeamRed_2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.TeamRed_1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -316,5 +431,19 @@ Partial Class Form1
     Friend WithEvents Worker_Pokemonreader As System.ComponentModel.BackgroundWorker
     Friend WithEvents Worker_Movereader As System.ComponentModel.BackgroundWorker
     Friend WithEvents Worker_Abilityreader As System.ComponentModel.BackgroundWorker
+    Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
+    Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents PrintToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RecentBattleToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents LastBattleToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents SettingsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AccuracyToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents HighAccuracyToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MediumAccuracyToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents LowAccuracyToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents DamageToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MaximumToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents NormalToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MinimumToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

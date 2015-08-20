@@ -597,6 +597,14 @@ PokemonBattlePredictor
  </summary>
 	<returns>A list of special moves. Make sure to clone!</returns>
 	<remarks></remarks>
+</member><member name="M:PokemonBattlePredictor.PBP.Dex_IO.Dex_Writer.PrintLogger(PokemonBattlePredictor.PBP.Pokemon_Arena,System.Int32,System.Int32)">
+	<summary>
+ Prints the contents of LogID and the arena associated to that log.
+ </summary>
+	<param name="arena">Arena that holds the Pokemon.</param>
+	<param name="LogID">1 - Current Log, 2 - Last Log.</param>
+	<param name="Funct_ID">The calling function's ID.</param>
+	<remarks></remarks>
 </member><member name="M:PokemonBattlePredictor.PBP.Dex_IO.Dex_reader.Execute(System.ComponentModel.BackgroundWorker,System.ComponentModel.DoWorkEventArgs)">
 	<summary>
  Begins reading files. The object will determine which function to run based on the filename it holds.

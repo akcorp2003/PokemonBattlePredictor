@@ -2,9 +2,11 @@
     Module Constants
         Public Const LEVEL As Integer = 100 REM for TPP levels
         Public Const CONFUSE_DAMAGE As Integer = 40
-        Public Const ACCURACY_HIGH As Integer = 25
+        'Public Const ACCURACY_HIGH As Integer = 25
 
         Dim m_iterationdict As New Dictionary(Of Integer, Integer)
+        Dim m_damagelevel As Integer = Damage_Level.MAX
+        Dim m_accuracylevel As Integer = Accuracy.HIGH
 
         Enum Types
             normal = 0
@@ -46,11 +48,24 @@
             ApplyBattle = 40
             ApplyBattle_SuperEffectiveBranch = 50
             ApplyBattle_NormalMoveBranch = 60
+            Button2_Form1 = 70
         End Enum
 
         Enum Stat_Type
             Affect_Opponent = 1
             Affect_Self = 2
+        End Enum
+
+        Enum Damage_Level
+            MIN = -1
+            NORM = 0
+            MAX = 1
+        End Enum
+
+        Enum Accuracy
+            LOW = 5
+            MEDIUM = 10
+            HIGH = 25
         End Enum
 
         Public Function Get_CriticalStageValue(ByVal stage As Integer) As Double
@@ -365,6 +380,23 @@
             End If
         End Function
 
+        Public Property Damage As Integer
+            Get
+                Return m_damagelevel
+            End Get
+            Set(value As Integer)
+                m_damagelevel = value
+            End Set
+        End Property
+
+        Public Property Accuracy_Level As Integer
+            Get
+                Return m_accuracylevel
+            End Get
+            Set(value As Integer)
+                m_accuracylevel = value
+            End Set
+        End Property
         ''' <summary>
         ''' Takes in a string and formats the string by:
         ''' 1. Removing any leading and ending whitespace

@@ -52,13 +52,13 @@ Namespace PBP.Calculator
                 CRITICAL = 1
             End If
 
-            If MAXMIN = 0 Then
+            If MAXMIN = Constants.Damage_Level.NORM Then
                 REM apply damage according to formula normally
                 MODIFIER = STAB * EFF * CRITICAL * OTHER * GenerateRandomNumber(0.85, 1)
-            ElseIf MAXMIN = -1 Then
-                REM apply min possible, no critical hit
+            ElseIf MAXMIN = Constants.Damage_Level.MIN Then
+                REM apply mi, no critical hit
                 MODIFIER = STAB * EFF * OTHER * 0.85
-            ElseIf MAXMIN = 1 Then
+            ElseIf MAXMIN = Constants.Damage_Level.MAX Then
                 REM apply max possible, with critical
                 MODIFIER = STAB * EFF * 2 * OTHER * 1
             Else

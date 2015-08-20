@@ -275,8 +275,29 @@ Namespace PBP.Dex_IO
             filewriter.Close()
         End Sub
 
-        Public Sub PrintLogger(ByVal arena As Pokemon_Arena)
-            Dim filename As String = "battlelog.docx"
+        ''' <summary>
+        ''' Prints the contents of LogID and the arena associated to that log.
+        ''' </summary>
+        ''' <param name="arena">Arena that holds the Pokemon.</param>
+        ''' <param name="LogID">1 - Current Log, 2 - Last Log.</param>
+        ''' <param name="Funct_ID">The calling function's ID.</param>
+        ''' <remarks></remarks>
+        Public Sub PrintLogger(ByVal arena As Pokemon_Arena, ByVal LogID As Integer,
+                               Optional ByVal Funct_ID As Integer = 0)
+            Dim my_log As New List(Of String)
+            Dim filename As String = ""
+            If LogID = 1 Then
+                my_log = Logger.get_Log1()
+                filename = "battlelog_recent.docx"
+            Else
+                my_log = Logger.get_Log2()
+                filename = "battlelog_last.docx"
+            End If
+
+            If Funct_ID = Funct_IDs.Button2_Form1 Then
+                filename = "battlelog.docx"
+            End If
+
             Dim newfile As DocX = DocX.Create(filename)
 
             Dim title_format As New Formatting
@@ -375,8 +396,8 @@ Namespace PBP.Dex_IO
             Dim my_format As Formatting = Get_NormalTextFormat()
 
             newfile.InsertParagraph(Environment.NewLine, False, my_format)
-            For i As Integer = 0 To Logger.get_Log1().Count - 1 Step 1
-                If Logger.get_Log1.Item(i) = "BEGIN BATTLE" Then
+            For i As Integer = 0 To my_log.Count - 1 Step 1
+                If my_log.Item(i) = "BEGIN BATTLE" Then
                     my_format.UnderlineColor = Color.Black
                     Dim para As Paragraph = newfile.InsertParagraph("The battle begins!!", False, my_format)
                     para.Alignment = Alignment.center
@@ -384,61 +405,61 @@ Namespace PBP.Dex_IO
                     Continue For
                 End If
 
-                If Logger.get_Log1.Item(i) = "END BATTLE" Then
+                If my_log.Item(i) = "END BATTLE" Then
                     newfile.InsertParagraph(Environment.NewLine, False, my_format)
                     Continue For
                 End If
 
-                If Logger.get_Log1.Item(i) = "BEGIN TEMP INFO" Then
+                If my_log.Item(i) = "BEGIN TEMP INFO" Then
                     newfile.InsertParagraph("-------Arena Status-------", False, my_format)
-                    i = PrintArenaCondition(i + 1, newfile, arena)
-                    If Logger.get_Log1.Item(i) = "END TEAM RED" Then
+                    i = PrintArenaCondition(i + 1, newfile, arena, my_log)
+                    If my_log.Item(i) = "END TEAM RED" Then
                         Continue For
-                    ElseIf Logger.get_Log1.Item(i) = "END TEMP INFO" Then
+                    ElseIf my_log.Item(i) = "END TEMP INFO" Then
                         i -= 1 REM off by one, PrintArenaCondition() returns the index to END TEMP INFO, now we need to rewind it by one
                     End If
                     Continue For
                 End If
 
-                If Logger.get_Log1.Item(i) = "END TEMP INFO" Then
+                If my_log.Item(i) = "END TEMP INFO" Then
                     newfile.InsertParagraph("-------Arena Status Completed-------", False, my_format)
                     newfile.InsertParagraph(Environment.NewLine, False, my_format)
                     Continue For
                 End If
 
-                If Logger.get_Log1.Item(i) = "FAINT" Then
+                If my_log.Item(i) = "FAINT" Then
                     newfile.InsertParagraph(Environment.NewLine, False, my_format)
                     Continue For
                 End If
 
-                If Logger.get_Log1().Item(i).Contains(";") Or Logger.get_Log1().Item(i).Length = 1 Then
-                    Get_Formatting(Logger.get_Log1().Item(i), my_format)
-                    newfile.InsertParagraph(Logger.get_Log1().Item(i + 1), False, my_format)
+                If my_log.Item(i).Contains(";") Or my_log.Item(i).Length = 1 Then
+                    Get_Formatting(my_log.Item(i), my_format)
+                    newfile.InsertParagraph(my_log.Item(i + 1), False, my_format)
                     i += 1
                     Reset_Formatting(my_format)
                     Continue For
                 End If
 
-                If Logger.get_Log1().Item(i).Contains("END CYCLE") Then
+                If my_log.Item(i).Contains("END CYCLE") Then
                     newfile.InsertParagraph(Environment.NewLine, False, my_format)
                     Continue For
                 End If
 
-                If Logger.get_Log1().Item(i).Contains("winning") Then
+                If my_log.Item(i).Contains("winning") Then
                     my_format.Position = 36
-                    If Logger.get_Log1().Item(i).Contains("red") Then
+                    If my_log.Item(i).Contains("red") Then
                         my_format.FontColor = Color.Red
-                    ElseIf Logger.get_Log1().Item(i).Contains("blue") Then
+                    ElseIf my_log.Item(i).Contains("blue") Then
                         my_format.FontColor = Color.Blue
                     End If
-                    newfile.InsertParagraph(Logger.get_Log1().Item(i), False, my_format)
+                    newfile.InsertParagraph(my_log.Item(i), False, my_format)
                     REM this should be the last line
                     Reset_Formatting(my_format)
                     Continue For
                 End If
 
                 REM write the line normally
-                newfile.InsertParagraph(Logger.get_Log1().Item(i), False, my_format)
+                newfile.InsertParagraph(my_log.Item(i), False, my_format)
 
                 Reset_Formatting(my_format)
 
@@ -544,67 +565,67 @@ Namespace PBP.Dex_IO
             End If
         End Sub
 
-        Private Function PrintArenaCondition(ByVal start_index As Integer, ByRef newfile As DocX, ByVal arena As Pokemon_Arena) As Integer
+        Private Function PrintArenaCondition(ByVal start_index As Integer, ByRef newfile As DocX, ByVal arena As Pokemon_Arena, ByVal my_log As List(Of String)) As Integer
             Dim ending_index As Integer = start_index
             Dim my_format As Formatting = Get_NormalTextFormat()
             Dim workingon_red As Boolean = False
             Dim workingon_blue As Boolean = False
 
-            For i As Integer = start_index To Logger.get_Log1.Count - 1 Step 1
+            For i As Integer = start_index To my_log.Count - 1 Step 1
                 ending_index = i
-                If Logger.get_Log1.Item(i) = "BEGIN TEAM BLUE" Then
+                If my_log.Item(i) = "BEGIN TEAM BLUE" Then
                     workingon_blue = True
                     workingon_red = False
                     Continue For
                 End If
 
-                If Logger.get_Log1.Item(i) = "END TEAM BLUE" Then
+                If my_log.Item(i) = "END TEAM BLUE" Then
                     workingon_blue = False
                     Continue For
                 End If
 
-                If Logger.get_Log1.Item(i) = "BEGIN TEAM RED" Then
+                If my_log.Item(i) = "BEGIN TEAM RED" Then
                     workingon_blue = False
                     workingon_red = True
                     Continue For
                 End If
 
-                If Logger.get_Log1.Item(i) = "END TEAM RED" Then
+                If my_log.Item(i) = "END TEAM RED" Then
                     REM by convention, this is the last one
                     ending_index = i
                     Exit For
                 End If
 
-                If Logger.get_Log1.Item(i) = "END TEMP INFO" Then
+                If my_log.Item(i) = "END TEMP INFO" Then
                     REM the second trap in case END TEAM RED is not read
                     ending_index = i
                     Exit For
                 End If
 
-                If Logger.get_Log1().Item(i).Contains(";") Or Logger.get_Log1().Item(i).Length = 1 Then
-                    Get_Formatting(Logger.get_Log1().Item(i), my_format)
-                    newfile.InsertParagraph(Logger.get_Log1().Item(i + 1), False, my_format)
+                If my_log.Item(i).Contains(";") Or my_log.Item(i).Length = 1 Then
+                    Get_Formatting(my_log.Item(i), my_format)
+                    newfile.InsertParagraph(my_log.Item(i + 1), False, my_format)
                     i += 1
                     Reset_Formatting(my_format)
                     Continue For
                 End If
 
-                If Logger.get_Log1().Item(i).Contains("green") OrElse Logger.get_Log1().Item(i).Contains("yellow") OrElse Logger.get_Log1().Item(i).Contains("red") Then
-                    If Logger.get_Log1().Item(i).Contains("green") Then
+                If my_log.Item(i).Contains("green") OrElse my_log.Item(i).Contains("yellow") OrElse my_log.Item(i).Contains("red") Then
+                    If my_log.Item(i).Contains("green") Then
                         my_format.FontColor = Color.Green
-                    ElseIf Logger.get_Log1().Item(i).Contains("yellow") Then
+                    ElseIf my_log.Item(i).Contains("yellow") Then
                         my_format.FontColor = Color.Yellow
-                    ElseIf Logger.get_Log1().Item(i).Contains("red") Then
+                    ElseIf my_log.Item(i).Contains("red") Then
                         my_format.FontColor = Color.Red
                     Else
                         my_format.FontColor = Color.Green
                     End If
-                    newfile.InsertParagraph(Logger.get_Log1().Item(i), False, my_format)
+                    newfile.InsertParagraph(my_log.Item(i), False, my_format)
                     Reset_Formatting(my_format)
                     Continue For
                 End If
 
-                If Logger.get_Log1().Item(i).Contains("ONE POKEMON") Then
+                If my_log.Item(i).Contains("ONE POKEMON") Then
                     i += 1 REM move to the next item which begins the important things
                     Dim n_columns As Integer
                     If workingon_blue Then
@@ -617,19 +638,19 @@ Namespace PBP.Dex_IO
                     infotable.Design = TableDesign.ColorfulListAccent5
                     For j As Integer = 0 To n_columns - 1 Step 1
                         REM only be true for the iteration where j >=1 
-                        If Logger.get_Log1().Item(i).Contains("ONE POKEMON") Then
+                        If my_log.Item(i).Contains("ONE POKEMON") Then
                             i += 1
                         End If
 
-                        infotable.Rows(0).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i)) 'Blue/Red Team #
-                        infotable.Rows(1).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i + 1)) 'HP:
+                        infotable.Rows(0).Cells(j).Paragraphs.First.Append(my_log.Item(i)) 'Blue/Red Team #
+                        infotable.Rows(1).Cells(j).Paragraphs.First.Append(my_log.Item(i + 1)) 'HP:
 
-                        Dim hp_para As Paragraph = infotable.Rows(2).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i + 2)) 'HP color:
+                        Dim hp_para As Paragraph = infotable.Rows(2).Cells(j).Paragraphs.First.Append(my_log.Item(i + 2)) 'HP color:
                         REM apply a color to the paragraph
-                        If Logger.get_Log1.Item(i + 2) = "red" Then
+                        If my_log.Item(i + 2) = "red" Then
                             my_format.FontColor = Color.Red
                             hp_para.Color(Color.Red)
-                        ElseIf Logger.get_Log1.Item(i + 2) = "yellow" Then
+                        ElseIf my_log.Item(i + 2) = "yellow" Then
                             'infotable.Rows(2).Cells(j).Paragraphs.First.Color(Color.Yellow)
                             my_format.FontColor = Color.Yellow
                             hp_para.Color(Color.Red)
@@ -638,11 +659,11 @@ Namespace PBP.Dex_IO
                             my_format.FontColor = Color.Green
                             hp_para.Color(Color.Green)
                         End If
-                        infotable.Rows(2).Cells(j).InsertParagraph(Logger.get_Log1.Item(i + 2), False, my_format)
-                        infotable.Rows(3).Cells(j).Paragraphs.First.Append(Logger.get_Log1.Item(i + 3)) 'Status:
+                        infotable.Rows(2).Cells(j).InsertParagraph(my_log.Item(i + 2), False, my_format)
+                        infotable.Rows(3).Cells(j).Paragraphs.First.Append(my_log.Item(i + 3)) 'Status:
                         Reset_Formatting(my_format)
                         i += 4
-                        If Logger.get_Log1.Item(i) = "END ONE POKEMON" Then
+                        If my_log.Item(i) = "END ONE POKEMON" Then
                             i += 1
                             Continue For
                         End If
@@ -653,7 +674,7 @@ Namespace PBP.Dex_IO
                 End If
 
                 REM just insert the paragraph normally
-                newfile.InsertParagraph(Logger.get_Log1().Item(i), False, my_format)
+                newfile.InsertParagraph(my_log.Item(i), False, my_format)
 
             Next
 

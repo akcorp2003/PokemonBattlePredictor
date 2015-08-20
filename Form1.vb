@@ -16,13 +16,9 @@ Public Class Form1
     Dim dictionaryOf_Pokemon As New Pokemon_Dictionary
     Dim dictionaryOf_Moves As New Move_Dictionary
     Dim dictionaryOf_Abilities As New Ability_Dictionary
+    Dim listOf_PokemonArena As New List(Of Pokemon_Arena) REM this list will only house 2 arenas at the moment
 
     Dim battle_arena As New Pokemon_Arena
-
-    'Dim battlesetupform As New BattleSetup
-
-    'Dim Team_Blue As New Pokemon_Team
-    'Dim Team_Red As New Pokemon_Team
 
     Public Function Get_ResourceURIDictionary() As Pokemon_ResourceURI_dictionary
         Return dictionaryOf_ResourceURI
@@ -41,16 +37,8 @@ Public Class Form1
     End Function
 
     Public Function Get_PokemonArena() As Pokemon_Arena
-        Return battle_arena
+        Return listOf_PokemonArena(0) REM we will assume the first arena is the working arena
     End Function
-
-    'Public Function Get_TeamBlue() As Pokemon_Team
-    '    Return Team_Blue
-    'End Function
-
-    'Public Function Get_TeamRed() As Pokemon_Team
-    '    Return Team_Red
-    'End Function
 
     '////////////////////////////////////////////////////////////////
     '// BackgroundWorker Code                                      //
@@ -399,6 +387,12 @@ Public Class Form1
         dex_reader3.Parent_Form = Me
         Worker_Abilityreader.RunWorkerAsync(dex_reader3)
 
+        REM do other initializations
+        Dim first_arena As New Pokemon_Arena
+        listOf_PokemonArena.Add(first_arena)
+        Constants.Accuracy_Level = Accuracy.HIGH
+        Constants.Damage = Damage_Level.MAX
+
     End Sub
 
     Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As FormClosedEventArgs) Handles Me.FormClosed
@@ -428,8 +422,8 @@ Public Class Form1
         Dim filetype As String = ".bmp"
 
         REM load the Blue Team photos
-        For i As Integer = 0 To battle_arena.Get_TeamBlue.Get_Team("blue").Count - 1 Step 1
-            Dim name As String = battle_arena.Get_TeamBlue.Get_Team("blue").Item(i).Name
+        For i As Integer = 0 To listOf_PokemonArena(0).Get_TeamBlue.Get_Team("blue").Count - 1 Step 1
+            Dim name As String = listOf_PokemonArena(0).Get_TeamBlue.Get_Team("blue").Item(i).Name
             Dim full_path As String = base_path + Constants.Get_FormattedString(name) + filetype
             Dim sprite As New Bitmap(full_path)
             If sprite IsNot Nothing Then
@@ -448,8 +442,8 @@ Public Class Form1
         Next
 
         REM load the Red Team photos
-        For i As Integer = 0 To battle_arena.Get_TeamRed.Get_Team("red").Count - 1 Step 1
-            Dim name As String = battle_arena.Get_TeamRed.Get_Team("red").Item(i).Name
+        For i As Integer = 0 To listOf_PokemonArena(0).Get_TeamRed.Get_Team("red").Count - 1 Step 1
+            Dim name As String = listOf_PokemonArena(0).Get_TeamRed.Get_Team("red").Item(i).Name
             Dim full_path As String = base_path + Constants.Get_FormattedString(name) + filetype
             Dim sprite As New Bitmap(full_path)
             If sprite IsNot Nothing Then
@@ -473,23 +467,82 @@ Public Class Form1
         'Pass the Pokemon to true algorithm
         Dim predictor As New Battle_Prediction
         Dim winner As String = ""
-        'Just testing code
-        Dim temp_battlearena As New Pokemon_Arena
-        temp_battlearena = battle_arena.Clone()
-        'end testing code
+        If listOf_PokemonArena.Count = 0 Then
+            MessageBox.Show("There are no arenas in the system! Something has gone wrong...try restarting the program. Returning.", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+        Dim temp_battlearena As New Pokemon_Arena REM for log printing
+        temp_battlearena = listOf_PokemonArena(0).Clone()
 
         Logger.InitializeRecord()
-        winner = predictor.predict_outcome(battle_arena)
+        winner = predictor.predict_outcome(temp_battlearena)
         MessageBox.Show("The winning party is: " & winner & ". ", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Logger.Record(winner + " is the winning team of this match!")
         Dim toprint As Integer = MessageBox.Show("Would you like to see the battle record?", "Print?", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
         If toprint = DialogResult.Yes Then
             Dim logprinter As New Dex_Writer
-            logprinter.PrintLogger(temp_battlearena)
+            logprinter.PrintLogger(listOf_PokemonArena(0), 1, Funct_IDs.Button2_Form1)
             MessageBox.Show("The log is finished writing!", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
         End If
-        REM clear out the arena
-        battle_arena.Clear()
+        REM Archive current arena and prepare the next arena
+        Dim next_arena As New Pokemon_Arena
+        listOf_PokemonArena.Insert(0, next_arena)
     End Sub
 
+    '///////////////////////////////////////////////////
+    '//// ToolBar Functions                           //
+    '///////////////////////////////////////////////////
+
+    Private Sub RecentBattleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RecentBattleToolStripMenuItem.Click
+        If listOf_PokemonArena.Count = 1 Then REM after the first prediction, there will be 2 arenas. However, if only one arena is in the system, that arena is empty by convention
+            MessageBox.Show("There has been no battles! Try predicting a battle and I'll print out the battle for you then. :)", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+        Dim recent_logprinter As New Dex_Writer
+        recent_logprinter.PrintLogger(listOf_PokemonArena(1), 1)
+        MessageBox.Show("The recent log is finished printing! Find the filename battlelog_recent.docx.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub LastBattleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LastBattleToolStripMenuItem.Click
+        If listOf_PokemonArena.Count = 1 Then
+            MessageBox.Show("There has been no battles! Try predicting a battle and I'll print out the battle for you then. :)", "Whoops!", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Return
+        End If
+        Dim last_logprinter As New Dex_Writer
+        last_logprinter.PrintLogger(listOf_PokemonArena(2), 2)
+        MessageBox.Show("The last log is finished printing! Find the filename battlelog_last.docx.", "Success!", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub HighAccuracyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles HighAccuracyToolStripMenuItem.Click
+        Constants.Accuracy_Level = Accuracy.HIGH
+        MessageBox.Show("The accuracy has been set to HIGH.", "Settings Changed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+
+    Private Sub MediumAccuracyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MediumAccuracyToolStripMenuItem.Click
+        Constants.Accuracy_Level = Accuracy.MEDIUM
+        MessageBox.Show("The accuracy has been set to MEDIUM.", "Settings Changed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub LowAccuracyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LowAccuracyToolStripMenuItem.Click
+        Constants.Accuracy_Level = Accuracy.LOW
+        MessageBox.Show("The accuracy has been set to LOW.", "Settings Changed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+
+    Private Sub MaximumToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MaximumToolStripMenuItem.Click
+        Constants.Damage = Damage_Level.MAX
+        MessageBox.Show("The damage has been set to MAXIMUM.", "Settings Changed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+
+    Private Sub NormalToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NormalToolStripMenuItem.Click
+        Constants.Damage = Damage_Level.NORM
+        MessageBox.Show("The damage has been set to NORMAL.", "Settings Changed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub MinimumToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MinimumToolStripMenuItem.Click
+        Constants.Damage = Damage_Level.MIN
+        MessageBox.Show("The damage has been set to MINIMUM.", "Settings Changed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
 End Class

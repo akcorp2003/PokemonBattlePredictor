@@ -128,7 +128,6 @@
     <Compile Include="Progress.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RequestPokemon.vb" />
     <Compile Include="test.Designer.vb">
       <DependentUpon>test.vb</DependentUpon>
     </Compile>

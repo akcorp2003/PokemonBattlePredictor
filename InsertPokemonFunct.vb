@@ -347,4 +347,5 @@ Public Class InsertPokemonFunct
         BattleSetup.Show()
         BattleSetup.BringToFront()
     End Sub
+
 End Class

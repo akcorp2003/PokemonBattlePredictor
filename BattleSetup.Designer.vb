@@ -52,6 +52,7 @@ Partial Class BattleSetup
         Me.BuildPokemonDictionaryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BuildMoveDictionaryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.BuildImageLibraryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -220,7 +221,7 @@ Partial Class BattleSetup
         'MenuStrip1
         '
         Me.MenuStrip1.BackColor = System.Drawing.SystemColors.MenuHighlight
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolsToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ToolsToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(762, 24)
@@ -251,6 +252,12 @@ Partial Class BattleSetup
         Me.BuildImageLibraryToolStripMenuItem.Name = "BuildImageLibraryToolStripMenuItem"
         Me.BuildImageLibraryToolStripMenuItem.Size = New System.Drawing.Size(212, 22)
         Me.BuildImageLibraryToolStripMenuItem.Text = "Build Image Library"
+        '
+        'FileToolStripMenuItem
+        '
+        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
+        Me.FileToolStripMenuItem.Text = "File"
         '
         'BattleSetup
         '
@@ -306,4 +313,5 @@ Partial Class BattleSetup
     Friend WithEvents BuildPokemonDictionaryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BuildMoveDictionaryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BuildImageLibraryToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 End Class

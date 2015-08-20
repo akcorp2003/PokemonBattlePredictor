@@ -12,16 +12,7 @@ Namespace PBP
             curr_recording = "1"
             m_mute = False
 
-            If m_battlelist1.Count > 0 Then
-                m_battlelist1.Clear()
-            End If
-
-            If curr_recording = "first" Then
-                If m_battlelist2.Count > 0 Then
-                    m_battlelist2.Clear()
-                End If
-            Else
-                REM for those folks who are lazy to call Prepare_NextRecord()
+            If Not m_battlelist1.Count <= 0 Then
                 Prepare_NextRecord()
             End If
 
@@ -117,9 +108,13 @@ Namespace PBP
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function Prepare_NextRecord() As List(Of String)
+            If m_battlelist2.Count > 0 Then
+                m_battlelist2.Clear()
+            End If
+
             If curr_recording = "1" Then
-                For i As Integer = 0 To m_battlelist1.Count - 1 Step 1
-                    m_battlelist2(i) = m_battlelist1(i)
+                For Each log As String In m_battlelist1
+                    m_battlelist2.Add(log)
                 Next
             End If
             m_battlelist1.Clear()
